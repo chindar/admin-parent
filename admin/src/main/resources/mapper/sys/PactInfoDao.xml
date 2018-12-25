@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.PactInfoDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.PactInfoEntity" id="pactInfoMap">
+            <result property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="businessName" column="business_name"/>
+            <result property="cityId" column="city_id"/>
+            <result property="startDate" column="start_date"/>
+            <result property="endDate" column="end_date"/>
+            <result property="createTime" column="create_time"/>
+            <result property="pactStatus" column="pact_status"/>
+            <result property="fileId" column="file_id"/>
+            <result property="fileName" column="file_name"/>
+            <result property="isDelete" column="is_delete"/>
+            <result property="cityName" column="cityName"/>
+    </resultMap>
+
+    <select id="getPactList" parameterType="com.admin.modules.sys.entity.PactInfoEntity" resultMap="pactInfoMap">
+        select  a.*,b.`name` as cityName from tb_pact_info a
+        LEFT JOIN tb_city_info b
+        ON a.city_id = b.id
+        where a.is_delete = 0
+        <if test="businessName != null and businessName != ''">
+            and a.business_name like CONCAT('%',ltrim(rtrim(#{businessName})),'%')
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and a.city_id = #{cityId}
+        </if>
+        <if test="(pactStatus != null and pactStatus != '') or pactStatus == 0">
+            and a.pact_status = #{pactStatus}
+        </if>
+    </select>
+    <select id="getAll" resultType="com.admin.modules.sys.entity.PactInfoEntity">
+      select  a.id, a.name from tb_pact_info a
+    </select>
+
+</mapper>

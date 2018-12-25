@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.CourierDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.CourierEntity" id="courierMap">
+        <result property="id" column="id"/>
+        <result property="courierName" column="courier_name"/>
+        <result property="cardId" column="card_id"/>
+        <result property="phone" column="phone"/>
+        <result property="bankCardId" column="bank_card_id"/>
+        <result property="depositBank" column="deposit_bank"/>
+        <result property="joinBankNumber" column="join_bank_number"/>
+        <result property="entryDate" column="entry_date"/>
+        <result property="leaveDate" column="leave_date"/>
+        <result property="status" column="status"/>
+        <result property="comment" column="comment"/>
+        <result property="erpId" column="erp_id"/>
+        <result property="area" column="area"/>
+        <result property="site" column="site"/>
+        <result property="pactId" column="pact_id"/>
+        <result property="cityId" column="city_id"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modify" column="modify"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+    <resultMap type="com.admin.modules.sys.vo.CourierVo" id="courierVoMap">
+        <result property="id" column="id"/>
+        <result property="courierName" column="courier_name"/>
+        <result property="cardId" column="card_id"/>
+        <result property="phone" column="phone"/>
+        <result property="bankCardId" column="bank_card_id"/>
+        <result property="depositBank" column="deposit_bank"/>
+        <result property="joinBankNumber" column="join_bank_number"/>
+        <result property="entryDate" column="entry_date"/>
+        <result property="leaveDate" column="leave_date"/>
+        <result property="status" column="status"/>
+        <result property="comment" column="comment"/>
+        <result property="erpId" column="erp_id"/>
+        <result property="area" column="area"/>
+        <result property="site" column="site"/>
+        <result property="pactId" column="pact_id"/>
+        <result property="pactName" column="pact_name"/>
+        <result property="cityId" column="city_id"/>
+        <result property="cityName" column="city_name"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="modify" column="modify"/>
+        <result property="modifyDate" column="modify_date"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+    <update id="updateByBatch">
+        UPDATE tb_courier
+        SET pact_id = #{pactId}
+        WHERE 1 = 1
+        AND batch_id = #{batchId}
+     </update>
+
+    <select id="selectMyPage" parameterType="com.admin.modules.sys.vo.CourierVo" resultMap="courierVoMap">
+      SELECT
+        a.id
+        , a.courier_name
+        , a.card_id
+        , a.phone
+        , a.bank_card_id
+        , a.deposit_bank
+        , a.join_bank_number
+        , a.entry_date
+        , a.leave_date
+        , a.`status`
+        , a.comment
+        , a.erp_id
+        , a.area
+        , a.site
+        , a.pact_id
+        , b.name AS pact_name
+        , a.city_id
+        , c.name AS city_name
+        , a.creater
+        , a.create_date
+        , a.modify
+        , a.modify_date
+        , a.is_delete
+      FROM tb_courier a
+      LEFT JOIN tb_pact_info b on a.pact_id = b.id
+      LEFT JOIN tb_city_info c on a.city_id = c.id
+      WHERE 1 = 1
+        AND a.is_delete = 0
+      <if test="courierName != null and courierName != ''">
+        AND a.courier_name = #{courierName}
+      </if>
+      <if test="cardId != null and cardId != ''">
+        AND a.card_id = #{cardId}
+      </if>
+      <if test="phone != null and phone != ''">
+        AND a.phone = #{phone}
+      </if>
+      <if test="pactId != null and pactId != ''">
+          AND a.pact_id = #{pactId}
+      </if>
+    </select>
+
+    <select id="selectByIds" resultType="com.admin.modules.sys.vo.CourierVo">
+      SELECT
+        a.id
+        , a.courier_name
+        , a.card_id
+        , a.phone
+        , a.bank_card_id
+        , a.deposit_bank
+        , a.join_bank_number
+        , a.entry_date
+        , a.leave_date
+        , a.`status`
+        , a.comment
+        , a.erp_id
+        , a.area
+        , a.site
+        , a.pact_id
+        , b.name AS pact_name
+        , a.city_id
+        , c.name AS city_name
+        , a.creater
+        , a.create_date
+        , a.modify
+        , a.modify_date
+        , a.is_delete
+      FROM tb_courier a
+      LEFT JOIN tb_pact_info b on a.pact_id = b.id
+      LEFT JOIN tb_city_info c on a.city_id = c.id
+      WHERE 1 = 1
+      <if test="ids != null and ids.size() != 0">
+        AND a.id IN
+          <foreach collection="ids" item="id" separator="," open="(" close=")">
+              #{id}
+          </foreach>
+      </if>
+    </select>
+
+
+</mapper>

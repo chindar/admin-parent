@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.CityInfoDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.CityInfoEntity" id="cityInfoMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getCityNameById" resultType="java.lang.String">
+        SELECT city_name FROM tb_city_info WHERE 1 = 1 AND id = #{id}
+    </select>
+    <select id="getIdByCityName" resultType="java.lang.Integer">
+        SELECT id FROM tb_city_info WHERE 1 = 1 AND `name` = #{cityName}
+    </select>
+
+
+</mapper>

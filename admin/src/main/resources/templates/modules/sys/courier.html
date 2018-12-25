@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+    <title>快递员信息表</title>
+    <#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="keyword" id="keyword" name="keyword" placeholder="请选择关键字类型">
+                    <option value="0">配送员姓名</option>
+                    <option value="1">配送员身份证号</option>
+                    <option value="2">配送员电话</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query"
+                       :placeholder="keyword==0?'请输入姓名':keyword==1? '请输入身份证号' : keyword == 2 ? '请输入电话' : ''">
+            </div>
+
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="pactId" id="pactId" name="pactId" placeholder="请选择合同">
+                    <option value="">请选择合同</option>
+                    <option v-for="pact in pactList" v-bind:value="pact.id" v-bind:key="pact.id">
+                        {{ pact.name }}
+                    </option>
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            <a class="btn btn-primary" @click="download"><i class="fa fa-download"></i>&nbsp;下载导入模板</a>
+            <a class="btn btn-primary" id="upload"><i class="fa fa-plus"></i>&nbsp;录入</a>
+            <a class="btn btn-primary" id="export" @click="exportCourier"><i class="fa fa-plus"></i>&nbsp;导出</a>
+            <#if shiro.hasPermission("sys:courier:delete")>
+                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            </#if>
+
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <!-- add/update div start-->
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">快递员姓名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.courierName" placeholder="快递员姓名"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">身份证号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.cardId" placeholder="身份证号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">电话</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.phone" placeholder="电话"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">银行卡</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.bankCardId" placeholder="银行卡"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">开户行名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.depositBank" placeholder="开户行名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">联行号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.joinBankNumber" placeholder="联行号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">入职时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.entryDate" placeholder="入职时间"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">离职时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.leaveDate" placeholder="离职时间"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.status" placeholder="状态"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">备注</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.comment" placeholder="备注"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">ERP账号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.erpId" placeholder="ERP账号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">片区</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.area" placeholder="片区"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">站点</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.site" placeholder="站点"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">合同id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.pactId" placeholder="合同id"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">城市id</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.cityId" placeholder="城市id"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">创建人</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.creater" placeholder="创建人"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">创建时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.createDate" placeholder="创建时间"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">修改人</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.modify" placeholder="修改人"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">修改时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="courier.modifyDate" placeholder="修改时间"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/courier.js?_${.now?long}"></script>
+<script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
+</body>
+</html>
