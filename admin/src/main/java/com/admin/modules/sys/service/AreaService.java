@@ -5,6 +5,7 @@ import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.vo.AreaEntityVo;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +22,7 @@ public interface AreaService extends IService<AreaEntity> {
     AreaEntityVo getAreaById(Integer id);
 
     int deleteAreaById(Integer id);
+
+    List<AreaEntity> getAllAreaList(Integer companyId);
 }
 

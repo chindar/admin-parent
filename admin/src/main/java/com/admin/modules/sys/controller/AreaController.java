@@ -1,5 +1,6 @@
 package com.admin.modules.sys.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import com.admin.common.utils.PageUtils;
@@ -7,6 +8,7 @@ import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.AreaEntity;
+import com.admin.modules.sys.entity.CompanyEntity;
 import com.admin.modules.sys.service.AreaService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,17 @@ import org.springframework.web.bind.annotation.*;
 public class AreaController {
     @Autowired
     private AreaService areaService;
+
+
+    /**
+     * 获取该公司下所有有效的片区(不带分页)
+     * @return
+     */
+    @RequestMapping(value = "getAllAreaList")
+    public R getAllAreaList(@RequestParam(value = "companyId",defaultValue = "") Integer companyId){
+        List<AreaEntity> list = areaService.getAllAreaList(companyId);
+        return R.ok().put("list",list);
+    }
 
     /**
      * 列表

@@ -1,7 +1,12 @@
 package com.admin.modules.sys.dao;
 
+import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.CityEntity;
+import com.admin.modules.sys.entity.vo.CityEntityVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.session.RowBounds;
+
+import java.util.List;
 
 /**
  * 城市信息表
@@ -11,5 +16,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @date 2018-12-26 10:19:10
  */
 public interface CityDao extends BaseMapper<CityEntity> {
-	
+
+    List<CityEntityVo> getCityList(RowBounds var1, CityEntity params);
 }

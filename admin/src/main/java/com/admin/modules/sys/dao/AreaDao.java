@@ -23,4 +23,6 @@ public interface AreaDao extends BaseMapper<AreaEntity> {
     AreaEntityVo getAreaById(@Param("id")Integer id);
 
     int deleteAreaById(@Param("id") Integer id);
+
+    List<AreaEntity> getAllAreaList(@Param("companyId") Integer companyId);
 }

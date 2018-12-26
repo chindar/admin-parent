@@ -65,4 +65,14 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements
         int count = dao.deleteAreaById(id);
         return count;
     }
+
+    /**
+     * 获取该公司下所有有效的片区(不带分页)
+     * @param companyId
+     * @return
+     */
+    @Override
+    public List<AreaEntity> getAllAreaList(Integer companyId) {
+        return dao.getAllAreaList(companyId);
+    }
 }

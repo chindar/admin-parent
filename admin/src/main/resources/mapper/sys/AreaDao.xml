@@ -34,4 +34,8 @@
     <update id="deleteAreaById">
         update tb_area set is_delete = 1 where id = #{id}
     </update>
+
+    <select id="getAllAreaList" resultMap="areaMap">
+        select * from tb_area where is_delete = 0 and company_id = #{companyId} order by  create_time desc
+    </select>
 </mapper>

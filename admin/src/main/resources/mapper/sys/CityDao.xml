@@ -4,7 +4,7 @@
 <mapper namespace="com.admin.modules.sys.dao.CityDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.admin.modules.sys.entity.CityEntity" id="cityMap">
+    <resultMap type="com.admin.modules.sys.entity.vo.CityEntityVo" id="cityMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="companyId" column="company_id"/>
@@ -12,5 +12,24 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
+
+    <select id="getCityList" parameterType="com.admin.modules.sys.entity.CityEntity" resultMap="cityMap">
+        SELECT a.*,b.`name` as areaName,c.name AS companyName
+        FROM tb_city a
+        INNER JOIN tb_area b
+        ON a.area_id = b.id
+        INNER JOIN tb_company c
+        ON a.company_id = c.id
+        WHERE a.is_delete = 0
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',ltrim(rtrim(#{name})),'%')
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            and a.company_id = #{companyId}
+        </if>
+    </select>
 
 </mapper>
