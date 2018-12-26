@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.CityDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.CityEntity" id="cityMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="companyId" column="company_id"/>
+        <result property="areaId" column="area_id"/>
+        <result property="isDelete" column="is_delete"/>
+    </resultMap>
+
+
+</mapper>

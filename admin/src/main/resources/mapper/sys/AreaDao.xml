@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.AreaDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.vo.AreaEntityVo" id="areaMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="companyId" column="company_id"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="companyName" column="companyName"/>
+    </resultMap>
+
+    <select id="getAreaList" parameterType="com.admin.modules.sys.entity.AreaEntity" resultMap="areaMap">
+        SELECT a.*,b.`name` as companyName FROM tb_area a
+        INNER JOIN tb_company b
+        ON a.company_id = b.id
+        WHERE a.is_delete = 0
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',ltrim(rtrim(#{name})),'%')
+        </if>
+        <if test="companyId != null and companyId != ''">
+            and a.company_id = #{companyId}
+        </if>
+    </select>
+
+    <select id="getAreaById" resultMap="areaMap">
+        select * from tb_area where id = #{id}
+    </select>
+
+
+    <!--删除-->
+    <update id="deleteAreaById">
+        update tb_area set is_delete = 1 where id = #{id}
+    </update>
+</mapper>

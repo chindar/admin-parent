@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.admin.modules.sys.dao.DispatchDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.admin.modules.sys.entity.DispatchEntity" id="dispatchMap">
+                    <result property="id" column="id"/>
+                    <result property="month" column="month"/>
+                    <result property="companyId" column="company_id"/>
+                    <result property="erpId" column="erp_id"/>
+                    <result property="allOrderCount" column="all_order_count"/>
+                    <result property="totalOrderCount" column="total_order_count"/>
+                    <result property="totalMoney" column="total_money"/>
+                    <result property="small" column="small"/>
+                    <result property="large" column="large"/>
+                    <result property="thrIdentical" column="thr_identical"/>
+                    <result property="afterSaleCount" column="after_sale_count"/>
+                    <result property="firstCount" column="first_count"/>
+                    <result property="againCount" column="again_count"/>
+                    <result property="otherCount" column="other_count"/>
+                    <result property="badCount" column="bad_count"/>
+                    <result property="complaintCount" column="complaint_count"/>
+                    <result property="fineMoney" column="fine_money"/>
+                    <result property="deductMoney" column="deduct_money"/>
+                    <result property="salary" column="salary"/>
+                    <result property="remark" column="remark"/>
+                    <result property="createTime" column="create_time"/>
+                    <result property="isDelete" column="is_delete"/>
+            </resultMap>
+
+
+</mapper>

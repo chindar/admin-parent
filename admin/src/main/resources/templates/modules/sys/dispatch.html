@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>配送信息表</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("sys:dispatch:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dispatch:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sys:dispatch:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">月份</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.month" placeholder="月份"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">公司id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.companyId" placeholder="公司id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">ERP账号id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.erpId" placeholder="ERP账号id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">总单量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.allOrderCount" placeholder="总单量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">合计单量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.totalOrderCount" placeholder="合计单量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">费用合计</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.totalMoney" placeholder="费用合计"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">小件</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.small" placeholder="小件"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">大件</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.large" placeholder="大件"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">三同</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.thrIdentical" placeholder="三同"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">售后取件</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.afterSaleCount" placeholder="售后取件"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">接货首单量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.firstCount" placeholder="接货首单量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">接货续单量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.againCount" placeholder="接货续单量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">其他单量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.otherCount" placeholder="其他单量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">差评数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.badCount" placeholder="差评数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">投诉数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.complaintCount" placeholder="投诉数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">罚款合计</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.fineMoney" placeholder="罚款合计"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">其他扣款</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.deductMoney" placeholder="其他扣款"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">工资</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.salary" placeholder="工资"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.remark" placeholder="备注"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.createTime" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">1:删除0:正常</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="dispatch.isDelete" placeholder="1:删除0:正常"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${request.contextPath}/statics/js/modules/sys/dispatch.js?_${.now?long}"></script>
+</body>
+</html>
