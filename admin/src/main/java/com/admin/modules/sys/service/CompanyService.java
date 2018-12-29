@@ -19,5 +19,7 @@ public interface CompanyService extends IService<CompanyEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<CompanyEntity> getAllCompanyList();
+
+    PageUtils getCompanyList(Map<String, Object> params,String path);
 }
 

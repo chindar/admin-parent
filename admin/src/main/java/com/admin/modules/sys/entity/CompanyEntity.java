@@ -1,14 +1,17 @@
 package com.admin.modules.sys.entity;
 
+import com.admin.common.validator.group.AddGroup;
+import com.admin.common.validator.group.UpdateGroup;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 公司信息表
- * 
+ *
  * @author lxj
  * @email sunlightcs@gmail.com
  * @date 2018-12-26 10:55:09
@@ -18,37 +21,44 @@ public class CompanyEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 *
 	 */
 	@TableId
 	private Integer id;
 	/**
 	 * 公司名
 	 */
+	@NotBlank(message="公司名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 法人
 	 */
+	@NotBlank(message="法人不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String legalPersonName;
 	/**
 	 * 地址
 	 */
+	@NotBlank(message="地址不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String address;
 	/**
 	 * 邮箱
 	 */
+	@NotBlank(message="邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String email;
 	/**
 	 * 邮编
 	 */
+	@NotBlank(message="邮编不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String zipCode;
 	/**
 	 * 联系人
 	 */
+	@NotBlank(message="联系人姓名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String contactName;
 	/**
 	 * 联系人电话
 	 */
+	@NotBlank(message="联系人电话不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String phone;
 	/**
 	 * 营业执照
@@ -57,23 +67,52 @@ public class CompanyEntity implements Serializable {
 	/**
 	 * 法人身份证
 	 */
+
 	private String cardFileid;
 	/**
 	 * 省份
 	 */
+    @NotBlank(message="省份不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String provinceName;
 	/**
 	 * 城市
 	 */
+    @NotBlank(message="城市不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String cityName;
 	/**
-	 * 
+	 *
 	 */
 	private Date createTime;
 	/**
 	 * 1:删除0:正常
 	 */
 	private Integer isDelete;
+
+
+//	private String businessFileUrl;
+//
+//	private String cardFileUrl;
+//
+//	public String getBusinessFileUrl() {
+//		return businessFileUrl;
+//	}
+//
+//	public void setBusinessFileUrl(String businessFileUrl) {
+//		this.businessFileUrl = businessFileUrl;
+//	}
+//
+//	public String getCardFileUrl() {
+//		return cardFileUrl;
+//	}
+//
+//	public void setCardFileUrl(String cardFileUrl) {
+//		this.cardFileUrl = cardFileUrl;
+//	}
+
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
 
 	/**
 	 * 设置：

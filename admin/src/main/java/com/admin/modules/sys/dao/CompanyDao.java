@@ -2,9 +2,8 @@ package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.CompanyEntity;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.session.RowBounds;
 
-import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,4 +19,6 @@ public interface CompanyDao extends BaseMapper<CompanyEntity> {
      * @return
      */
     List<CompanyEntity> getAllCompanyList();
+
+    List<CompanyEntity> getCompanyList(RowBounds var1, CompanyEntity params);
 }
