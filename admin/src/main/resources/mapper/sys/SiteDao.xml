@@ -4,7 +4,7 @@
 <mapper namespace="com.admin.modules.sys.dao.SiteDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.admin.modules.sys.entity.SiteEntity" id="siteMap">
+    <resultMap type="com.admin.modules.sys.entity.vo.SiteEntityVo" id="siteMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="companyId" column="company_id"/>
@@ -14,4 +14,27 @@
     </resultMap>
 
 
+    <select id="getSiteList" parameterType="com.admin.modules.sys.entity.SiteEntity" resultMap="siteMap">
+        SELECT a.*,b.`name` as areaName,c.name AS companyName,d.name as cityName
+        FROM tb_site a
+        INNER JOIN tb_area b
+        ON a.area_id = b.id
+        INNER JOIN tb_company c
+        ON a.company_id = c.id
+        inner join tb_city d
+        on a.city_id = d.id
+        WHERE a.is_delete = 0
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',ltrim(rtrim(#{name})),'%')
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and a.area_id = #{areaId}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            and a.company_id = #{companyId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            and a.city_id = #{cityId}
+        </if>
+    </select>
 </mapper>

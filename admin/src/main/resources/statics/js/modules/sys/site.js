@@ -3,44 +3,47 @@ $(function () {
         url: baseURL + 'sys/site/list',
         datatype: "json",
         colModel: [
-                                                {
-                        label: 'id',
-                        name: 'id',
-                        index: 'id',
-                        width: 50,
-                        key: true
-                    },
-                                                                {
-                        label: '',
+                   // {
+                   //      label: 'id',
+                   //      name: 'id',
+                   //      index: 'id',
+                   //      width: 50,
+                   //      key: true
+                   //  },
+                    {
+                        label: '站点',
                         name: 'name',
                         index: 'name',
                         width: 80
                     }, 
-                                                                {
-                        label: '',
-                        name: 'companyId',
-                        index: 'company_id',
+                    {
+                        label: '公司',
+                        name: 'companyName',
+                        index: 'company_name',
                         width: 80
                     }, 
-                                                                {
-                        label: '',
-                        name: 'areaId',
-                        index: 'area_id',
+                    {
+                        label: '片区',
+                        name: 'areaName',
+                        index: 'area_name',
                         width: 80
                     }, 
-                                                                {
-                        label: '',
-                        name: 'cityId',
-                        index: 'city_id',
+                    {
+                        label: '城市',
+                        name: 'cityName',
+                        index: 'city_name',
                         width: 80
-                    }, 
-                                                                {
-                        label: '1:删除0:正常',
-                        name: 'isDelete',
-                        index: 'is_delete',
-                        width: 80
+                    },
+                    {
+                        label:'操作',
+                        name:'id',
+                        index:'id',
+                        align:'center',
+                        width:50,
+                        // edittype:"button",
+                        formatter:cmgStateFormat
                     }
-                            ],
+        ],
         viewrecords: true,
         height: 385,
         rowNum: 10,
@@ -66,6 +69,11 @@ $(function () {
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         }
     });
+    //格式化操作列
+    function cmgStateFormat(cellValue) {
+        return "<button class='btn btn-info	 ' onclick=\"editArea("+ cellValue + ")\">编辑</button>"+
+            "&nbsp;&nbsp;&nbsp;<button class='btn btn-info	 ' onclick=\"deleteArea("+ cellValue + ")\">删除</button>";
+    }
 });
 
 var vm = new Vue({

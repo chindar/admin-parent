@@ -35,7 +35,39 @@ public class SiteEntityVo implements Serializable{
          */
         private Integer isDelete;
 
-        /**
+
+        private String areaName;
+
+        private String companyName;
+
+        private String cityName;
+
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    /**
          * 设置：
          */
         public void setId(Integer id) {
