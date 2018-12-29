@@ -91,7 +91,6 @@ function deleteArea(id) {
             dataType: "json",
             data:{id: id},
             success: function (r) {
-                console.log(r)
                 if (r.code == 0) {
                     alert('操作成功', function (index) {
                         $("#jqGrid").trigger("reloadGrid");

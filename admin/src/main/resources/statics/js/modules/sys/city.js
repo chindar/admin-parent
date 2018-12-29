@@ -88,7 +88,27 @@ function editArea(id) {
     vm.showList = false;
     vm.getInfo(id);
 }
-
+//删除
+function deleteArea(id) {
+    confirm('确定要删除选中的记录？', function () {
+        var data = {id: id}
+        $.ajax({
+            type: "POST",
+            url: baseURL + "sys/city/delete",
+            dataType: "json",
+            data:{id: id},
+            success: function (r) {
+                if (r.code == 0) {
+                    alert('操作成功', function (index) {
+                        $("#jqGrid").trigger("reloadGrid");
+                    });
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    });
+}
 var vm = new Vue({
     el: '#rrapp',
     data: {
@@ -104,10 +124,6 @@ var vm = new Vue({
         companylist:[],
         arealist:[]
     },
-watch:{
-    city(val){
-    }
-},
 methods: {
     query: function () {
         vm.reload();
@@ -182,7 +198,6 @@ methods: {
 ,
     getInfo: function (id) {
         $.get(baseURL + "sys/city/info/" +id, function (s) {
-            console.info(s.city);
             $.ajax({
                 type: "POST",
                 url: baseURL + "sys/area/getAllAreaList",

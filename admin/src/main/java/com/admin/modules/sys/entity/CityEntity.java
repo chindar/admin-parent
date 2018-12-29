@@ -1,8 +1,12 @@
 package com.admin.modules.sys.entity;
 
+import com.admin.common.validator.group.AddGroup;
+import com.admin.common.validator.group.UpdateGroup;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,14 +29,17 @@ public class CityEntity implements Serializable {
 	/**
 	 * 
 	 */
+	@NotBlank(message="城市名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 
 	 */
+	@NotNull(message="公司不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer companyId;
 	/**
 	 * 
 	 */
+	@NotNull(message="片区不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer areaId;
 	/**
 	 * 1:删除0:正常

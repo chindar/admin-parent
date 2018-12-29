@@ -43,4 +43,13 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
         return new PageUtils(page);
     }
 
+    @Override
+    public int deleteCityById(Integer id) {
+        //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
+        if (id == 2){
+            throw new RuntimeException("该城市不能删除");
+        }
+        int count = dao.deleteCityById(id);
+        return count;
+    }
 }

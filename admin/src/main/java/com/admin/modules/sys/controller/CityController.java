@@ -6,6 +6,7 @@ import java.util.Map;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
+import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.service.CityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -59,6 +60,7 @@ public class CityController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:city:save")
     public R save(@RequestBody CityEntity city){
+        ValidatorUtils.validateEntity(city,UpdateGroup.class);
         cityService.insert(city);
 
         return R.ok();
@@ -70,7 +72,7 @@ public class CityController {
     @RequestMapping("/update")
     @RequiresPermissions("sys:city:update")
     public R update(@RequestBody CityEntity city){
-        ValidatorUtils.validateEntity(city);
+        ValidatorUtils.validateEntity(city,UpdateGroup.class);
         cityService.updateAllColumnById(city);//全部更新
         
         return R.ok();
@@ -81,8 +83,14 @@ public class CityController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:city:delete")
-    public R delete(@RequestBody Integer[] ids){
-        cityService.deleteBatchIds(Arrays.asList(ids));
+    public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
+//        cityService.deleteBatchIds(Arrays.asList(ids));
+        try {
+            cityService.deleteCityById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
 
         return R.ok();
     }
