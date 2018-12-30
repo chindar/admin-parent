@@ -2,21 +2,20 @@ package com.admin.modules.sys.service.impl;
 
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
+import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
 import com.admin.modules.sys.dao.SiteDao;
-import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.entity.SiteEntity;
-import com.admin.modules.sys.entity.vo.CityEntityVo;
 import com.admin.modules.sys.entity.vo.SiteEntityVo;
 import com.admin.modules.sys.service.SiteService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 @Service("siteService")
 public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements SiteService {
@@ -44,6 +43,16 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
         List<SiteEntityVo> list = dao.getSiteList(page,entity);
         page.setRecords(list);
         return new PageUtils(page);
+    }
+
+    /**
+     * 获取所有有效的站点(不带分页)
+     *
+     * @return
+     */
+    @Override
+    public R listAll() {
+        return R.ok().put("list", this.selectList(new EntityWrapper<SiteEntity>()));
     }
 
 }
