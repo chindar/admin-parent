@@ -10,32 +10,68 @@
     <div v-show="showList">
         <div class="grid-btn">
             <div class="form-group col-md-2">
-                <select class="form-control" v-model="keyword" id="keyword" name="keyword" placeholder="请选择关键字类型">
-                    <option value="0">配送员姓名</option>
-                    <option value="1">配送员身份证号</option>
-                    <option value="2">配送员电话</option>
+                <input type="text" class="form-control" v-model="q.name" placeholder="请输入姓名">
+            </div>
+            <div class="form-group col-md-2">
+                <input type="text" class="form-control" v-model="q.erpNumber" placeholder="请输入ERP账户">
+            </div>
+            <div class="form-group col-md-2">
+                <input type="text" class="form-control" v-model="q.cardId" placeholder="请输入身份证">
+            </div>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.companyId" placeholder="请选择公司">
+                    <option value="">请选择公司</option>
+                    <option v-for="company in companyList" v-bind:value="company.id" v-bind:key="company.id">
+                        {{ company.name }}
+                    </option>
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query"
-                       :placeholder="keyword==0?'请输入姓名':keyword==1? '请输入身份证号' : keyword == 2 ? '请输入电话' : ''">
+                <select class="form-control" v-model="q.status" placeholder="请选择状态">
+                    <option value="-1">请选择状态</option>
+                    <option value="0">在职</option>
+                    <option value="1">离职</option>
+                </select>
             </div>
-
             <div class="form-group col-md-2">
-                <select class="form-control" v-model="pactId" id="pactId" name="pactId" placeholder="请选择合同">
+                <select class="form-control" v-model="q.pactId" placeholder="请选择合同">
                     <option value="">请选择合同</option>
                     <option v-for="pact in pactList" v-bind:value="pact.id" v-bind:key="pact.id">
                         {{ pact.name }}
                     </option>
                 </select>
             </div>
-            <a class="btn btn-default" @click="query">查询</a>
-            <a class="btn btn-primary" @click="download"><i class="fa fa-download"></i>&nbsp;下载导入模板</a>
-            <a class="btn btn-primary" id="upload"><i class="fa fa-plus"></i>&nbsp;录入</a>
-            <a class="btn btn-primary" id="export" @click="exportCourier"><i class="fa fa-plus"></i>&nbsp;导出</a>
-            <#if shiro.hasPermission("sys:courier:delete")>
-                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-            </#if>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.cityId" placeholder="请选择城市">
+                    <option value="">请选择城市</option>
+                    <option v-for="city in cityList" v-bind:value="city.id" v-bind:key="city.id">
+                        {{ city.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.areaId" placeholder="请选择片区">
+                    <option value="">请选择片区</option>
+                    <option v-for="area in areaList" v-bind:value="area.id" v-bind:key="area.id">
+                        {{ area.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.siteId" placeholder="请选择站点">
+                    <option value="">请选择站点</option>
+                    <option v-for="site in siteList" v-bind:value="site.id" v-bind:key="site.id">
+                        {{ site.name }}
+                    </option>
+                </select>
+            </div>
+            <a class="btn btn-primary" @click="query"><i class="fa fa-search"></i>&nbsp;查询</a>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新建配送员</a>
+            <!--<a class="btn btn-primary" @click="download"><i class="fa fa-download"></i>&nbsp;下载导入模板</a>-->
+            <!--<a class="btn btn-primary" @click="batchEnter"><i class="fa fa-list"></i>&nbsp;批量录入</a>-->
+            <!--<a class="btn btn-primary" @click="leadOut"><i class="fa fa-sign-out"></i>&nbsp;导出</a>-->
+            <!--<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+
 
         </div>
         <table id="jqGrid"></table>

@@ -75,14 +75,24 @@ $(function () {
                 index: 'status',
                 width: 80,
                 formatter: function (value, options, row) {
-                    console.log(value, options, row);
                     return value == 0 ?
                         '<span class="label label-success">在职</span>' :
                         value == 1 ?
                             '<span class="label label-danger">离职</span>' :
                             '<span class="label"></span>';
                 }
-            }
+            },
+            {
+                label: '操作',
+                name: 'option',
+                index: 'option',
+                width: 150,
+                formatter: function (value, options, row) {
+                    return '<a href="#" id="edit">操作</a>' +
+                        '<span class="label label-info" @click="show(row.id)">详情</span>' +
+                        '<span class="label label-warning" @click="del(row.id)">删除</span>';
+                }
+            },
         ],
         viewrecords: true,
         height: 385,
@@ -91,7 +101,7 @@ $(function () {
         rownumbers: true,
         rownumWidth: 25,
         autowidth: true,
-        multiselect: true,
+        multiselect: false,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -110,30 +120,30 @@ $(function () {
         }
     });
 
-    new AjaxUpload('#upload', {
-        action: baseURL + "sys/courier/import",
-        name: 'file',
-        autoSubmit: true,
-        responseType: "json",
-        onSubmit: function (file, extension) {
-
-            if (vm.pactId == '') {
-                alert("录入之前请先选择某一个合同, 之后再操作!");
-                return false;
-            }
-            if (!(extension && /^(xlsx)$/.test(extension.toLowerCase()))) {
-                alert('只支持xlsx格式的文件！');
-                return false;
-            }
-        },
-        onComplete: function (file, r) {
-            if (r.code == 0) {
-                vm.batchId = r.batchId;
-            } else {
-                alert(r.msg);
-            }
-        },
-    });
+    // new AjaxUpload('#upload', {
+    //     action: baseURL + "sys/courier/import",
+    //     name: 'file',
+    //     autoSubmit: true,
+    //     responseType: "json",
+    //     onSubmit: function (file, extension) {
+    //
+    //         if (vm.pactId == '') {
+    //             alert("录入之前请先选择某一个合同, 之后再操作!");
+    //             return false;
+    //         }
+    //         if (!(extension && /^(xlsx)$/.test(extension.toLowerCase()))) {
+    //             alert('只支持xlsx格式的文件！');
+    //             return false;
+    //         }
+    //     },
+    //     onComplete: function (file, r) {
+    //         if (r.code == 0) {
+    //             vm.batchId = r.batchId;
+    //         } else {
+    //             alert(r.msg);
+    //         }
+    //     },
+    // });
 });
 
 
@@ -145,11 +155,22 @@ var vm = new Vue({
         keyword: 0,
         q: {
             name: null,
-            pactId: null
+            erpNumber: null,
+            cardId: null,
+            companyId: null,
+            status: -1,
+            pactId: null,
+            cityId: null,
+            areaId: null,
+            siteId: null
         },
         courier: {},
         pactId: '',
+        companyList: [],
         pactList: [],
+        cityList: [],
+        areaList: [],
+        siteList: [],
         batchId: null
     },
     watch: {
@@ -178,12 +199,9 @@ var vm = new Vue({
             vm.title = "新增";
             vm.courier = {};
         },
-        update: function (event) {
-            var id = getSelectedRow();
-            if (id == null
-            ) {
-                return;
-            }
+        update: function (id) {
+            console.log(id);
+
             vm.showList = false;
             vm.title = "修改";
 
@@ -336,6 +354,89 @@ var vm = new Vue({
         },
 
         /**********************************************************************
+         * 初始化查询条件
+         * @author Wang Chinda
+         **********************************************************************/
+        initSearch: function () {
+            this.q.name = null;
+            this.q.erpNumber = null;
+            this.q.cardId = null;
+            this.q.companyId = '';
+            this.q.status = -1;
+            this.q.pactId = '';
+            this.q.cityId = '';
+            this.q.areaId = '';
+            this.q.siteId = '';
+        },
+
+        /**********************************************************************
+         * 初始化查询条件下拉列表信息
+         * @author Wang Chinda
+         **********************************************************************/
+        initCondition: function () {
+            // 查询公司信息
+            this.searchCompany();
+            // 查询合同信息
+            this.searchPact();
+            // 查询城市信息
+            this.searchCity();
+            // 查询区域信息
+            this.searchArea();
+            // 查询站点信息
+            this.searchSite();
+        },
+
+        /**********************************************************************
+         * 查询公司信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchCompany: function () {
+            $.get(baseURL + "sys/company/getAllCompanyList", function (r) {
+                vm.companyList = r.list;
+            });
+        },
+
+        /**********************************************************************
+         * 查询合同信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchPact: function () {
+            $.get(baseURL + "sys/pact/listAll", function (r) {
+                vm.pactList = r.list;
+            });
+        },
+
+        /**********************************************************************
+         * 查询城市信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchCity: function () {
+            $.get(baseURL + "sys/city/listAll", function (r) {
+                vm.cityList = r.list;
+            });
+        },
+
+        /**********************************************************************
+         * 查询区域信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchArea: function () {
+            $.get(baseURL + "sys/area/getAllAreaList", function (r) {
+                vm.areaList = r.list;
+            });
+        },
+
+        /**********************************************************************
+         * 查询站点信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchSite: function () {
+            $.get(baseURL + "sys/city/listAll", function (r) {
+                vm.siteList = r.list;
+            });
+        },
+        
+        /**********************************************************************
          * 表单校验
          * @author Wang Chinda
          **********************************************************************/
@@ -348,6 +449,7 @@ var vm = new Vue({
     },
 
     created: function () {
-        this.getPact();
+        this.initSearch();
+        this.initCondition();
     }
 });
