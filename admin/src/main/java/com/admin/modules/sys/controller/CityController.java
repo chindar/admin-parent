@@ -1,8 +1,5 @@
 package com.admin.modules.sys.controller;
 
-import java.util.Arrays;
-import java.util.Map;
-
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
@@ -11,11 +8,9 @@ import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.service.CityService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 /**
@@ -40,6 +35,15 @@ public class CityController {
         PageUtils page = cityService.queryPage(params);
 
         return R.ok().put("page", page);
+    }
+
+    /**
+     * 获取所有有效的城市信息(不带分页)
+     * @return
+     */
+    @GetMapping("/listAll")
+    public R listAll() {
+        return cityService.listAll();
     }
 
 

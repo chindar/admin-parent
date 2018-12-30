@@ -2,20 +2,20 @@ package com.admin.modules.sys.service.impl;
 
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
+import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
 import com.admin.modules.sys.dao.CityDao;
-import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.CityEntity;
-import com.admin.modules.sys.entity.vo.AreaEntityVo;
 import com.admin.modules.sys.entity.vo.CityEntityVo;
 import com.admin.modules.sys.service.CityService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 
 @Service("cityService")
@@ -51,5 +51,15 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
         }
         int count = dao.deleteCityById(id);
         return count;
+    }
+
+    /**
+     * 获取所有有效的城市信息(不带分页)
+     *
+     * @return
+     */
+    @Override
+    public R listAll() {
+        return R.ok().put("list", this.selectList(new EntityWrapper<CityEntity>()));
     }
 }

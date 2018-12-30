@@ -1,6 +1,7 @@
 package com.admin.modules.sys.service;
 
 import com.admin.common.utils.PageUtils;
+import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.CityEntity;
 import com.baomidou.mybatisplus.service.IService;
 import java.util.Map;
@@ -17,5 +18,11 @@ public interface CityService extends IService<CityEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     int deleteCityById(Integer id);
+
+    /**
+     * 获取所有有效的城市信息(不带分页)
+     * @return
+     */
+    R listAll();
 }
 
