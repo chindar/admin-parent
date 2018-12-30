@@ -3,7 +3,7 @@ package com.admin.modules.sys.dao;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.admin.modules.sys.entity.CourierEntity;
-import com.admin.modules.sys.vo.CourierVo;
+import com.admin.modules.sys.entity.vo.CourierVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,4 +37,12 @@ public interface CourierDao extends BaseMapper<CourierEntity> {
      * @return
      */
     List<CourierVo> selectByIds(@Param("ids") List<Integer> ids);
+
+    /**
+     * 查询配送员信息
+     * @param page
+     * @param courierVo
+     * @return
+     */
+    List<CourierVo> queryCourierList(Page<CourierVo> page, CourierVo courierVo);
 }

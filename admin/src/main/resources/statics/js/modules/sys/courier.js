@@ -3,32 +3,9 @@ $(function () {
         url: baseURL + 'sys/courier/list',
         datatype: "json",
         colModel: [
-            // 片区	城市	站点	erp账号	配送员姓名	身份证	电话	银行卡号	开户行	联行号	入职时间	离职时间	状态	备注
+            // 姓名 身份证 手机 公司 片区 城市 站点 合同 创建时间 ERP账号 离职倒记时 状态 操作
             {
-                label: '片区',
-                name: 'area',
-                index: 'area',
-                width: 80
-            }, {
-                label: '城市',
-                name: 'cityName',
-                index: 'city_name',
-                width: 80
-            },
-            {
-                label: '站点',
-                name: 'site',
-                index: 'site',
-                width: 80
-            },
-            {
-                label: 'erp账号',
-                name: 'erpId',
-                index: 'erp_id',
-                width: 80
-            },
-            {
-                label: '配送员姓名',
+                label: '姓名',
                 name: 'courierName',
                 index: 'courier_name',
                 width: 100
@@ -40,39 +17,56 @@ $(function () {
                 width: 100
             },
             {
-                label: '电话',
+                label: '手机',
                 name: 'phone',
                 index: 'phone',
                 width: 100
             },
             {
-                label: '银行卡号',
-                name: 'bankCardId',
-                index: 'bank_card_id',
+                label: '公司',
+                name: 'companyName',
+                index: 'company_name',
+                width: 100
+            },
+            {
+                label: '片区',
+                name: 'areaName',
+                index: 'area_name',
+                width: 80
+            }, {
+                label: '城市',
+                name: 'cityName',
+                index: 'city_name',
                 width: 80
             },
             {
-                label: '开户行',
-                name: 'depositBank',
-                index: 'deposit_bank',
+                label: '站点',
+                name: 'siteName',
+                index: 'site_name',
                 width: 80
             },
             {
-                label: '联行号',
-                name: 'joinBankNumber',
-                index: 'Join_bank_number',
+                label: '合同',
+                name: 'pactName',
+                index: 'pact_name',
                 width: 80
             },
             {
-                label: '入职时间',
-                name: 'entryDate',
-                index: 'entry_date',
+                label: '创建时间',
+                name: 'createTime',
+                index: 'create_time',
                 width: 80
             },
             {
-                label: '离职时间',
-                name: 'leaveDate',
-                index: 'leave_date',
+                label: 'ERP账号',
+                name: 'erpNumber',
+                index: 'erp_number',
+                width: 80
+            },
+            {
+                label: '离职倒记时',
+                name: 'jobOverTime',
+                index: 'job_over_time',
                 width: 80
             },
             {
@@ -81,25 +75,14 @@ $(function () {
                 index: 'status',
                 width: 80,
                 formatter: function (value, options, row) {
-                    return value === 0 ?
-                        '<span class="label label-danger">离职</span>' :
-                        value === 1 ?
-                            '<span class="label label-success">在职</span>' :
+                    console.log(value, options, row);
+                    return value == 0 ?
+                        '<span class="label label-success">在职</span>' :
+                        value == 1 ?
+                            '<span class="label label-danger">离职</span>' :
                             '<span class="label"></span>';
                 }
-            },
-            {
-                label: '备注',
-                name: 'comment',
-                index: 'comment',
-                width: 80
             }
-            // {
-            //     label: '合同名称',
-            //     name: 'pactName',
-            //     index: 'pact_name',
-            //     width: 80
-            // },
         ],
         viewrecords: true,
         height: 385,
@@ -255,6 +238,7 @@ var vm = new Vue({
             });
         },
         reload: function (event) {
+            console.log(event);
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             var postData = $("#jqGrid").jqGrid('getGridParam', 'postData');
@@ -262,26 +246,32 @@ var vm = new Vue({
             delete postData.courierName;
             delete postData.phone;
             if (vm.keyword == 0) {
-                $("#jqGrid").jqGrid('setGridParam', {
-                    postData: {"courierName": vm.q.name, "pactId": vm.pactId},
-                    page: page
-                }).trigger("reloadGrid");
-
+                alert(r.msg, function (index) {
+                    $("#jqGrid").jqGrid('setGridParam', {
+                        postData: {"courierName": vm.q.name, "pactId": vm.pactId},
+                        page: page
+                    }).trigger("reloadGrid");
+                });
             } else if (vm.keyword == 1) {
-                $("#jqGrid").jqGrid('setGridParam', {
-                    postData: {"cardId": vm.q.name, "pactId": vm.pactId},
-                    page: page
-                }).trigger("reloadGrid");
-
+                alert(r.msg, function (index) {
+                    $("#jqGrid").jqGrid('setGridParam', {
+                        postData: {"cardId": vm.q.name, "pactId": vm.pactId},
+                        page: page
+                    }).trigger("reloadGrid");
+                });
             } else if (vm.keyword == 2) {
-                $("#jqGrid").jqGrid('setGridParam', {
-                    postData: {"phone": vm.q.name, "pactId": vm.pactId},
-                    page: page
-                }).trigger("reloadGrid");
+                alert(r.msg, function (index) {
+                    $("#jqGrid").jqGrid('setGridParam', {
+                        postData: {"phone": vm.q.name, "pactId": vm.pactId},
+                        page: page
+                    }).trigger("reloadGrid");
+                });
             } else {
-                $("#jqGrid").jqGrid('setGridParam', {
-                    page: page
-                }).trigger("reloadGrid");
+                alert(r.msg, function (index) {
+                    $("#jqGrid").jqGrid('setGridParam', {
+                        page: page
+                    }).trigger("reloadGrid");
+                });
             }
 
         },

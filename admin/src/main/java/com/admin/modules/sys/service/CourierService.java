@@ -1,12 +1,10 @@
 package com.admin.modules.sys.service;
 
-import com.baomidou.mybatisplus.service.IService;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.CourierEntity;
-import org.springframework.web.multipart.MultipartFile;
+import com.baomidou.mybatisplus.service.IService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -20,28 +18,35 @@ public interface CourierService extends IService<CourierEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+//    /**
+//     * 上传文件
+//     * @param file
+//     * @return
+//     */
+//    R importCourier(MultipartFile file);
+//
+//    PageUtils selectMyPage(Map<String, Object> params);
+//
+//    /**
+//     * 批量更新配送员信息
+//     * @param batchId
+//     * @param pactId
+//     * @return
+//     */
+//    R editBatch(String batchId, String pactId);
+//
+//    /**
+//     * 导出配送员信息
+//     * @param ids
+//     * @param res
+//     */
+//    void exportCourier(Integer[] ids, HttpServletResponse res);
+
     /**
-     * 上传文件
-     * @param file
+     * 查询配送员列表
+     * @param params
      * @return
      */
-    R importCourier(MultipartFile file);
-
-    PageUtils selectMyPage(Map<String, Object> params);
-
-    /**
-     * 批量更新配送员信息
-     * @param batchId
-     * @param pactId
-     * @return
-     */
-    R editBatch(String batchId, String pactId);
-
-    /**
-     * 导出配送员信息
-     * @param ids
-     * @param res
-     */
-    void exportCourier(Integer[] ids, HttpServletResponse res);
+    R queryCourierList(Map<String, Object> params);
 }
 
