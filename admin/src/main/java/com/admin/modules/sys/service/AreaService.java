@@ -1,6 +1,7 @@
 package com.admin.modules.sys.service;
 
 import com.admin.common.utils.PageUtils;
+import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.vo.AreaEntityVo;
 import com.baomidou.mybatisplus.service.IService;
@@ -24,5 +25,11 @@ public interface AreaService extends IService<AreaEntity> {
     int deleteAreaById(Integer id);
 
     List<AreaEntity> getAllAreaList(Integer companyId);
+
+    /**
+     * 获取所有有效的片区(不带分页)
+     * @return
+     */
+    R listAll();
 }
 
