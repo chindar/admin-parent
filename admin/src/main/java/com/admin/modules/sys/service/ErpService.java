@@ -1,6 +1,7 @@
 package com.admin.modules.sys.service;
 
 import com.admin.common.utils.PageUtils;
+import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.baomidou.mybatisplus.service.IService;
 import java.util.Map;
@@ -15,5 +16,11 @@ import java.util.Map;
 public interface ErpService extends IService<ErpEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    /**
+     * 查询未绑定在职员工的ERP账号
+     * @return
+     */
+    R getErpList();
 }
 

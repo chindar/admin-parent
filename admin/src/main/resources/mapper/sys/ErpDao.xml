@@ -12,6 +12,17 @@
         <result property="createTime" column="create_time"/>
         <result property="isDelete" column="is_delete"/>
     </resultMap>
+    <select id="getErpList" resultType="com.admin.modules.sys.entity.ErpEntity">
+        SELECT id
+             , a.erp_number
+             , a.company_id
+             , a.status
+             , a.create_time
+             , a.is_delete
+        FROM tb_erp a
+        WHERE 1 = 1
+          AND NOT exists(SELECT 0 FROM tb_courier b WHERE a.id = b.erp_id)
+    </select>
 
 
 </mapper>
