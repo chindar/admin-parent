@@ -85,7 +85,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 long jobOverTime = DateUtil.betweenDay(DateUtil.date(), leaveDate, false);
                 c.setJobOverTime(jobOverTime);
             } else {
-                nameList.add(c.getCourierName());
+                nameList.add(c.getName());
             }
         }
         page.setRecords(courierVoList);
@@ -134,7 +134,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
 //                    courierEntity.setCityId(cityId);
 //                    courierEntity.setSite(Convert.toStr(lineList.get(2)));
 //                    courierEntity.setErpId(Convert.toStr(lineList.get(3)));
-//                    courierEntity.setCourierName(Convert.toStr(lineList.get(4)));
+//                    courierEntity.setName(Convert.toStr(lineList.get(4)));
 //                    courierEntity.setCardId(Convert.toStr(lineList.get(5)));
 //                    courierEntity.setPhone(Convert.toStr(lineList.get(6)));
 //                    courierEntity.setBankCardId(Convert.toStr(lineList.get(7)));
@@ -240,7 +240,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
 //                cell.setCellValue(vo.getErpId());
 //                // 配送员姓名
 //                cell = row.createCell(4);
-//                cell.setCellValue(vo.getCourierName());
+//                cell.setCellValue(vo.getName());
 //                // 身份证
 //                cell = row.createCell(5);
 //                cell.setCellValue(vo.getCardId());

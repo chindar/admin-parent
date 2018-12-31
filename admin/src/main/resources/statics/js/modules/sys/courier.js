@@ -6,8 +6,8 @@ $(function () {
             // 姓名 身份证 手机 公司 片区 城市 站点 合同 创建时间 ERP账号 离职倒记时 状态 操作
             {
                 label: '姓名',
-                name: 'courierName',
-                index: 'courier_name',
+                name: 'name',
+                index: 'name',
                 width: 100
             },
             {
@@ -255,44 +255,6 @@ var vm = new Vue({
                 vm.courier = r.courier;
             });
         },
-        reload: function (event) {
-            console.log(event);
-            vm.showList = true;
-            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
-            var postData = $("#jqGrid").jqGrid('getGridParam', 'postData');
-            delete postData.cardId;
-            delete postData.courierName;
-            delete postData.phone;
-            if (vm.keyword == 0) {
-                alert(r.msg, function (index) {
-                    $("#jqGrid").jqGrid('setGridParam', {
-                        postData: {"courierName": vm.q.name, "pactId": vm.pactId},
-                        page: page
-                    }).trigger("reloadGrid");
-                });
-            } else if (vm.keyword == 1) {
-                alert(r.msg, function (index) {
-                    $("#jqGrid").jqGrid('setGridParam', {
-                        postData: {"cardId": vm.q.name, "pactId": vm.pactId},
-                        page: page
-                    }).trigger("reloadGrid");
-                });
-            } else if (vm.keyword == 2) {
-                alert(r.msg, function (index) {
-                    $("#jqGrid").jqGrid('setGridParam', {
-                        postData: {"phone": vm.q.name, "pactId": vm.pactId},
-                        page: page
-                    }).trigger("reloadGrid");
-                });
-            } else {
-                alert(r.msg, function (index) {
-                    $("#jqGrid").jqGrid('setGridParam', {
-                        page: page
-                    }).trigger("reloadGrid");
-                });
-            }
-
-        },
 
         /**********************************************************************
          * 导出配送员信息
@@ -421,7 +383,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchArea: function () {
-            $.get(baseURL + "sys/area/getAllAreaList", function (r) {
+            $.get(baseURL + "sys/area/listAll", function (r) {
                 vm.areaList = r.list;
             });
         },
@@ -431,9 +393,28 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchSite: function () {
-            $.get(baseURL + "sys/city/listAll", function (r) {
+            $.get(baseURL + "sys/site/listAll", function (r) {
                 vm.siteList = r.list;
             });
+        },
+
+        reload: function (event) {
+            vm.showList = true;
+            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+            $("#jqGrid").jqGrid('setGridParam', {
+                postData:{
+                    'name': vm.q.name,
+                    'erpNumber': vm.q.erpNumber,
+                    'cardId': vm.q.cardId,
+                    'companyId':vm.q.companyId,
+                    'status': vm.q.status,
+                    'pactId': vm.q.pactId,
+                    'cityId': vm.q.cityId,
+                    'areaId':vm.q.areaId,
+                    'siteId': vm.q.siteId
+                },
+                page: page
+            }).trigger("reloadGrid");
         },
         
         /**********************************************************************

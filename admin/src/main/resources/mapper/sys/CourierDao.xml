@@ -5,7 +5,7 @@
 
     <resultMap type="com.admin.modules.sys.entity.vo.CourierVo" id="courierVoMap">
         <result property="id" column="id"/>
-        <result property="courierName" column="courier_name"/>
+        <result property="name" column="name"/>
         <result property="cardId" column="card_id"/>
         <result property="phone" column="phone"/>
         <result property="bankCardId" column="bank_card_id"/>
@@ -40,7 +40,7 @@
     <select id="selectMyPage" parameterType="com.admin.modules.sys.entity.vo.CourierVo" resultMap="courierVoMap">
       SELECT
         a.id
-        , a.courier_name
+        , a.name
         , a.card_id
         , a.phone
         , a.bank_card_id
@@ -67,8 +67,8 @@
       LEFT JOIN tb_city_info c on a.city_id = c.id
       WHERE 1 = 1
         AND a.is_delete = 0
-      <if test="courierName != null and courierName != ''">
-        AND a.courier_name = #{courierName}
+      <if test="name != null and name != ''">
+        AND a.name = #{name}
       </if>
       <if test="cardId != null and cardId != ''">
         AND a.card_id = #{cardId}
@@ -84,7 +84,7 @@
     <select id="selectByIds" resultType="com.admin.modules.sys.entity.vo.CourierVo">
       SELECT
         a.id
-        , a.courier_name
+        , a.name
         , a.card_id
         , a.phone
         , a.bank_card_id
@@ -119,7 +119,7 @@
     </select>
     <select id="queryCourierList" resultType="com.admin.modules.sys.entity.vo.CourierVo" resultMap="courierVoMap">
         SELECT a.id
-             , a.courier_name
+             , a.name
              , a.card_id
              , a.phone
              , a.bank_card_id
@@ -151,5 +151,32 @@
                LEFT JOIN tb_area f ON a.area_id = f.id
                LEFT JOIN tb_site g ON a.site_id = g.id
         WHERE 1 = 1
+        <if test="name != null and name != ''">
+               AND a.name = #{name}
+        </if>
+        <if test="erpNumber != null and erpNumber != ''">
+               AND d.erp_number = #{erpNumber}
+        </if>
+        <if test="cardId != null and cardId != ''">
+               AND a.card_id = #{cardId}
+        </if>
+        <if test="companyId != null and companyId != ''">
+               AND a.company_id = #{companyId}
+        </if>
+        <if test="status != null and status != ''">
+               AND a.status = #{status}
+        </if>
+        <if test="pactId != null and pactId != ''">
+               AND a.erp_id = #{pactId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+               AND a.city_id = #{cityId}
+        </if>
+        <if test="areaId != null and areaId != ''">
+               AND a.area_id = #{areaId}
+        </if>
+        <if test="siteId != null and siteId != ''">
+               AND a.site_id = #{siteId}
+        </if>
     </select>
 </mapper>

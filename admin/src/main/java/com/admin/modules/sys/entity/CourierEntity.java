@@ -27,7 +27,7 @@ public class CourierEntity implements Serializable {
 	/**
 	 * 姓名
 	 */
-	private String courierName;
+	private String name;
 	/**
 	 * 身份证
 	 */
