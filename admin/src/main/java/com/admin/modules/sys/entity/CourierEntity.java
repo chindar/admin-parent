@@ -1,9 +1,12 @@
 package com.admin.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,18 +30,22 @@ public class CourierEntity implements Serializable {
 	/**
 	 * 姓名
 	 */
+	@NotBlank(message="配送员姓名不能为空")
 	private String name;
 	/**
 	 * 身份证
 	 */
+	@NotBlank(message="身份证号不能为空")
 	private String cardId;
 	/**
 	 * 手机
 	 */
+	@NotBlank(message="手机号不能为空")
 	private String phone;
 	/**
 	 * 银行卡号
 	 */
+	@NotBlank(message="银行卡号不能为空")
 	private String bankCardId;
 	/**
 	 * 开户行名称
@@ -51,10 +58,12 @@ public class CourierEntity implements Serializable {
 	/**
 	 * 入职时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
 	private Date entryDate;
 	/**
 	 * 离职时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd", timezone = "GMT+8")
 	private Date leaveDate;
 	/**
 	 * 1:离职 0:在职
@@ -89,8 +98,9 @@ public class CourierEntity implements Serializable {
 	/** 创建时间 */
 	private Date createTime;
 	/**
-	 * -1:删除0:正常
+	 * 1:删除0:正常
 	 */
+	@TableLogic
 	private Integer isDelete;
 
 }

@@ -87,11 +87,7 @@ $(function () {
                 name: 'option',
                 index: 'option',
                 width: 150,
-                formatter: function (value, options, row) {
-                    return '<a href="#" id="edit">操作</a>' +
-                        '<span class="label label-info" @click="show(row.id)">详情</span>' +
-                        '<span class="label label-warning" @click="del(row.id)">删除</span>';
-                }
+                formatter: cmgStateFormat
             },
         ],
         viewrecords: true,
@@ -117,8 +113,15 @@ $(function () {
         gridComplete: function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
-        }
+        },
+        //格式化操作列
     });
+
+    function cmgStateFormat(cellValue) {
+        return "<button class='btn btn-info	 ' onclick=\"editArea(" + cellValue + ")\">编辑</button>" +
+            "<button class='btn btn-info	 ' onclick=\"editArea(" + cellValue + ")\">详情</button>" +
+            "&nbsp;&nbsp;&nbsp;<button class='btn btn-info	 ' onclick=\"del(" + cellValue + ")\">删除</button>";
+    }
 
     // new AjaxUpload('#upload', {
     //     action: baseURL + "sys/courier/import",
@@ -152,7 +155,7 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-        keyword: 0,
+        showStatus: false,
         q: {
             name: null,
             erpNumber: null,
@@ -171,6 +174,7 @@ var vm = new Vue({
         cityList: [],
         areaList: [],
         siteList: [],
+        erpList: [],
         batchId: null
     },
     watch: {
@@ -195,13 +199,21 @@ var vm = new Vue({
         },
         add: function () {
             vm.showList = false;
-            vm.showImport = true;
-            vm.title = "新增";
-            vm.courier = {};
+            vm.showStatus = false;
+            vm.title = "新增配送员";
+            vm.courier = {
+                erpId: '',
+                companyId: '',
+                status: '',
+                pactId: '',
+                cityId: '',
+                areaId: '',
+                siteId: ''
+            };
+            vm.searchErpList();
+
         },
         update: function (id) {
-            console.log(id);
-
             vm.showList = false;
             vm.title = "修改";
 
@@ -209,6 +221,9 @@ var vm = new Vue({
         },
         saveOrUpdate: function (event) {
             var url = vm.courier.id == null ? "sys/courier/save" : "sys/courier/update";
+            if (this.validator()) {
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: baseURL + url,
@@ -226,12 +241,10 @@ var vm = new Vue({
             });
         },
 
-        del: function (event) {
-            var ids = getSelectedRows();
-            if (ids == null) {
-                return;
-            }
+        del: function (cell) {
 
+            console.log(cell);
+            debugger;
             confirm('确定要删除选中的记录？', function () {
                 $.ajax({
                     type: "POST",
@@ -324,7 +337,7 @@ var vm = new Vue({
             this.q.erpNumber = null;
             this.q.cardId = null;
             this.q.companyId = '';
-            this.q.status = -1;
+            this.q.status = '';
             this.q.pactId = '';
             this.q.cityId = '';
             this.q.areaId = '';
@@ -398,32 +411,62 @@ var vm = new Vue({
             });
         },
 
+        /**********************************************************************
+         * 查询Erp账户
+         * @author Wang Chinda
+         **********************************************************************/
+        searchErpList: function () {
+            $.get(baseURL + "sys/erp/listByCourier", function (r) {
+                vm.erpList = r.list;
+            });
+        },
+
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData:{
+                postData: {
                     'name': vm.q.name,
                     'erpNumber': vm.q.erpNumber,
                     'cardId': vm.q.cardId,
-                    'companyId':vm.q.companyId,
+                    'companyId': vm.q.companyId,
                     'status': vm.q.status,
                     'pactId': vm.q.pactId,
                     'cityId': vm.q.cityId,
-                    'areaId':vm.q.areaId,
+                    'areaId': vm.q.areaId,
                     'siteId': vm.q.siteId
                 },
                 page: page
             }).trigger("reloadGrid");
         },
-        
+
         /**********************************************************************
          * 表单校验
          * @author Wang Chinda
          **********************************************************************/
         validator: function () {
             if (isBlank(vm.courier.name)) {
-                alert("快递员名称不能为空");
+                alert("配送员姓名不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.cardId)) {
+                alert("身份证号不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.phone)) {
+                alert("手机号不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.bankCardId)) {
+                alert("银行卡号不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.entryDate)) {
+                alert("入职时间不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.entryDate)) {
+                alert("入职时间不能为空");
                 return true;
             }
         }

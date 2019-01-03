@@ -178,5 +178,6 @@
         <if test="siteId != null and siteId != ''">
                AND a.site_id = #{siteId}
         </if>
+               AND a.is_delete = 0
     </select>
 </mapper>

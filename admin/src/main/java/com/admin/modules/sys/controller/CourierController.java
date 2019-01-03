@@ -53,6 +53,7 @@ public class CourierController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:courier:save")
     public R save(@RequestBody CourierEntity courier){
+        courier.setIsDelete(0);
         courierService.insert(courier);
 
         return R.ok();

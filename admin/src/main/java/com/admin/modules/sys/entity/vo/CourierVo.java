@@ -9,6 +9,7 @@
 package com.admin.modules.sys.entity.vo;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -61,8 +62,10 @@ public class CourierVo implements Serializable {
     /**
      * 离职时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date leaveDate;
     /** 离职倒计时 */
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Long jobOverTime;
     /**
      * 1:离职 0:在职
