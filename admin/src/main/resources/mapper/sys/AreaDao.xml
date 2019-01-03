@@ -38,4 +38,14 @@
     <select id="getAllAreaList" resultMap="areaMap">
         select * from tb_area where is_delete = 0 and company_id = #{companyId} order by  create_time desc
     </select>
+
+    <!--删除则校验该公司下面有无绑定的待生效、生效中的合同-->
+    <select id="getPactByCompanyId" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM tb_pact
+        WHERE is_delete = 0
+        AND company_id = (
+            SELECT company_id FROM ${tb} WHERE id = #{id}
+            )
+        AND end_date > NOW()
+    </select>
 </mapper>

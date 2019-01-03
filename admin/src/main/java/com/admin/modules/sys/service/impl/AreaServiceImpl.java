@@ -58,8 +58,9 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements
     @Override
     public int deleteAreaById(Integer id) {
         //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
-        if (id == 2){
-            throw new RuntimeException("该片区不能删除");
+        int pactcount = dao.getPactByCompanyId(id,"tb_area");
+        if (pactcount>0){
+            throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
         int count = dao.deleteAreaById(id);
         return count;

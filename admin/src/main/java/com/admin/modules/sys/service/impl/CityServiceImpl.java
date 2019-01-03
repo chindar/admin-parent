@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
+import com.admin.modules.sys.dao.AreaDao;
 import com.admin.modules.sys.dao.CityDao;
 import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.entity.vo.CityEntityVo;
@@ -23,6 +24,9 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
 
     @Autowired
     private CityDao dao;
+
+    @Autowired
+    private AreaDao areaDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -46,8 +50,9 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
     @Override
     public int deleteCityById(Integer id) {
         //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
-        if (id == 2){
-            throw new RuntimeException("该城市不能删除");
+        int pactcount = areaDao.getPactByCompanyId(id,"tb_city");
+        if (pactcount>0){
+            throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
         int count = dao.deleteCityById(id);
         return count;
