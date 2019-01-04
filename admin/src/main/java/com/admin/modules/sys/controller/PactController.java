@@ -9,6 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -32,8 +33,11 @@ public class PactController {
      */
     @RequestMapping("/list")
     @RequiresPermissions("sys:pact:list")
-    public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = pactService.queryPage(params);
+    public R list(@RequestParam Map<String, Object> params, HttpServletRequest request){
+        String QUERY_FILE_PATH = request.getScheme() + "://" +
+                request.getServerName() + ":" + request.getServerPort() +
+                request.getContextPath() + "/";
+        PageUtils page = pactService.queryPage(params, QUERY_FILE_PATH);
 
         return R.ok().put("page", page);
     }

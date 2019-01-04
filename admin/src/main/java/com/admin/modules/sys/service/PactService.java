@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface PactService extends IService<PactEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    PageUtils queryPage(Map<String, Object> params,String path);
 
     /**
      * 获取所有有效的合同信息

@@ -4,21 +4,44 @@
 <mapper namespace="com.admin.modules.sys.dao.PactDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.admin.modules.sys.entity.PactEntity" id="pactMap">
-                    <result property="id" column="id"/>
-                    <result property="name" column="name"/>
-                    <result property="businessName" column="business_name"/>
-                    <result property="cityId" column="city_id"/>
-                    <result property="startDate" column="start_date"/>
-                    <result property="endDate" column="end_date"/>
-                    <result property="createTime" column="create_time"/>
-                    <result property="fileId" column="file_id"/>
-                    <result property="fileName" column="file_name"/>
-                    <result property="companyId" column="company_id"/>
-                    <result property="provinceName" column="province_name"/>
-                    <result property="cityName" column="city_name"/>
-                    <result property="isDelete" column="is_delete"/>
-            </resultMap>
+    <resultMap type="com.admin.modules.sys.entity.vo.PactEntityVo" id="pactMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="businessName" column="business_name"/>
+        <result property="cityId" column="city_id"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="fileId" column="file_id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="companyId" column="company_id"/>
+        <result property="provinceName" column="province_name"/>
+        <result property="cityName" column="city_name"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="companyName" column="companyName"/>
+        <result property="pactStatus" column="pactStatus"/>
+        <result property="overDays" column="overDays"/>
+    </resultMap>
 
+    <select id="getPactList" parameterType="com.admin.modules.sys.entity.PactEntity" resultMap="pactMap">
+        select  a.*,b.`name` as companyName,
+        case WHEN NOW()>end_date THEN 2
+        WHEN start_date > NOW()  THEN 0
+        ELSE 1 END pactStatus,
+        TIMESTAMPDIFF(DAY,NOW(),end_date) as overDays
+        from tb_pact a
+        LEFT JOIN tb_company b
+        ON a.company_id = b.id
+        where a.is_delete = 0
+        <if test="businessName != null and businessName != ''">
+            and a.business_name like CONCAT('%',ltrim(rtrim(#{businessName})),'%')
+        </if>
+        <if test="companyId != null and companyId != ''">
+            and a.company_id = #{companyId}
+        </if>
+        <if test="(pactStatus != null and pactStatus != '') or pactStatus == 0">
+            having pactStatus = #{pactStatus}
+        </if>
+    </select>
 
 </mapper>
