@@ -19,10 +19,10 @@ required:必选项
 		settings=$.extend({
 			url:"/admin/statics/js/city.min.js",
 			prov:null,
-			city:null,
+			city:"请选择城市",
 			dist:null,
 			nodata:null,
-			required:true
+			required:false
 		},settings);
 
 		var box_obj=this;
@@ -37,7 +37,7 @@ required:必选项
 
 		// 赋值市级函数
 		var cityStart=function(){
-			var prov_id=prov_obj.get(0).selectedIndex-1;
+			var prov_id=prov_obj.get(0).selectedIndex;
 			if(!settings.required){
 				prov_id--;
 			};
@@ -56,12 +56,17 @@ required:必选项
 			};
 
 			// 遍历赋值市级下拉列表
-			temp_html=select_prehtml;
+			// temp_html=select_prehtml;
+			temp_html=settings.required? "" : "<option value=''>请选择城市</option>"
 			$.each(city_json.citylist[prov_id].c,function(i,city){
-				temp_html+="<option value='"+city.n+"'>"+city.n+"</option>";
+				if (i==0){
+                    temp_html += "<option value='" + city.n + "' selected>" + city.n + "</option>";
+				}else {
+                    temp_html += "<option value='" + city.n + "'>" + city.n + "</option>";
+                }
 			});
-			city_obj.append(temp_html).attr("disabled",false).css({"display":"","visibility":""});
-			distStart();
+			city_obj.html(temp_html).attr("disabled",false).css({"display":"","visibility":""});
+			// distStart();
 		};
 
 		// 赋值地区（县）函数
@@ -93,11 +98,12 @@ required:必选项
 
 		var init=function(){
 			// 遍历赋值省份下拉列表
-			temp_html=select_prehtml;
+			// temp_html=select_prehtml;
+            temp_html=settings.required? "" : "<option value=''>请选择省份</option>"
 			$.each(city_json.citylist,function(i,prov){
 				temp_html+="<option value='"+prov.p+"'>"+prov.p+"</option>";
 			});
-			prov_obj.append(temp_html);
+			prov_obj.html(temp_html);
 
 			// 若有传入省份与市级的值，则选中。（setTimeout为兼容IE6而设置）
 			setTimeout(function(){
@@ -121,6 +127,7 @@ required:必选项
 			// 选择省份时发生事件
 			prov_obj.bind("change",function(){
 				cityStart();
+                settings.city="请选择城市"
 			});
 
 			// 选择市级时发生事件

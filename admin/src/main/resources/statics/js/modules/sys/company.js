@@ -236,7 +236,7 @@ $(function () {
             $(this).fadeOut("fast");
         });
     };
-    $("#city").citySelect();
+    // $("#city").citySelect();
 });
 //编辑
 function editCompany(id) {
@@ -293,27 +293,29 @@ var vm = new Vue({
             };
             $("#aaa").attr("src", "/admin/statics/default.png")
             $("#bbb").attr("src", "/admin/statics/default.png")
+            $("#city").citySelect({prov:"",city:""});
         }
         ,
         saveOrUpdate: function (event) {
             var url = vm
                 .company.id ==
             null ? "sys/company/save" : "sys/company/update";
-            $.ajax({
-                type: "POST",
-                url: baseURL + url,
-                contentType: "application/json",
-                data: JSON.stringify(vm.company),
-                success: function (r) {
-                    if (r.code === 0) {
-                        alert('操作成功', function (index) {
-                            vm.reload();
-                        });
-                    } else {
-                        alert(r.msg);
-                    }
-                }
-            });
+            console.log(vm.company)
+            // $.ajax({
+            //     type: "POST",
+            //     url: baseURL + url,
+            //     contentType: "application/json",
+            //     data: JSON.stringify(vm.company),
+            //     success: function (r) {
+            //         if (r.code === 0) {
+            //             alert('操作成功', function (index) {
+            //                 vm.reload();
+            //             });
+            //         } else {
+            //             alert(r.msg);
+            //         }
+            //     }
+            // });
         }
         ,
         del: function (event) {
@@ -343,6 +345,7 @@ var vm = new Vue({
         ,
         getInfo: function (id) {
             $.get(baseURL + "sys/company/info/" + id, function (r) {
+                $("#city").citySelect({prov:r.company.provinceName,city:r.company.cityName,required:true});
                 vm.company = r.company;
             });
         }
