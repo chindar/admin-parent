@@ -72,6 +72,19 @@ public class PactEntity implements Serializable {
 	private Integer isDelete;
 
 	/**
+	 *合同状态 0待生效、1生效、2结束
+	 */
+	private Integer pactStatus;
+
+	public Integer getPactStatus() {
+		return pactStatus;
+	}
+
+	public void setPactStatus(Integer pactStatus) {
+		this.pactStatus = pactStatus;
+	}
+
+	/**
 	 * 设置：
 	 */
 	public void setId(Integer id) {
