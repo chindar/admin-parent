@@ -286,7 +286,9 @@ var vm = new Vue({
             vm.showList = false;
             vm.title = "新增";
             vm.company = {
-                cityId: ''
+                cityId: '',
+                provinceName: '',
+                cityName: ''
                 // businessFileUrl : 'http://localhost:8080/renren-admin/sys/company/getFile?fileId=1545211156491&dbname=businessFile'
             };
             $("#aaa").attr("src", "/admin/statics/default.png")

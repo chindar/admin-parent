@@ -37,7 +37,7 @@ required:必选项
 
 		// 赋值市级函数
 		var cityStart=function(){
-			var prov_id=prov_obj.get(0).selectedIndex;
+			var prov_id=prov_obj.get(0).selectedIndex-1;
 			if(!settings.required){
 				prov_id--;
 			};
@@ -60,7 +60,7 @@ required:必选项
 			$.each(city_json.citylist[prov_id].c,function(i,city){
 				temp_html+="<option value='"+city.n+"'>"+city.n+"</option>";
 			});
-			city_obj.html(temp_html).attr("disabled",false).css({"display":"","visibility":""});
+			city_obj.append(temp_html).attr("disabled",false).css({"display":"","visibility":""});
 			distStart();
 		};
 
@@ -97,7 +97,7 @@ required:必选项
 			$.each(city_json.citylist,function(i,prov){
 				temp_html+="<option value='"+prov.p+"'>"+prov.p+"</option>";
 			});
-			prov_obj.html(temp_html);
+			prov_obj.append(temp_html);
 
 			// 若有传入省份与市级的值，则选中。（setTimeout为兼容IE6而设置）
 			setTimeout(function(){
@@ -124,9 +124,9 @@ required:必选项
 			});
 
 			// 选择市级时发生事件
-			city_obj.bind("change",function(){
-				distStart();
-			});
+			// city_obj.bind("change",function(){
+			// 	distStart();
+			// });
 		};
 
 		// 设置省市json数据
