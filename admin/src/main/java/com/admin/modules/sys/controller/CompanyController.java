@@ -21,7 +21,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,9 +103,13 @@ public class CompanyController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:company:delete")
-    public R delete(@RequestBody Integer[] ids){
-        companyService.deleteBatchIds(Arrays.asList(ids));
-
+    public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
+        try {
+            companyService.deleteComById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
         return R.ok();
     }
 

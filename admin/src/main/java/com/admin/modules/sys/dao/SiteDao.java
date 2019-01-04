@@ -3,6 +3,7 @@ package com.admin.modules.sys.dao;
 import com.admin.modules.sys.entity.SiteEntity;
 import com.admin.modules.sys.entity.vo.SiteEntityVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -17,4 +18,6 @@ import java.util.List;
 public interface SiteDao extends BaseMapper<SiteEntity> {
 
     List<SiteEntityVo> getSiteList(RowBounds var1, SiteEntity params);
+
+    int deleteSiteById(@Param("id") Integer id);
 }

@@ -21,7 +21,7 @@ $(function () {
                 label: '地址',
                 name: 'address',
                 index: 'address',
-                width: 80
+                width:120
             },
             {
                 label: '所在省',
@@ -83,6 +83,14 @@ $(function () {
                 formatter: function(value, options, row){
                     return '<img src="'+row.cardFileUrl+'">';
                 }
+            },
+            {
+                label:'操作',
+                name:'id',
+                valign: 'middle',
+                width:180,
+                // edittype:"button",
+                formatter:cmgStateFormat
             }
         ],
         viewrecords: true,
@@ -117,6 +125,12 @@ $(function () {
         },
 
     });
+    //格式化操作列
+    function cmgStateFormat(cellValue) {
+        return "<button class='btn btn-primary' onclick=\"editCompany("+ cellValue + ")\">编辑</button>"+
+            "&nbsp;&nbsp;&nbsp;<button class='btn btn-primary' onclick=\"deleteCompany("+ cellValue + ")\">删除</button>";
+    };
+
     $.ajax({
         type: "POST",
         url: baseURL + "sys/city/list",
@@ -133,6 +147,7 @@ $(function () {
             }
         }
     });
+
     new AjaxUpload('#upload', {
         action: baseURL + "sys/company/upload",
         name: 'file',
@@ -223,6 +238,33 @@ $(function () {
     };
     $("#city").citySelect();
 });
+//编辑
+function editCompany(id) {
+    vm.showList = false;
+    vm.title = "修改";
+    vm.getInfo(id);
+};
+//删除
+function deleteCompany(id) {
+    confirm('确定要删除选中的记录？', function () {
+        var data = {id: id};
+        $.ajax({
+            type: "POST",
+            url: baseURL + "sys/company/delete",
+            dataType: "json",
+            data:{id: id},
+            success: function (r) {
+                if (r.code == 0) {
+                    alert('操作成功', function (index) {
+                        $("#jqGrid").trigger("reloadGrid");
+                    });
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    });
+};
 var vm = new Vue({
 
     el: '#rrapp',
@@ -232,7 +274,9 @@ var vm = new Vue({
         company: {
 
         },
-
+        q:{
+            name: null
+        }
     },
     methods: {
         query: function () {
@@ -247,19 +291,6 @@ var vm = new Vue({
             };
             $("#aaa").attr("src", "/admin/statics/default.png")
             $("#bbb").attr("src", "/admin/statics/default.png")
-        }
-        ,
-        update: function (event) {
-            var id =
-                getSelectedRow();
-            if (id == null
-            ) {
-                return;
-            }
-            vm.showList = false;
-            vm.title = "修改";
-
-            vm.getInfo(id)
         }
         ,
         saveOrUpdate: function (event) {
@@ -318,6 +349,7 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
+                postData:{'name': vm.q.name},
                 page: page
             }).trigger("reloadGrid");
         },

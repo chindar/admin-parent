@@ -18,15 +18,19 @@
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
+            <div class="form-group col-sm-2" style="width:200px">
+                <input type="text" class="form-control" v-model="q.name" @keyup.enter="query" placeholder="请输入公司名称"/>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
             <#if shiro.hasPermission("sys:company:save")>
-                <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+                <a class="btn btn-primary" @click="add">新建公司</a>
             </#if>
-            <#if shiro.hasPermission("sys:company:update")>
-                <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            </#if>
-            <#if shiro.hasPermission("sys:company:delete")>
-                <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
-            </#if>
+            <!--<#if shiro.hasPermission("sys:company:update")>-->
+                <!--<a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->
+            <!--</#if>-->
+            <!--<#if shiro.hasPermission("sys:company:delete")>-->
+                <!--<a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>-->
+            <!--</#if>-->
 </div>
 <table id="jqGrid"></table>
 <div id="jqGridPager"></div>
@@ -51,7 +55,7 @@
             <div class="col-sm-2 control-label">选择省份</div>
             <div class="col-sm-10">
                 <select class="prov" style="width: 175px;height: 30px;" v-model="company.provinceName">
-                    <option value="" >请选择省份</option>
+                    <!--<option value="" >请选择省份</option>-->
                 </select>
                 <select class="city" style="width: 190px;height: 30px;" v-model="company.cityName">
                 </select>

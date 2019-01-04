@@ -37,4 +37,9 @@
             and a.city_id = #{cityId}
         </if>
     </select>
+
+    <!--删除-->
+    <update id="deleteSiteById">
+        update tb_site set is_delete = 1 where id = #{id}
+    </update>
 </mapper>

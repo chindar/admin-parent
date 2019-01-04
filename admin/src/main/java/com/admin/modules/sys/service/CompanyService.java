@@ -21,5 +21,7 @@ public interface CompanyService extends IService<CompanyEntity> {
     List<CompanyEntity> getAllCompanyList();
 
     PageUtils getCompanyList(Map<String, Object> params,String path);
+
+    int deleteComById(Integer id);
 }
 

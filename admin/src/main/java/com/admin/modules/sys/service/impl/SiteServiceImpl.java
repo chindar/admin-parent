@@ -25,10 +25,6 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
-//        Page<SiteEntity> page = this.selectPage(
-//                new Query<SiteEntity>(params).getPage(),
-//                new EntityWrapper<SiteEntity>()
-//        );
 
         SiteEntity entity = new SiteEntity();
         Page page = new Query<SiteEntity>(params).getPage();
@@ -53,6 +49,22 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
     @Override
     public R listAll() {
         return R.ok().put("list", this.selectList(new EntityWrapper<SiteEntity>()));
+    }
+
+
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @Override
+    public int deleteSiteById(Integer id) {
+        //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
+        if (id == 2){
+            throw new RuntimeException("该片区不能删除");
+        }
+        int count = dao.deleteSiteById(id);
+        return count;
     }
 
 }

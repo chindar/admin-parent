@@ -9,7 +9,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 
@@ -88,9 +87,14 @@ public class SiteController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:site:delete")
-    public R delete(@RequestBody Integer[] ids){
-        siteService.deleteBatchIds(Arrays.asList(ids));
-
+    public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
+  //      siteService.deleteBatchIds(Arrays.asList(ids));
+        try {
+            siteService.deleteSiteById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
         return R.ok();
     }
 

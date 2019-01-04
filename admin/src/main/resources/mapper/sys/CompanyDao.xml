@@ -27,4 +27,16 @@
     </select>
 
 
+    <select id="getComList" parameterType="com.admin.modules.sys.entity.CompanyEntity" resultMap="companyMap">
+        select * from tb_company a where is_delete = 0
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',ltrim(rtrim(#{name})),'%')
+        </if>
+
+    </select>
+    <!--删除-->
+    <update id="deleteComById">
+        update tb_company set is_delete = 1 where id = #{id}
+    </update>
+
 </mapper>

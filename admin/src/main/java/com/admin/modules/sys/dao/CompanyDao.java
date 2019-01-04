@@ -1,7 +1,9 @@
 package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.CompanyEntity;
+import com.admin.modules.sys.entity.vo.CompanyEntityVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
@@ -21,4 +23,9 @@ public interface CompanyDao extends BaseMapper<CompanyEntity> {
     List<CompanyEntity> getAllCompanyList();
 
     List<CompanyEntity> getCompanyList(RowBounds var1, CompanyEntity params);
+
+    List<CompanyEntityVo> getComList(RowBounds var1, CompanyEntity params);
+
+    int deleteComById(@Param("id") Integer id);
+
 }
