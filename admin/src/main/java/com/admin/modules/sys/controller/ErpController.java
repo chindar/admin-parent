@@ -7,6 +7,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 
@@ -76,6 +77,15 @@ public class ErpController {
         erpService.deleteById(id);
 
         return R.ok();
+    }
+
+    /**
+     * 导出excel
+     * @param res
+     */
+    @GetMapping("/leadOut")
+    public void leadOut(HttpServletResponse res) {
+        erpService.leadOut(res);
     }
 
 }

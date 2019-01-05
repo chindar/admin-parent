@@ -56,5 +56,19 @@
           AND a.is_delete = 0
     </select>
 
+    <select id="selectAll" resultMap="erpVoMap">
+        SELECT a.id
+        , a.erp_number
+        , a.company_id
+        , b.name
+        , a.status
+        , a.create_time
+        , a.is_delete
+        FROM tb_erp a
+        LEFT JOIN tb_company b ON a.company_id = b.id
+        WHERE 1 = 1
+        AND a.is_delete = 0
+    </select>
+
 
 </mapper>

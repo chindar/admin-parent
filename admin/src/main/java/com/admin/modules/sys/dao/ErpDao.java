@@ -29,4 +29,10 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
      * @return
      */
     List<ErpVo> queryPageErpList(Page<ErpVo> page, ErpVo erpVo);
+
+    /**
+     * 获取ERP账号全部信息
+     * @return
+     */
+    List<ErpVo> selectAll();
 }

@@ -5,6 +5,7 @@ import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -44,5 +45,11 @@ public interface ErpService extends IService<ErpEntity> {
      * @return
      */
     R update(ErpEntity erp);
+
+    /**
+     * 导出excel
+     * @param res
+     */
+    void leadOut(HttpServletResponse res);
 }
 

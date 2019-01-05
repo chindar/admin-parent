@@ -150,6 +150,14 @@ var vm = new Vue({
                 vm.erp = r.erp;
             });
         },
+        /**********************************************************************
+         * 导出配送员信息
+         * @author Wang Chinda
+         **********************************************************************/
+        leadOut: function () {
+
+            window.open("/admin/sys/erp/leadOut");
+        },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
