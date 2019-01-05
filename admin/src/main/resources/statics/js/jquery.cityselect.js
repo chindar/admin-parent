@@ -37,12 +37,13 @@ required:必选项
 
 		// 赋值市级函数
 		var cityStart=function(){
+			console.info("qwer")
 			var prov_id=prov_obj.get(0).selectedIndex;
 			if(!settings.required){
 				prov_id--;
 			};
-			city_obj.empty().attr("disabled",true);
-			dist_obj.empty().attr("disabled",true);
+			// city_obj.empty().attr("disabled",true);
+			// dist_obj.empty().attr("disabled",true);
 
 			if(prov_id<0||typeof(city_json.citylist[prov_id].c)=="undefined"){
 				if(settings.nodata=="none"){
@@ -110,17 +111,17 @@ required:必选项
 				if(settings.prov!=null){
 					prov_obj.val(settings.prov);
 					cityStart();
-					setTimeout(function(){
-						if(settings.city!=null){
-							city_obj.val(settings.city);
-							distStart();
-							setTimeout(function(){
-								if(settings.dist!=null){
-									dist_obj.val(settings.dist);
-								};
-							},1);
-						};
-					},1);
+					// setTimeout(function(){
+					// 	if(settings.city!=null){
+					// 		city_obj.val(settings.city);
+					// 		distStart();
+					// 		setTimeout(function(){
+					// 			if(settings.dist!=null){
+					// 				dist_obj.val(settings.dist);
+					// 			};
+					// 		},1);
+					// 	};
+					// },1);
 				};
 			},1);
 
@@ -138,11 +139,13 @@ required:必选项
 
 		// 设置省市json数据
 		if(typeof(settings.url)=="string"){
+			console.info("1111")
 			$.getJSON(settings.url,function(json){
 				city_json=json;
 				init();
 			});
 		}else{
+			console.info("2222")
 			city_json=settings.url;
 			init();
 		};

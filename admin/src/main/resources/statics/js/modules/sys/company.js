@@ -1,4 +1,5 @@
-
+var url= "/admin/statics/js/city.min.js"
+var city_json;
 $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'sys/company/list',
@@ -293,29 +294,32 @@ var vm = new Vue({
             };
             $("#aaa").attr("src", "/admin/statics/default.png")
             $("#bbb").attr("src", "/admin/statics/default.png")
-            $("#city").citySelect({prov:"",city:""});
+            // $("#city").citySelect({prov:"",city:""});
+            $.getJSON(url,function(json){
+                city_json=json;
+                vm.init();
+            });
         }
         ,
         saveOrUpdate: function (event) {
             var url = vm
                 .company.id ==
             null ? "sys/company/save" : "sys/company/update";
-            console.log(vm.company)
-            // $.ajax({
-            //     type: "POST",
-            //     url: baseURL + url,
-            //     contentType: "application/json",
-            //     data: JSON.stringify(vm.company),
-            //     success: function (r) {
-            //         if (r.code === 0) {
-            //             alert('操作成功', function (index) {
-            //                 vm.reload();
-            //             });
-            //         } else {
-            //             alert(r.msg);
-            //         }
-            //     }
-            // });
+            $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                data: JSON.stringify(vm.company),
+                success: function (r) {
+                    if (r.code === 0) {
+                        alert('操作成功', function (index) {
+                            vm.reload();
+                        });
+                    } else {
+                        alert(r.msg);
+                    }
+                }
+            });
         }
         ,
         del: function (event) {
@@ -345,8 +349,11 @@ var vm = new Vue({
         ,
         getInfo: function (id) {
             $.get(baseURL + "sys/company/info/" + id, function (r) {
-                $("#city").citySelect({prov:r.company.provinceName,city:r.company.cityName,required:true});
-                vm.company = r.company;
+                // $("#city").citySelect({prov:r.company.provinceName,city:r.company.cityName,required:true});
+                $.getJSON(url,function(json){
+                    city_json=json;
+                    vm.init(r.company);
+                });
             });
         }
         ,
@@ -357,6 +364,65 @@ var vm = new Vue({
                 postData:{'name': vm.q.name},
                 page: page
             }).trigger("reloadGrid");
+        },
+        init:function(data){
+            // 遍历赋值省份下拉列表
+            temp_html="<option value=''>请选择省份</option>"
+            $.each(city_json.citylist,function(i,prov){
+                temp_html+="<option value='"+prov.p+"'>"+prov.p+"</option>";
+            });
+            //省份
+            $(".prov").html(temp_html);
+            //城市
+            temp_html2="<option value=''>请选择城市</option>"
+            $(".city").html(temp_html2);
+            // 选择省份时发生事件
+            $(".prov").bind("change",function(){
+                vm.changePri();
+            });
+            if (typeof(data) != "undefined"){
+                // vm.company = data
+                setTimeout(function(){
+                    vm.changePri($(".prov").get(0).selectedIndex,data)
+                },1);
+            }
+        },
+        changePri:function (id,data) {
+            var prov_id=$(".prov").get(0).selectedIndex;
+            if (typeof(id) != "undefined"){
+                prov_id = id
+            }
+            temp_html="<option value=''>请选择城市</option>"
+            if(prov_id==0||typeof(city_json.citylist[prov_id].c)=="undefined"){
+                let optionflag = city_json.citylist.find((e, i) => {
+                    return e.p === data.provinceName
+                })
+                $.each(optionflag.c,function(i,city){
+                    if (i==0){
+                        temp_html += "<option value='" + city.n + "' selected>" + city.n + "</option>";
+                    }else {
+                        temp_html += "<option value='" + city.n + "'>" + city.n + "</option>";
+                    }
+                });
+            }else{
+                prov_id--;
+                // 遍历赋值市级下拉列表
+                $.each(city_json.citylist[prov_id].c,function(i,city){
+                    if (i==0){
+                        temp_html += "<option value='" + city.n + "' selected>" + city.n + "</option>";
+                    }else {
+                        temp_html += "<option value='" + city.n + "'>" + city.n + "</option>";
+                    }
+                });
+            }
+            $(".city").html(temp_html).css({"display":"","visibility":""});
+            if (typeof(data) != "undefined"){
+                setTimeout(function(){
+                    vm.company = data
+                },1);
+            }else {
+                vm.company.cityName = ""
+            }
         },
     }
 });
