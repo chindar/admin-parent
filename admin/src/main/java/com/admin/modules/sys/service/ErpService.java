@@ -30,5 +30,19 @@ public interface ErpService extends IService<ErpEntity> {
      * @return
      */
     R queryPageErpList(Map<String, Object> params);
+
+    /**
+     * 保存ERP账户
+     * @param erp
+     * @return
+     */
+    R save(ErpEntity erp);
+
+    /**
+     * 编辑ERP账户
+     * @param erp
+     * @return
+     */
+    R update(ErpEntity erp);
 }
 

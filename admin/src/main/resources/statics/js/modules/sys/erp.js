@@ -74,6 +74,7 @@ var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
+        showStatus: false,
         title: null,
         q: {
             erpNumber: '',
@@ -89,17 +90,26 @@ var vm = new Vue({
         },
         add: function () {
             vm.showList = false;
+            vm.showStatus = false;
             vm.title = "新增ERP账号";
-            vm.erp = {};
+            vm.erp = {
+                erpNumber: '',
+                status: '',
+                companyId: ''
+            };
         },
         edit: function (id) {
             vm.showList = false;
+            vm.showStatus = true;
             vm.title = "修改ERP账号";
 
             vm.getInfo(id)
         },
         saveOrUpdate: function (event) {
             var url = vm.erp.id == null ? "sys/erp/save" : "sys/erp/update";
+            if (this.validator()) {
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: baseURL + url,
@@ -151,6 +161,20 @@ var vm = new Vue({
                 },
                 page: page
             }).trigger("reloadGrid");
+        },
+        /**********************************************************************
+         * 表单校验
+         * @author Wang Chinda
+         **********************************************************************/
+        validator: function () {
+            if (isBlank(vm.erp.erpNumber)) {
+                alert("ERP账号不能为空");
+                return true;
+            }
+            if (isBlank(vm.erp.companyId)) {
+                alert("公司不允许不选择");
+                return true;
+            }
         },
         /**********************************************************************
          * 初始化查询条件下拉列表信息
