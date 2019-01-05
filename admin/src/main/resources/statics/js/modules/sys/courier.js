@@ -136,9 +136,9 @@ $(function () {
 
     // 格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<a onclick=\"edit(" + cellValue + ")\">编辑</a>" +
-            "&nbsp;&nbsp;&nbsp;<a onclick=\"info(" + cellValue + ")\">详情</a>" +
-            "&nbsp;&nbsp;&nbsp;<a onclick=\"del(" + cellValue + ")\">删除</a>";
+        return "<a onclick=\"vm.edit(" + cellValue + ")\">编辑</a>" +
+            "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + cellValue + ")\">详情</a>" +
+            "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + cellValue + ")\">删除</a>";
     }
 
     // new AjaxUpload('#upload', {
@@ -167,64 +167,13 @@ $(function () {
     // });
 });
 
-/**********************************************************************
- * 删除配送员信息
- * @author Wang Chinda
- **********************************************************************/
-function del(id) {
-    confirm('确定要删除选中的记录？', function () {
-        $.ajax({
-            type: "POST",
-            url: baseURL + "sys/courier/delete",
-            contentType: "application/json",
-            data: JSON.stringify(id),
-            success: function (r) {
-                if (r.code == 0) {
-                    alert('操作成功', function (index) {
-                        $("#jqGrid").trigger("reloadGrid");
-                    });
-                } else {
-                    alert(r.msg);
-                }
-            }
-        });
-    });
-};
-
-/**********************************************************************
- * 配送员详情
- * @author Wang Chinda
- **********************************************************************/
-function info(id) {
-    vm.showList = false;
-    vm.showStatus = true;
-    vm.disabled = true;
-    vm.showEnter = false;
-    vm.title = "配送员详情";
-    vm.getInfo(id);
-};
-
-/**********************************************************************
- * 配送员编辑
- * @author Wang Chinda
- **********************************************************************/
-function edit(id) {
-    vm.showList = false;
-    vm.showStatus = true;
-    vm.disabled = false;
-    vm.showEnter = false;
-    vm.title = "编辑配送员";
-    vm.getInfo(id);
-};
-
-
 var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
         showStatus: false,
         disabled: false,
-        showEnter: false,
+        showDialog: false,
         title: null,
         q: {
             name: null,
@@ -271,7 +220,6 @@ var vm = new Vue({
             vm.showList = false;
             vm.showStatus = false;
             vm.disabled = false;
-            vm.showEnter = false;
             vm.title = "新增配送员";
             vm.courier = {
                 erpId: '',
@@ -285,24 +233,70 @@ var vm = new Vue({
             vm.searchErpList();
 
         },
+        /**********************************************************************
+         * 删除配送员信息
+         * @author Wang Chinda
+         **********************************************************************/
+        del: function (id) {
+            confirm('确定要删除选中的记录？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "sys/courier/delete",
+                    contentType: "application/json",
+                    data: JSON.stringify(id),
+                    success: function (r) {
+                        if (r.code == 0) {
+                            alert('操作成功', function (index) {
+                                $("#jqGrid").trigger("reloadGrid");
+                            });
+                        } else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            });
+        },
+
+        /**********************************************************************
+         * 配送员详情
+         * @author Wang Chinda
+         **********************************************************************/
+        info: function (id) {
+            vm.showList = false;
+            vm.showStatus = true;
+            vm.disabled = true;
+            vm.title = "配送员详情";
+            vm.getInfo(id);
+        },
+
+        /**********************************************************************
+         * 配送员编辑
+         * @author Wang Chinda
+         **********************************************************************/
+        edit: function (id) {
+            vm.showList = false;
+            vm.showStatus = true;
+            vm.disabled = false;
+            vm.title = "编辑配送员";
+            vm.getInfo(id);
+        },
 
         /**********************************************************************
          * 批量导入
          * @author Wang Chinda
          **********************************************************************/
         batchEnter: function () {
-            vm.showList = false;
-            vm.showEnter = true;
-            vm.title = "批量添加配送员";
-            vm.courier = {
-                erpId: '',
-                companyId: '',
-                status: '',
-                pactId: '',
-                cityId: '',
-                areaId: '',
-                siteId: ''
-            };
+            layer.open({
+                type: 1,
+                offset: '100px',
+                skin: 'layui-layer-molv',
+                title: "批量添加配送员",
+                area: ['400px', '250px'],
+                shade: 0,
+                shadeClose: false,
+                content: jQuery("#dialog")
+            });
+
         },
 
         saveOrUpdate: function (event) {
@@ -338,12 +332,9 @@ var vm = new Vue({
          * 导出配送员信息
          * @author Wang Chinda
          **********************************************************************/
-        exportCourier: function () {
-            var ids = getSelectedRows();
-            if (ids == null) {
-                return;
-            }
-            window.open("/admin/sys/courier/exportCourier?ids=" + ids);
+        leadOut: function () {
+
+            window.open("/admin/sys/courier/leadOut");
         },
 
         /**********************************************************************
@@ -488,6 +479,7 @@ var vm = new Vue({
 
         reload: function (event) {
             vm.showList = true;
+            vm.showDialog = false;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {

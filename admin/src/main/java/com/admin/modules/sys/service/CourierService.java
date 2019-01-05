@@ -5,6 +5,7 @@ import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.CourierEntity;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -35,12 +36,11 @@ public interface CourierService extends IService<CourierEntity> {
 //     */
 //    R editBatch(String batchId, String pactId);
 //
-//    /**
-//     * 导出配送员信息
-//     * @param ids
-//     * @param res
-//     */
-//    void exportCourier(Integer[] ids, HttpServletResponse res);
+    /**
+     * 导出配送员信息
+     * @param res
+     */
+    void exportCourier(HttpServletResponse res);
 
     /**
      * 查询配送员列表

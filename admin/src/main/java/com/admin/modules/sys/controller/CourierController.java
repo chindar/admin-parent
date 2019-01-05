@@ -1,5 +1,6 @@
 package com.admin.modules.sys.controller;
 
+import com.admin.common.annotation.SysLog;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.CourierEntity;
@@ -8,6 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 
@@ -77,15 +79,15 @@ public class CourierController {
 //        return courierService.editBatch(batchId, pactId);
 //    }
 //
-//    /**
-//     * 导出配送员信息
-//     * @return
-//     */
-//    @SysLog("导出配送员信息")
-//    @GetMapping("/exportCourier")
-//    public void exportCourier(HttpServletResponse res, Integer[] ids) {
-//        courierService.exportCourier(ids, res);
-//    }
+    /**
+     * 导出配送员信息
+     * @return
+     */
+    @SysLog("导出配送员信息")
+    @GetMapping("/leadOut")
+    public void exportCourier(HttpServletResponse res) {
+        courierService.exportCourier(res);
+    }
 
     /**
      * 修改
