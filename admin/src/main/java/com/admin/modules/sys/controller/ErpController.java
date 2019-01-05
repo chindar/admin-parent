@@ -1,7 +1,6 @@
 package com.admin.modules.sys.controller;
 
 import com.admin.common.utils.R;
-import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.admin.modules.sys.service.ErpService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -47,7 +46,6 @@ public class ErpController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:erp:info")
     public R info(@PathVariable("id") Integer id){
         ErpEntity erp = erpService.selectById(id);
 
@@ -58,30 +56,22 @@ public class ErpController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:erp:save")
     public R save(@RequestBody ErpEntity erp){
-        erpService.insert(erp);
-
-        return R.ok();
+        return erpService.save(erp);
     }
 
     /**
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:erp:update")
     public R update(@RequestBody ErpEntity erp){
-        ValidatorUtils.validateEntity(erp);
-        erpService.updateAllColumnById(erp);//全部更新
-        
-        return R.ok();
+        return erpService.update(erp);
     }
 
     /**
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:erp:delete")
     public R delete(@RequestBody Integer id){
         erpService.deleteById(id);
 
