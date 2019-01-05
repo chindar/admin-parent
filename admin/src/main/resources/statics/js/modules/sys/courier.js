@@ -8,71 +8,88 @@ $(function () {
                 label: '姓名',
                 name: 'name',
                 index: 'name',
+                align: 'center',
                 width: 100
             },
             {
                 label: '身份证',
                 name: 'cardId',
                 index: 'card_id',
+                align: 'center',
                 width: 100
             },
             {
                 label: '手机',
                 name: 'phone',
                 index: 'phone',
+                align: 'center',
                 width: 100
             },
             {
                 label: '公司',
                 name: 'companyName',
                 index: 'company_name',
+                align: 'center',
                 width: 100
             },
             {
                 label: '片区',
                 name: 'areaName',
                 index: 'area_name',
+                align: 'center',
                 width: 80
             }, {
                 label: '城市',
                 name: 'cityName',
                 index: 'city_name',
+                align: 'center',
                 width: 80
             },
             {
                 label: '站点',
                 name: 'siteName',
                 index: 'site_name',
+                align: 'center',
                 width: 80
             },
             {
                 label: '合同',
                 name: 'pactName',
                 index: 'pact_name',
+                align: 'center',
                 width: 80
             },
             {
                 label: '创建时间',
                 name: 'createTime',
                 index: 'create_time',
+                align: 'center',
                 width: 80
             },
             {
                 label: 'ERP账号',
                 name: 'erpNumber',
                 index: 'erp_number',
+                align: 'center',
                 width: 80
             },
             {
                 label: '离职倒记时',
                 name: 'jobOverTime',
                 index: 'job_over_time',
-                width: 80
+                align: 'center',
+                width: 80,
+                formatter: function (value, options, row) {
+                    return value == null ? '<span></span>' :
+                        value < 30 ? '<span style="color: red;">' + value + '天</span>' :
+                            '<span>' + value + '天</span>';
+                }
             },
             {
                 label: '状态',
                 name: 'status',
                 index: 'status',
+                align: 'center',
                 width: 80,
                 formatter: function (value, options, row) {
                     return value == 0 ?
@@ -84,8 +101,9 @@ $(function () {
             },
             {
                 label: '操作',
-                name: 'option',
-                index: 'option',
+                name: 'id',
+                index: 'id',
+                align: 'center',
                 width: 150,
                 formatter: cmgStateFormat
             },
@@ -114,13 +132,13 @@ $(function () {
             //隐藏grid底部滚动条
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         },
-        //格式化操作列
     });
 
+    // 格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<button class='btn btn-info	 ' onclick=\"editArea(" + cellValue + ")\">编辑</button>" +
-            "<button class='btn btn-info	 ' onclick=\"editArea(" + cellValue + ")\">详情</button>" +
-            "&nbsp;&nbsp;&nbsp;<button class='btn btn-info	 ' onclick=\"del(" + cellValue + ")\">删除</button>";
+        return "<a onclick=\"edit(" + cellValue + ")\">编辑</a>" +
+            "&nbsp;&nbsp;&nbsp;<a onclick=\"info(" + cellValue + ")\">详情</a>" +
+            "&nbsp;&nbsp;&nbsp;<a onclick=\"del(" + cellValue + ")\">删除</a>";
     }
 
     // new AjaxUpload('#upload', {
@@ -149,13 +167,62 @@ $(function () {
     // });
 });
 
+/**********************************************************************
+ * 删除配送员信息
+ * @author Wang Chinda
+ **********************************************************************/
+function del(id) {
+    confirm('确定要删除选中的记录？', function () {
+        $.ajax({
+            type: "POST",
+            url: baseURL + "sys/courier/delete",
+            contentType: "application/json",
+            data: JSON.stringify(id),
+            success: function (r) {
+                if (r.code == 0) {
+                    alert('操作成功', function (index) {
+                        $("#jqGrid").trigger("reloadGrid");
+                    });
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    });
+};
+
+/**********************************************************************
+ * 配送员详情
+ * @author Wang Chinda
+ **********************************************************************/
+function info(id) {
+    vm.showList = false;
+    vm.showStatus = true;
+    vm.disabled = true;
+    vm.title = "配送员详情";
+    vm.getInfo(id);
+};
+
+/**********************************************************************
+ * 配送员编辑
+ * @author Wang Chinda
+ **********************************************************************/
+function edit(id) {
+    vm.showList = false;
+    vm.showStatus = true;
+    vm.disabled = false;
+    vm.title = "编辑配送员";
+    vm.getInfo(id);
+};
+
 
 var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
-        title: null,
         showStatus: false,
+        disabled: false,
+        title: null,
         q: {
             name: null,
             erpNumber: null,
@@ -200,6 +267,7 @@ var vm = new Vue({
         add: function () {
             vm.showList = false;
             vm.showStatus = false;
+            vm.disabled = false;
             vm.title = "新增配送员";
             vm.courier = {
                 erpId: '',
@@ -219,6 +287,15 @@ var vm = new Vue({
 
             vm.getInfo(id)
         },
+
+        /**********************************************************************
+         * 批量导入
+         * @author Wang Chinda
+         **********************************************************************/
+        batchEnter: function () {
+
+        },
+
         saveOrUpdate: function (event) {
             var url = vm.courier.id == null ? "sys/courier/save" : "sys/courier/update";
             if (this.validator()) {
@@ -241,28 +318,7 @@ var vm = new Vue({
             });
         },
 
-        del: function (cell) {
 
-            console.log(cell);
-            debugger;
-            confirm('确定要删除选中的记录？', function () {
-                $.ajax({
-                    type: "POST",
-                    url: baseURL + "sys/courier/delete",
-                    contentType: "application/json",
-                    data: JSON.stringify(ids),
-                    success: function (r) {
-                        if (r.code == 0) {
-                            alert('操作成功', function (index) {
-                                $("#jqGrid").trigger("reloadGrid");
-                            });
-                        } else {
-                            alert(r.msg);
-                        }
-                    }
-                });
-            });
-        },
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
                 vm.courier = r.courier;
@@ -465,8 +521,8 @@ var vm = new Vue({
                 alert("入职时间不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.entryDate)) {
-                alert("入职时间不能为空");
+            if (isBlank(vm.courier.leaveDate)) {
+                alert("离职时间不能为空");
                 return true;
             }
         }

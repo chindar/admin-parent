@@ -8,7 +8,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 
@@ -53,7 +52,8 @@ public class CourierController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:courier:save")
     public R save(@RequestBody CourierEntity courier){
-        courier.setIsDelete(0);
+        //校验类型
+        ValidatorUtils.validateEntity(courier);
         courierService.insert(courier);
 
         return R.ok();
@@ -104,9 +104,8 @@ public class CourierController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:courier:delete")
-    public R delete(@RequestBody Integer[] ids){
-        courierService.deleteBatchIds(Arrays.asList(ids));
-
+    public R delete(@RequestBody Integer id){
+        courierService.deleteById(id);
         return R.ok();
     }
 
