@@ -1,7 +1,6 @@
 package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.PactEntity;
-import com.admin.modules.sys.entity.PactInfoEntity;
 import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -19,4 +18,6 @@ public interface PactDao extends BaseMapper<PactEntity> {
 
 
     List<PactEntityVo> getPactList(RowBounds var1, PactEntity params);
+
+    List<PactEntity> listAll();
 }

@@ -6,10 +6,8 @@ import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
 import com.admin.modules.sys.dao.PactDao;
 import com.admin.modules.sys.entity.PactEntity;
-import com.admin.modules.sys.entity.PactInfoEntity;
 import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.admin.modules.sys.service.PactService;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +58,7 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
      */
     @Override
     public R listAll() {
-        return R.ok().put("list", this.selectList(new EntityWrapper<PactEntity>()));
+        return R.ok().put("list", dao.listAll());
     }
 
 }

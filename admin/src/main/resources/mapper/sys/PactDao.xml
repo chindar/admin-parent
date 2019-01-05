@@ -43,5 +43,23 @@
             having pactStatus = #{pactStatus}
         </if>
     </select>
+    <select id="listAll" resultMap="pactMap">
+        SELECT id
+             , name
+             , business_name
+             , city_id
+             , start_date
+             , end_date
+             , create_time
+             , file_id
+             , file_name
+             , company_id
+             , province_name
+             , city_name
+             , is_delete
+        FROM tb_pact
+        WHERE 1 = 1
+             AND is_delete = 0
+    </select>
 
 </mapper>
