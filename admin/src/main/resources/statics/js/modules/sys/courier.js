@@ -199,6 +199,7 @@ function info(id) {
     vm.showList = false;
     vm.showStatus = true;
     vm.disabled = true;
+    vm.showEnter = false;
     vm.title = "配送员详情";
     vm.getInfo(id);
 };
@@ -211,6 +212,7 @@ function edit(id) {
     vm.showList = false;
     vm.showStatus = true;
     vm.disabled = false;
+    vm.showEnter = false;
     vm.title = "编辑配送员";
     vm.getInfo(id);
 };
@@ -222,6 +224,7 @@ var vm = new Vue({
         showList: true,
         showStatus: false,
         disabled: false,
+        showEnter: false,
         title: null,
         q: {
             name: null,
@@ -268,6 +271,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.showStatus = false;
             vm.disabled = false;
+            vm.showEnter = false;
             vm.title = "新增配送员";
             vm.courier = {
                 erpId: '',
@@ -281,19 +285,24 @@ var vm = new Vue({
             vm.searchErpList();
 
         },
-        update: function (id) {
-            vm.showList = false;
-            vm.title = "修改";
-
-            vm.getInfo(id)
-        },
 
         /**********************************************************************
          * 批量导入
          * @author Wang Chinda
          **********************************************************************/
         batchEnter: function () {
-
+            vm.showList = false;
+            vm.showEnter = true;
+            vm.title = "批量添加配送员";
+            vm.courier = {
+                erpId: '',
+                companyId: '',
+                status: '',
+                pactId: '',
+                cityId: '',
+                areaId: '',
+                siteId: ''
+            };
         },
 
         saveOrUpdate: function (event) {
