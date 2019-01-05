@@ -1,7 +1,9 @@
 package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.ErpEntity;
+import com.admin.modules.sys.entity.vo.ErpVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 
 import java.util.List;
 
@@ -19,4 +21,12 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
      * @return
      */
     List<ErpEntity> getErpList();
+
+    /**
+     * 查询ERP账号列表
+     * @param page
+     * @param erpVo
+     * @return
+     */
+    List<ErpVo> queryPageErpList(Page<ErpVo> page, ErpVo erpVo);
 }

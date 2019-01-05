@@ -1,6 +1,7 @@
 package com.admin.modules.sys.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableLogic;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class ErpEntity implements Serializable {
 	/**
 	 * 1:删除0:正常
 	 */
+	@TableLogic
 	private Integer isDelete;
 
 	/**

@@ -3,44 +3,47 @@ $(function () {
         url: baseURL + 'sys/erp/list',
         datatype: "json",
         colModel: [
-                                                {
-                        label: 'id',
-                        name: 'id',
-                        index: 'id',
-                        width: 50,
-                        key: true
-                    },
-                                                                {
-                        label: '',
-                        name: 'erpNumber',
-                        index: 'erp_number',
-                        width: 80
-                    }, 
-                                                                {
-                        label: '',
-                        name: 'companyId',
-                        index: 'company_id',
-                        width: 80
-                    }, 
-                                                                {
-                        label: '0启用1停用',
-                        name: 'status',
-                        index: 'status',
-                        width: 80
-                    }, 
-                                                                {
-                        label: '',
-                        name: 'createTime',
-                        index: 'create_time',
-                        width: 80
-                    }, 
-                                                                {
-                        label: '1:删除0:正常',
-                        name: 'isDelete',
-                        index: 'is_delete',
-                        width: 80
-                    }
-                            ],
+
+            {
+                label: 'ERP账号',
+                name: 'erpNumber',
+                index: 'erp_number',
+                width: 80
+            },
+            {
+                label: '公司',
+                name: 'companyName',
+                index: 'company_name',
+                width: 80
+            },
+            {
+                label: '创建时间',
+                name: 'createTime',
+                index: 'create_time',
+                width: 80
+            },
+            {
+                label: '状态',
+                name: 'status',
+                index: 'status',
+                width: 80,
+                formatter: function (value, options, row) {
+                    return value === 0 ? '<span class="label label-success">启用</span>' :
+                        '<span class="label label-danger">停用</span>'
+                }
+            },
+            {
+                label: '操作',
+                name: 'id',
+                index: 'id',
+                width: 80,
+                formatter: function (value, options, row) {
+                    return "<a onclick=\"vm.edit(" + value + ")\">编辑</a>" +
+                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
+                }
+            }
+
+        ],
         viewrecords: true,
         height: 385,
         rowNum: 10,
@@ -48,7 +51,7 @@ $(function () {
         rownumbers: true,
         rownumWidth: 25,
         autowidth: true,
-        multiselect: true,
+        multiselect: false,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -73,92 +76,90 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-erp: {
-}
-},
-methods: {
-    query: function () {
-        vm.reload();
-    }
-,
-    add: function () {
-        vm.showList = false;
-        vm.title = "新增";
-        vm.erp = {};
-    }
-,
-    update: function (event) {
-        var id =
-        getSelectedRow();
-        if (id== null
-    )
-        {
-            return;
+        erp: {}
+    },
+    methods: {
+        query: function () {
+            vm.reload();
         }
-        vm.showList = false;
-        vm.title = "修改";
-
-        vm.getInfo(id)
-    }
-,
-    saveOrUpdate: function (event) {
-        var url = vm
-    .erp.id ==
-        null ? "sys/erp/save" : "sys/erp/update";
-        $.ajax({
-            type: "POST",
-            url: baseURL + url,
-            contentType: "application/json",
-            data: JSON.stringify(vm.erp),
-            success: function (r) {
-                if (r.code === 0) {
-                    alert('操作成功', function (index) {
-                        vm.reload();
-                    });
-                } else {
-                    alert(r.msg);
-                }
+        ,
+        add: function () {
+            vm.showList = false;
+            vm.title = "新增";
+            vm.erp = {};
+        }
+        ,
+        update: function (event) {
+            var id =
+                getSelectedRow();
+            if (id == null
+            ) {
+                return;
             }
-        });
-    }
-,
-    del: function (event) {
-        var ids = getSelectedRows();
-        if (ids == null) {
-            return;
-        }
+            vm.showList = false;
+            vm.title = "修改";
 
-        confirm('确定要删除选中的记录？', function () {
+            vm.getInfo(id)
+        }
+        ,
+        saveOrUpdate: function (event) {
+            var url = vm
+                .erp.id ==
+            null ? "sys/erp/save" : "sys/erp/update";
             $.ajax({
                 type: "POST",
-                url: baseURL + "sys/erp/delete",
+                url: baseURL + url,
                 contentType: "application/json",
-                data: JSON.stringify(ids),
+                data: JSON.stringify(vm.erp),
                 success: function (r) {
-                    if (r.code == 0) {
+                    if (r.code === 0) {
                         alert('操作成功', function (index) {
-                            $("#jqGrid").trigger("reloadGrid");
+                            vm.reload();
                         });
                     } else {
                         alert(r.msg);
                     }
                 }
             });
-        });
+        }
+        ,
+        del: function (event) {
+            var ids = getSelectedRows();
+            if (ids == null) {
+                return;
+            }
+
+            confirm('确定要删除选中的记录？', function () {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "sys/erp/delete",
+                    contentType: "application/json",
+                    data: JSON.stringify(ids),
+                    success: function (r) {
+                        if (r.code == 0) {
+                            alert('操作成功', function (index) {
+                                $("#jqGrid").trigger("reloadGrid");
+                            });
+                        } else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            });
+        }
+        ,
+        getInfo: function (id) {
+            $.get(baseURL + "sys/erp/info/" + id, function (r) {
+                vm.erp = r.erp;
+            });
+        }
+        ,
+        reload: function (event) {
+            vm.showList = true;
+            var page = $("#jqGrid").jqGrid('getGridParam', 'page');
+            $("#jqGrid").jqGrid('setGridParam', {
+                page: page
+            }).trigger("reloadGrid");
+        }
     }
-,
-    getInfo: function (id) {
-        $.get(baseURL + "sys/erp/info/" +id, function (r) {
-            vm.erp = r.erp;
-        });
-    }
-,
-    reload: function (event) {
-        vm.showList = true;
-        var page = $("#jqGrid").jqGrid('getGridParam', 'page');
-        $("#jqGrid").jqGrid('setGridParam', {
-            page: page
-        }).trigger("reloadGrid");
-    }
-}
 });

@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.baomidou.mybatisplus.service.IService;
+
 import java.util.Map;
 
 /**
@@ -22,5 +23,12 @@ public interface ErpService extends IService<ErpEntity> {
      * @return
      */
     R getErpList();
+
+    /**
+     * 查询ERP账号列表
+     * @param params
+     * @return
+     */
+    R queryPageErpList(Map<String, Object> params);
 }
 

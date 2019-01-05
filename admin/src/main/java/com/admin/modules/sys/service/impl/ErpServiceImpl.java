@@ -1,10 +1,12 @@
 package com.admin.modules.sys.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.dao.ErpDao;
 import com.admin.modules.sys.entity.ErpEntity;
+import com.admin.modules.sys.entity.vo.ErpVo;
 import com.admin.modules.sys.service.ErpService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -35,12 +37,34 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
 
     /**
      * 查询未绑定在职员工的ERP账号
+     *
      * @return
      */
     @Override
     public R getErpList() {
         List<ErpEntity> erpList = erpDao.getErpList();
         return R.ok().put("list", erpList);
+    }
+
+    /**
+     * 查询ERP账号列表
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public R queryPageErpList(Map<String, Object> params) {
+        Page<ErpVo> page = new Query<ErpVo>(params).getPage();
+
+        ErpVo erpVo = BeanUtil.mapToBean(params, ErpVo.class, true);
+
+        List<ErpVo> erpVoList = erpDao.queryPageErpList(page, erpVo);
+        page.setRecords(erpVoList);
+
+        PageUtils pageUtils = new PageUtils(page);
+
+        return R.ok().put("page", pageUtils);
+
     }
 
 }

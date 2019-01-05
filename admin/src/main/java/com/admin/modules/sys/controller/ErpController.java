@@ -1,6 +1,5 @@
 package com.admin.modules.sys.controller;
 
-import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.ErpEntity;
@@ -32,9 +31,8 @@ public class ErpController {
     @RequestMapping("/list")
     @RequiresPermissions("sys:erp:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = erpService.queryPage(params);
 
-        return R.ok().put("page", page);
+        return erpService.queryPageErpList(params);
     }
 
     /**
@@ -45,7 +43,6 @@ public class ErpController {
     public R list() {
         return erpService.getErpList();
     }
-
 
     /**
      * 信息
