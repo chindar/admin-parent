@@ -42,7 +42,6 @@ $(function () {
                         "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
                 }
             }
-
         ],
         viewrecords: true,
         height: 385,
@@ -76,36 +75,31 @@ var vm = new Vue({
     data: {
         showList: true,
         title: null,
-        erp: {}
+        q: {
+            erpNumber: '',
+            status: '',
+            companyId: ''
+        },
+        erp: {},
+        companyList: []
     },
     methods: {
         query: function () {
             vm.reload();
-        }
-        ,
+        },
         add: function () {
             vm.showList = false;
-            vm.title = "新增";
+            vm.title = "新增ERP账号";
             vm.erp = {};
-        }
-        ,
-        update: function (event) {
-            var id =
-                getSelectedRow();
-            if (id == null
-            ) {
-                return;
-            }
+        },
+        edit: function (id) {
             vm.showList = false;
-            vm.title = "修改";
+            vm.title = "修改ERP账号";
 
             vm.getInfo(id)
-        }
-        ,
+        },
         saveOrUpdate: function (event) {
-            var url = vm
-                .erp.id ==
-            null ? "sys/erp/save" : "sys/erp/update";
+            var url = vm.erp.id == null ? "sys/erp/save" : "sys/erp/update";
             $.ajax({
                 type: "POST",
                 url: baseURL + url,
@@ -121,20 +115,14 @@ var vm = new Vue({
                     }
                 }
             });
-        }
-        ,
-        del: function (event) {
-            var ids = getSelectedRows();
-            if (ids == null) {
-                return;
-            }
-
+        },
+        del: function (id) {
             confirm('确定要删除选中的记录？', function () {
                 $.ajax({
                     type: "POST",
                     url: baseURL + "sys/erp/delete",
                     contentType: "application/json",
-                    data: JSON.stringify(ids),
+                    data: JSON.stringify(id),
                     success: function (r) {
                         if (r.code == 0) {
                             alert('操作成功', function (index) {
@@ -146,20 +134,44 @@ var vm = new Vue({
                     }
                 });
             });
-        }
-        ,
+        },
         getInfo: function (id) {
             $.get(baseURL + "sys/erp/info/" + id, function (r) {
                 vm.erp = r.erp;
             });
-        }
-        ,
+        },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
+                postData: {
+                    'erpNumber': vm.q.erpNumber,
+                    'companyId': vm.q.companyId,
+                    'status': vm.q.status
+                },
                 page: page
             }).trigger("reloadGrid");
-        }
+        },
+        /**********************************************************************
+         * 初始化查询条件下拉列表信息
+         * @author Wang Chinda
+         **********************************************************************/
+        initCondition: function () {
+            // 查询公司信息
+            this.searchCompany();
+        },
+        /**********************************************************************
+         * 查询公司信息
+         * @author Wang Chinda
+         **********************************************************************/
+        searchCompany: function () {
+            $.get(baseURL + "sys/company/getAllCompanyList", function (r) {
+                vm.companyList = r.list;
+            });
+        },
+    },
+
+    created: function () {
+        this.initCondition();
     }
 });

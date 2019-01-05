@@ -180,7 +180,7 @@ var vm = new Vue({
             erpNumber: null,
             cardId: null,
             companyId: null,
-            status: -1,
+            status: '',
             pactId: null,
             cityId: null,
             areaId: null,

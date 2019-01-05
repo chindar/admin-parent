@@ -2,15 +2,32 @@
 <html>
 <head>
     <title>erp账号表</title>
-		<#include "/header.html">
+    <#include "/header.html">
 </head>
 <body>
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
-			<#if shiro.hasPermission("sys:erp:save")>
+            <div class="form-group col-md-2">
+                <input type="text" class="form-control" v-model="q.erpNumber" placeholder="请输入ERP账号">
+            </div>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.companyId" placeholder="请选择公司">
+                    <option value="">请选择公司</option>
+                    <option v-for="company in companyList" :value="company.id" :key="company.id">
+                        {{ company.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <select class="form-control" v-model="q.status" placeholder="请选择状态">
+                    <option value="">请选择状态</option>
+                    <option value="0">启用</option>
+                    <option value="1">停用</option>
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">&nbsp;查询</a>
             <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
-			</#if>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -19,37 +36,30 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="erp.erpNumber" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="erp.companyId" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">0启用1停用</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="erp.status" placeholder="0启用1停用"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="erp.createTime" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">1:删除0:正常</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="erp.isDelete" placeholder="1:删除0:正常"/>
-                        </div>
-                    </div>
-							            <div class="form-group">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">ERP账号</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="erp.erpNumber" placeholder=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">公司</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="erp.companyId" placeholder="请选择公司">
+                        <option value="">请选择公司</option>
+                        <option v-for="company in companyList" :value="company.id" :key="company.id">
+                            {{ company.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">状态</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="erp.status" placeholder="0启用1停用"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
                 &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>

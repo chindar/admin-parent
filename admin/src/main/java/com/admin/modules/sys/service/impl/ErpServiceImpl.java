@@ -57,14 +57,11 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
         Page<ErpVo> page = new Query<ErpVo>(params).getPage();
 
         ErpVo erpVo = BeanUtil.mapToBean(params, ErpVo.class, true);
-
         List<ErpVo> erpVoList = erpDao.queryPageErpList(page, erpVo);
         page.setRecords(erpVoList);
-
         PageUtils pageUtils = new PageUtils(page);
 
         return R.ok().put("page", pageUtils);
-
     }
 
 }

@@ -8,7 +8,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Map;
 
 
@@ -83,8 +82,8 @@ public class ErpController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:erp:delete")
-    public R delete(@RequestBody Integer[] ids){
-        erpService.deleteBatchIds(Arrays.asList(ids));
+    public R delete(@RequestBody Integer id){
+        erpService.deleteById(id);
 
         return R.ok();
     }

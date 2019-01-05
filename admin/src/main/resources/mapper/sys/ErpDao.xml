@@ -44,8 +44,16 @@
         FROM tb_erp a
             LEFT JOIN tb_company b ON a.company_id = b.id
         WHERE 1 = 1
+        <if test="erpNumber != null and erpNumber != ''">
+            AND a.erp_number = #{erpNumber}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            AND a.company_id = #{companyId}
+        </if>
+        <if test="status != null">
+            AND a.status = #{status}
+        </if>
           AND a.is_delete = 0
-
     </select>
 
 
