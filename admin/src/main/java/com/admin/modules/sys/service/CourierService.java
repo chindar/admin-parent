@@ -48,5 +48,19 @@ public interface CourierService extends IService<CourierEntity> {
      * @return
      */
     R queryCourierList(Map<String, Object> params);
+
+    /**
+     * 保存配送员信息
+     * @param courier
+     * @return
+     */
+    R save(CourierEntity courier);
+
+    /**
+     * 更新配送员信息
+     * @param courier
+     * @return
+     */
+    R update(CourierEntity courier);
 }
 

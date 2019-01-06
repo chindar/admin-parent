@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
+import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.dao.CityInfoDao;
 import com.admin.modules.sys.dao.CourierDao;
 import com.admin.modules.sys.entity.CourierEntity;
@@ -263,20 +264,20 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 String name = vo.getName();
                 if (StrUtil.isNotBlank(name)) {
 
-                cell = row.createCell(4);
-                cell.setCellValue(name);
+                    cell = row.createCell(4);
+                    cell.setCellValue(name);
                 }
                 // 身份证
                 String cardId = vo.getCardId();
                 if (StrUtil.isNotBlank(cardId)) {
-                cell = row.createCell(5);
-                cell.setCellValue(cardId);
+                    cell = row.createCell(5);
+                    cell.setCellValue(cardId);
                 }
                 // 电话
                 String phone = vo.getPhone();
                 if (StrUtil.isNotBlank(phone)) {
-                cell = row.createCell(6);
-                cell.setCellValue(phone);
+                    cell = row.createCell(6);
+                    cell.setCellValue(phone);
                 }
                 // 银行卡号
                 cell = row.createCell(7);
@@ -318,6 +319,53 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         } finally {
             IoUtil.close(bos);
         }
+    }
+
+    /**
+     * 保存配送员信息
+     *
+     * @param courier
+     * @return
+     */
+    @Override
+    public R save(CourierEntity courier) {
+        if (isExist(courier)) {
+            return R.error("该员工已在公司中入职!");
+        }
+        //校验类型
+        ValidatorUtils.validateEntity(courier);
+        this.insert(courier);
+        return R.ok();
+    }
+
+    /**
+     * 更新配送员信息
+     *
+     * @param courier
+     * @return
+     */
+    @Override
+    public R update(CourierEntity courier) {
+        if (isExist(courier)) {
+            return R.error("该员工已在公司中入职!");
+        }
+        ValidatorUtils.validateEntity(courier);
+        this.updateAllColumnById(courier);//全部更新
+        return R.ok();
+    }
+
+    /**
+     * 判断配送员信息在公司中是否存在
+     *
+     * @param courier
+     * @return
+     */
+    private boolean isExist(CourierEntity courier) {
+        Integer companyId = courier.getCompanyId();
+        String cardId = courier.getCardId();
+        return this.selectCount(new EntityWrapper<CourierEntity>()
+                .eq("company_id", companyId)
+                .eq("card_id", cardId)) > 0 ? true : false;
     }
 
     /**

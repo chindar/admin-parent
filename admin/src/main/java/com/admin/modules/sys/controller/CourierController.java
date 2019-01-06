@@ -2,7 +2,6 @@ package com.admin.modules.sys.controller;
 
 import com.admin.common.annotation.SysLog;
 import com.admin.common.utils.R;
-import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.CourierEntity;
 import com.admin.modules.sys.service.CourierService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -54,11 +53,7 @@ public class CourierController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:courier:save")
     public R save(@RequestBody CourierEntity courier){
-        //校验类型
-        ValidatorUtils.validateEntity(courier);
-        courierService.insert(courier);
-
-        return R.ok();
+        return courierService.save(courier);
     }
 
 //    /**
@@ -93,12 +88,8 @@ public class CourierController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:courier:update")
     public R update(@RequestBody CourierEntity courier){
-        ValidatorUtils.validateEntity(courier);
-        courierService.updateAllColumnById(courier);//全部更新
-        
-        return R.ok();
+        return courierService.update(courier);
     }
 
     /**
