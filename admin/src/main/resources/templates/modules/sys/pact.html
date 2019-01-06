@@ -8,6 +8,7 @@
             text-align: center;
         }
     </style>
+    <script src="${request.contextPath}/statics/libs/ajaxupload.js"></script>
 </head>
 <body>
 <div id="rrapp" v-cloak>
@@ -41,7 +42,7 @@
                     <option value="2">合同结束时间</option>
                 </select>
             </div>
-            <div class="form-group col-sm-2">
+            <div class="form-group col-sm-6">
                 <input type="date" class="form-control" style="width: 40%;display: initial;" v-model="q.startDate"  placeholder="起始日期"/>---
                 <input type="date" class="form-control" style="width: 40%;display: initial;" v-model="q.endDate"  placeholder="终止日期"/>
             </div>
@@ -63,83 +64,67 @@
     <div v-show="!showList" class="panel panel-default">
         <div class="panel-heading">{{title}}</div>
         <form class="form-horizontal">
-														                    <div class="form-group">
+					<div class="form-group">
                         <div class="col-sm-2 control-label">合同名称</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="pact.name" placeholder="合同名称"/>
                         </div>
                     </div>
-											                    <div class="form-group">
+					<div class="form-group">
                         <div class="col-sm-2 control-label">业务名称</div>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" v-model="pact.businessName" placeholder="业务名称"/>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label">公司</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.cityId" placeholder=""/>
+                            <select class="form-control" v-model="pact.companyId" placeholder="选择公司">
+                                <option value="" >请选择公司</option>
+                                <option  v-for="company in companylist"  :value="company.id" >{{company.name}}</option>
+                            </select>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">开始时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.startDate" placeholder="开始时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">结束时间</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.endDate" placeholder="结束时间"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.createTime" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">合同文件id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.fileId" placeholder="合同文件id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label"></div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.fileName" placeholder=""/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">公司id</div>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.companyId" placeholder="公司id"/>
-                        </div>
-                    </div>
-											                    <div class="form-group">
+					<div class="form-group">
                         <div class="col-sm-2 control-label">省份</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.provinceName" placeholder="省份"/>
+                            <!--<input type="text" class="form-control" v-model="pact.provinceName" placeholder="省份"/>-->
+                            <select class="form-control prov"  v-model="pact.provinceName">
+                            </select>
                         </div>
                     </div>
-											                    <div class="form-group">
+					<div class="form-group">
                         <div class="col-sm-2 control-label">城市</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.cityName" placeholder="城市"/>
+                            <!--<input type="text" class="form-control" v-model="pact.cityName" placeholder="城市"/>-->
+                            <select class="form-control city"  v-model="pact.cityName">
+                            </select>
                         </div>
                     </div>
-											                    <div class="form-group">
-                        <div class="col-sm-2 control-label">1:删除0:正常</div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">开始时间</div>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" v-model="pact.isDelete" placeholder="1:删除0:正常"/>
+                            <input type="date" class="form-control" v-model="pact.startDate" placeholder="开始时间"/>
                         </div>
                     </div>
-							            <div class="form-group">
-                <div class="col-sm-2 control-label"></div>
-                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
-            </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">结束时间</div>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" v-model="pact.endDate" placeholder="结束时间"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">合同文件</div>
+                        <div class="col-sm-10">
+                            <a class="btn btn-primary" id="upload"><i class="fa fa-plus"></i>&nbsp;上传文件</a>
+                            <div class="filename_class" style="font-size: 20px;color: red;"></div>
+                        </div>
+                    </div>
+					<div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                        &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                    </div>
         </form>
     </div>
 </div>

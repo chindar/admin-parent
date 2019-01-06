@@ -23,7 +23,7 @@
         <result property="overDays" column="overDays"/>
     </resultMap>
 
-    <select id="getPactList" parameterType="com.admin.modules.sys.entity.PactEntity" resultMap="pactMap">
+    <select id="getPactList" parameterType="com.admin.modules.sys.entity.vo.PactEntityVo" resultMap="pactMap">
         select  a.*,b.`name` as companyName,
         case WHEN NOW()>end_date THEN 2
         WHEN start_date > NOW()  THEN 0
@@ -62,4 +62,14 @@
              AND is_delete = 0
     </select>
 
+
+    <!--删除-->
+    <update id="deletePactById">
+        update tb_pact set is_delete = 1 where id = #{id}
+    </update>
+
+
+    <select id="getPactInfoById" resultMap="pactMap">
+        select * from tb_pact where id = #{id}
+    </select>
 </mapper>

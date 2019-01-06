@@ -37,11 +37,11 @@ public class PactEntity implements Serializable {
 	/**
 	 * 开始时间
 	 */
-	private Date startDate;
+	private String startDate;
 	/**
 	 * 结束时间
 	 */
-	private Date endDate;
+	private String endDate;
 	/**
 	 * 
 	 */
@@ -71,18 +71,18 @@ public class PactEntity implements Serializable {
 	 */
 	private Integer isDelete;
 
-	/**
-	 *合同状态 0待生效、1生效、2结束
-	 */
-	private Integer pactStatus;
-
-	public Integer getPactStatus() {
-		return pactStatus;
-	}
-
-	public void setPactStatus(Integer pactStatus) {
-		this.pactStatus = pactStatus;
-	}
+//	/**
+//	 *合同状态 0待生效、1生效、2结束
+//	 */
+//	private Integer pactStatus;
+//
+//	public Integer getPactStatus() {
+//		return pactStatus;
+//	}
+//
+//	public void setPactStatus(Integer pactStatus) {
+//		this.pactStatus = pactStatus;
+//	}
 
 	/**
 	 * 设置：
@@ -135,25 +135,25 @@ public class PactEntity implements Serializable {
 	/**
 	 * 设置：开始时间
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 	/**
 	 * 获取：开始时间
 	 */
-	public Date getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 	/**
 	 * 设置：结束时间
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 	/**
 	 * 获取：结束时间
 	 */
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 	/**

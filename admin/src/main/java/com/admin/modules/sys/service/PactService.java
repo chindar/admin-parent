@@ -1,6 +1,7 @@
 package com.admin.modules.sys.service;
 
 import com.admin.common.utils.R;
+import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.baomidou.mybatisplus.service.IService;
 import com.admin.common.utils.PageUtils;
 import com.admin.modules.sys.entity.PactEntity;
@@ -23,5 +24,11 @@ public interface PactService extends IService<PactEntity> {
      * @return
      */
     R listAll();
+
+    int deletePactById(Integer id);
+
+    PactEntityVo getPactInfoById(Integer id);
 }
+
+
 

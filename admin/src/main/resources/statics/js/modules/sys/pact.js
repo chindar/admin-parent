@@ -1,3 +1,5 @@
+var url= "/admin/statics/js/city.min.js"
+var city_json;
 $(function () {
     $("#jqGrid").jqGrid({
         url: baseURL + 'sys/pact/list',
@@ -151,14 +153,59 @@ $(function () {
             }
         }
     });
+    new AjaxUpload('#upload', {
+        action: baseURL + "sys/pactinfo/upload",
+        name: 'file',
+        autoSubmit:true,
+        responseType:"json",
+        onSubmit:function(file, extension){
+            // if(vm.config.type == null){
+            //     alert("云存储配置未配置");
+            //     return false;
+            // }
+            if (!(extension && /^(pdf)$/.test(extension.toLowerCase()))){
+                alert('只支持pdf格式的合同文件！');
+                return false;
+            }
+        },
+        onComplete : function(file, r){
+            if(r.code == 0){
+                // alert(r.url);
+                vm.pactInfo.fileId = r.data.fileId
+                vm.pactInfo.fileName = r.data.fileName
+                $(".filename_class").text(r.data.fileName)
+                // vm.reload();
+            }else{
+                alert(r.msg);
+            }
+        }
+    });
 });
 //编辑
 function editPact(id) {
-
+    vm.showList = false;
+    vm.title = "修改";
+    vm.getInfo(id);
 }
 //删除
 function deletePact(id) {
-    
+    confirm('确定要删除选中的记录？', function () {
+        $.ajax({
+            type: "POST",
+            url: baseURL + "sys/pact/delete",
+            dataType: "json",
+            data:{id: id},
+            success: function (r) {
+                if (r.code == 0) {
+                    alert('操作成功', function (index) {
+                        $("#jqGrid").trigger("reloadGrid");
+                    });
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    });
 }
 var vm = new Vue({
     el: '#rrapp',
@@ -186,7 +233,16 @@ methods: {
     add: function () {
         vm.showList = false;
         vm.title = "新增";
-        vm.pact = {};
+        vm.pact = {
+            companyId: '',
+            provinceName: '',
+            cityName: ''
+        };
+        $(".filename_class").text("");
+        $.getJSON(url,function(json){
+            city_json=json;
+            vm.init();
+        });
     }
 ,
     update: function (event) {
@@ -251,7 +307,11 @@ methods: {
 ,
     getInfo: function (id) {
         $.get(baseURL + "sys/pact/info/" +id, function (r) {
-            vm.pact = r.pact;
+            // vm.pact = r.pact;
+            $.getJSON(url,function(json){
+                city_json=json;
+                vm.init(r.pact);
+            });
         });
     }
 ,
@@ -261,6 +321,65 @@ methods: {
         $("#jqGrid").jqGrid('setGridParam', {
             page: page
         }).trigger("reloadGrid");
-    }
+    },
+    init:function(data){
+        // 遍历赋值省份下拉列表
+        temp_html="<option value=''>请选择省份</option>"
+        $.each(city_json.citylist,function(i,prov){
+            temp_html+="<option value='"+prov.p+"'>"+prov.p+"</option>";
+        });
+        //省份
+        $(".prov").html(temp_html);
+        //城市
+        temp_html2="<option value=''>请选择城市</option>"
+        $(".city").html(temp_html2);
+        // 选择省份时发生事件
+        $(".prov").bind("change",function(){
+            vm.changePri();
+        });
+        if (typeof(data) != "undefined"){
+            setTimeout(function(){
+                vm.changePri($(".prov").get(0).selectedIndex,data)
+            },1);
+        }
+    },
+    changePri:function (id,data) {
+        var prov_id=$(".prov").get(0).selectedIndex;
+        if (typeof(id) != "undefined"){
+            prov_id = id
+        }
+        temp_html="<option value=''>请选择城市</option>"
+        if(prov_id==0||typeof(city_json.citylist[prov_id].c)=="undefined"){
+            let optionflag = city_json.citylist.find((e, i) => {
+                return e.p === data.provinceName
+            })
+            $.each(optionflag.c,function(i,city){
+                if (i==0){
+                    temp_html += "<option value='" + city.n + "' selected>" + city.n + "</option>";
+                }else {
+                    temp_html += "<option value='" + city.n + "'>" + city.n + "</option>";
+                }
+            });
+        }else{
+            prov_id--;
+            // 遍历赋值市级下拉列表
+            $.each(city_json.citylist[prov_id].c,function(i,city){
+                if (i==0){
+                    temp_html += "<option value='" + city.n + "' selected>" + city.n + "</option>";
+                }else {
+                    temp_html += "<option value='" + city.n + "'>" + city.n + "</option>";
+                }
+            });
+        }
+        $(".city").html(temp_html).css({"display":"","visibility":""});
+        console.info(data)
+        if (typeof(data) != "undefined"){
+            setTimeout(function(){
+                vm.pact = data
+            },1);
+        }else {
+            vm.pact.cityName = ""
+        }
+    },
 }
 });

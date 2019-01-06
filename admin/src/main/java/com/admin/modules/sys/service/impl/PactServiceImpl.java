@@ -31,8 +31,8 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
 //                new EntityWrapper<PactEntity>()
 //        );
 
-        PactEntity entity = new PactEntity();
-        Page page = new Query<PactEntity>(params).getPage();
+        PactEntityVo entity = new PactEntityVo();
+        Page page = new Query<PactEntityVo>(params).getPage();
         if (params.get("businessName") != null && Tools.notEmpty(params.get("businessName").toString()))
             entity.setBusinessName(params.get("businessName").toString());
         if (params.get("businessName") != null && Tools.notEmpty(params.get("cityId").toString()))
@@ -61,4 +61,18 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
         return R.ok().put("list", dao.listAll());
     }
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    @Override
+    public int deletePactById(Integer id) {
+        return dao.deletePactById(id);
+    }
+
+    @Override
+    public PactEntityVo getPactInfoById(Integer id) {
+        return dao.getPactInfoById(id);
+    }
 }

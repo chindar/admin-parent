@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.PactEntity;
+import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.admin.modules.sys.service.PactService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,8 @@ public class PactController {
     @RequestMapping("/info/{id}")
     @RequiresPermissions("sys:pact:info")
     public R info(@PathVariable("id") Integer id){
-        PactEntity pact = pactService.selectById(id);
-
+//        PactEntity pact = pactService.selectById(id);
+        PactEntityVo pact = pactService.getPactInfoById(id);
         return R.ok().put("pact", pact);
     }
 
@@ -91,10 +92,14 @@ public class PactController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:pact:delete")
-    public R delete(@RequestBody Integer[] ids){
-        pactService.deleteBatchIds(Arrays.asList(ids));
-
+    public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
+//        pactService.deleteBatchIds(Arrays.asList(ids));
+        try{
+            pactService.deletePactById(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(e.getMessage());
+        }
         return R.ok();
     }
-
 }
