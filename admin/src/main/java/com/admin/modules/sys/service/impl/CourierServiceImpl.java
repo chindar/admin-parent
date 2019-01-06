@@ -19,6 +19,7 @@ import com.admin.modules.sys.service.CourierService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -34,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
+@Log4j2
 @SuppressWarnings("ALL")
 @Service("courierService")
 public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> implements CourierService {
@@ -48,7 +49,6 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     private static List<Object> templetList = CollUtil.newArrayList();
 
     static {
-        // 片区 城市 站点 erp账号 配送员姓名 身份证 电话 银行卡号 开户行 联行号 入职时间 离职时间 状态 备注
         // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
         templetList.add("公司");
         templetList.add("姓名");
@@ -226,84 +226,109 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
             for (int i = 0; i < templetList.size(); i++) {
                 cell = row.createCell(i);
                 cell.setCellValue(Convert.toStr(templetList.get(i)));
-
             }
+            cell = row.createCell(13);
+            cell.setCellValue("状态");
 
-            // 遍历运营数据list
+            // 遍历配送员信息list
             for (int i = 0; i < courierList.size(); i++) {
                 CourierVo vo = courierList.get(i);
                 // 确定内容开始行
                 row = sheet.createRow(row.getRowNum() + 1);
                 //设置行高
                 row.setHeight((short) 600);
-                // 片区
-                String areaName = vo.getAreaName();
-                if (StrUtil.isNotBlank(areaName)) {
+
+                // 公司
+                String companyName = vo.getCompanyName();
+                if (StrUtil.isNotBlank(companyName)) {
                     cell = row.createCell(0);
-                    cell.setCellValue(areaName);
+                    cell.setCellValue(companyName);
                 }
-                // 城市
-                String cityName = vo.getCityName();
-                if (StrUtil.isNotBlank(cityName)) {
-                    cell = row.createCell(1);
-                    cell.setCellValue(cityName);
-                }
-                // 站点
-                String siteName = vo.getSiteName();
-                if (StrUtil.isNotBlank(siteName)) {
-                    cell = row.createCell(2);
-                    cell.setCellValue(siteName);
-                }
-                // erp账号
-                String erpNumber = vo.getErpNumber();
-                if (StrUtil.isNotBlank(erpNumber)) {
-                    cell = row.createCell(3);
-                    cell.setCellValue(erpNumber);
-                }
-                // 配送员姓名
+                // 姓名
                 String name = vo.getName();
                 if (StrUtil.isNotBlank(name)) {
-
-                    cell = row.createCell(4);
+                    cell = row.createCell(1);
                     cell.setCellValue(name);
                 }
                 // 身份证
                 String cardId = vo.getCardId();
                 if (StrUtil.isNotBlank(cardId)) {
-                    cell = row.createCell(5);
+                    cell = row.createCell(2);
                     cell.setCellValue(cardId);
                 }
-                // 电话
+                // 手机号
                 String phone = vo.getPhone();
                 if (StrUtil.isNotBlank(phone)) {
-                    cell = row.createCell(6);
+                    cell = row.createCell(3);
                     cell.setCellValue(phone);
                 }
-                // 银行卡号
-                cell = row.createCell(7);
-                cell.setCellValue(vo.getBankCardId());
+                // 银行卡
+                String bankCardId = vo.getBankCardId();
+                if (StrUtil.isNotBlank(bankCardId)) {
+                    cell = row.createCell(4);
+                    cell.setCellValue(bankCardId);
+                }
                 // 开户行
-                cell = row.createCell(8);
-                cell.setCellValue(vo.getDepositBank());
-                // 联行号
-                cell = row.createCell(9);
-                cell.setCellValue(vo.getJoinBankNumber());
+                String depositBank = vo.getDepositBank();
+                if (StrUtil.isNotBlank(depositBank)) {
+                    cell = row.createCell(5);
+                    cell.setCellValue(depositBank);
+                }
+                // 银联号
+                String joinBankNumber = vo.getJoinBankNumber();
+                if (StrUtil.isNotBlank(joinBankNumber)) {
+                    cell = row.createCell(6);
+                    cell.setCellValue(joinBankNumber);
+                }
                 // 入职时间
-                cell = row.createCell(10);
-                cell.setCellValue(vo.getEntryDate());
+                Date entryDate = vo.getEntryDate();
+                if (ObjectUtil.isNotNull(entryDate)) {
+                    cell = row.createCell(7);
+                    cell.setCellValue(entryDate);
+                }
+
                 // 离职时间
-                cell = row.createCell(11);
-                cell.setCellValue(vo.getLeaveDate());
+                Date leaveDate = vo.getLeaveDate();
+                if (ObjectUtil.isNotNull(leaveDate)) {
+                    cell = row.createCell(8);
+                    cell.setCellValue(leaveDate);
+                }
+
+                // 合同
+                String pactName = vo.getPactName();
+                if (StrUtil.isNotBlank(pactName)) {
+                    cell = row.createCell(9);
+                    cell.setCellValue(pactName);
+                }
+
+                // ERP账号
+                String erpNumber = vo.getErpNumber();
+                if (StrUtil.isNotBlank(erpNumber)) {
+                    cell = row.createCell(10);
+                    cell.setCellValue(erpNumber);
+                }
+
+                // 站点
+                String siteName = vo.getSiteName();
+                if (StrUtil.isNotBlank(siteName)) {
+                    cell = row.createCell(11);
+                    cell.setCellValue(siteName);
+                }
+
+                // 备注
+                String remark = vo.getRemark();
+                if (StrUtil.isNotBlank(remark)) {
+                    cell = row.createCell(12);
+                    cell.setCellValue(remark);
+                }
+
                 // 状态
                 Integer statusI = vo.getStatus();
                 if (ObjectUtil.isNotNull(statusI)) {
                     int status = statusI.intValue();
-                    cell = row.createCell(12);
-                    cell.setCellValue(status == 1 ? "在职" : status == 0 ? "离职" : "");
+                    cell = row.createCell(13);
+                    cell.setCellValue(status == 1 ? "离职" : status == 0 ? "在职" : "");
                 }
-                // 备注
-                cell = row.createCell(13);
-                cell.setCellValue(vo.getRemark());
             }
 
             String filename = "配送员信息.xlsx";
@@ -315,7 +340,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
             wb.write(bos);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("配送员信息导出失败!", e);
         } finally {
             IoUtil.close(bos);
         }

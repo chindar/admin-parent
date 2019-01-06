@@ -96,7 +96,6 @@ public class CourierController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:courier:delete")
     public R delete(@RequestBody Integer id){
         courierService.deleteById(id);
         return R.ok();

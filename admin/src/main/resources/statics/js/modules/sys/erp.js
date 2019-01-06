@@ -178,7 +178,7 @@ var vm = new Vue({
          * 导出配送员信息
          * @author Wang Chinda
          **********************************************************************/
-        leadOut: function () {
+        exportFile: function () {
             window.open(baseURL + "sys/erp/leadOut");
         },
 
