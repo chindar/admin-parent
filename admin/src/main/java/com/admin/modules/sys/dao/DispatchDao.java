@@ -1,7 +1,11 @@
 package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.DispatchEntity;
+import com.admin.modules.sys.entity.vo.DispatchVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
+
+import java.util.List;
 
 /**
  * 配送信息表
@@ -11,5 +15,12 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @date 2018-12-26 10:55:09
  */
 public interface DispatchDao extends BaseMapper<DispatchEntity> {
-	
+
+    /**
+     * 查询分页营运信息
+     * @param page
+     * @param dispatchVo
+     * @return
+     */
+    List<DispatchVo> queryPage(Page<DispatchVo> page, DispatchVo dispatchVo);
 }

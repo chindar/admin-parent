@@ -4,30 +4,50 @@
 <mapper namespace="com.admin.modules.sys.dao.DispatchDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.admin.modules.sys.entity.DispatchEntity" id="dispatchMap">
-                    <result property="id" column="id"/>
-                    <result property="month" column="month"/>
-                    <result property="companyId" column="company_id"/>
-                    <result property="erpId" column="erp_id"/>
-                    <result property="allOrderCount" column="all_order_count"/>
-                    <result property="totalOrderCount" column="total_order_count"/>
-                    <result property="totalMoney" column="total_money"/>
-                    <result property="small" column="small"/>
-                    <result property="large" column="large"/>
-                    <result property="thrIdentical" column="thr_identical"/>
-                    <result property="afterSaleCount" column="after_sale_count"/>
-                    <result property="firstCount" column="first_count"/>
-                    <result property="againCount" column="again_count"/>
-                    <result property="otherCount" column="other_count"/>
-                    <result property="badCount" column="bad_count"/>
-                    <result property="complaintCount" column="complaint_count"/>
-                    <result property="fineMoney" column="fine_money"/>
-                    <result property="deductMoney" column="deduct_money"/>
-                    <result property="salary" column="salary"/>
-                    <result property="remark" column="remark"/>
-                    <result property="createTime" column="create_time"/>
-                    <result property="isDelete" column="is_delete"/>
-            </resultMap>
+    <resultMap type="com.admin.modules.sys.entity.vo.DispatchVo" id="dispatchMap">
+        <result property="id" column="id"/>
+        <result property="month" column="month"/>
+        <result property="areaName" column="area_name"/>
+        <result property="cityName" column="city_name"/>
+        <result property="siteName" column="site_name"/>
+        <result property="erpNumber" column="erp_number"/>
+        <result property="courierName" column="courier_name"/>
+        <result property="cardId" column="card_id"/>
+        <result property="allOrderCount" column="all_order_count"/>
+        <result property="totalOrderCount" column="total_order_count"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="fineMoney" column="fine_money"/>
+        <result property="deductMoney" column="deduct_money"/>
+        <result property="salary" column="salary"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <select id="queryPage" resultType="com.admin.modules.sys.entity.vo.DispatchVo">
+        SELECT a.id
+             , a.month
+             , g.name        AS area_name
+             , f.name        AS city_name
+             , e.name        AS site_name
+             , c.erp_number
+             , b.name        AS courier_name
+             , b.card_id
+             , a.all_order_count
+             , a.total_order_count
+             , a.total_money
+             , a.fine_money
+             , a.deduct_money
+             , a.salary
+             , a.remark
+        FROM tb_dispatch a
+               LEFT JOIN tb_courier b ON a.courier_id = b.id
+               LEFT JOIN tb_erp c ON b.erp_id = c.id
+               LEFT JOIN tb_company d ON c.company_id = d.id
+               LEFT JOIN tb_site e ON e.id = b.site_id
+               LEFT JOIN tb_city f ON f.id = e.city_id
+               LEFT JOIN tb_area g ON g.id = f.area_id
+        WHERE 1 = 1
+          AND a.is_delete = 0
+    </select>
 
 
 </mapper>

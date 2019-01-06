@@ -1,8 +1,8 @@
 package com.admin.modules.sys.service;
 
-import com.baomidou.mybatisplus.service.IService;
-import com.admin.common.utils.PageUtils;
+import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.DispatchEntity;
+import com.baomidou.mybatisplus.service.IService;
 
 import java.util.Map;
 
@@ -15,6 +15,6 @@ import java.util.Map;
  */
 public interface DispatchService extends IService<DispatchEntity> {
 
-    PageUtils queryPage(Map<String, Object> params);
+    R queryPage(Map<String, Object> params);
 }
 

@@ -1,6 +1,5 @@
 package com.admin.modules.sys.controller;
 
-import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.DispatchEntity;
@@ -31,11 +30,8 @@ public class DispatchController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:dispatch:list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = dispatchService.queryPage(params);
-
-        return R.ok().put("page", page);
+        return dispatchService.queryPage(params);
     }
 
 
