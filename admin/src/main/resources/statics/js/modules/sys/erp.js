@@ -138,6 +138,7 @@ var vm = new Vue({
                 success: function (r) {
                     if (r.code === 0) {
                         alert('操作成功', function (index) {
+                            vm.initSearch();
                             vm.reload();
                         });
                     } else {
@@ -218,6 +219,16 @@ var vm = new Vue({
         },
 
         /**********************************************************************
+         * 初始化查询条件
+         * @author Wang Chinda
+         **********************************************************************/
+        initSearch: function () {
+            this.q.erpNumber = '';
+            this.q.status = '';
+            this.q.companyId = '';
+        },
+
+        /**********************************************************************
          * 初始化查询条件下拉列表信息
          * @author Wang Chinda
          **********************************************************************/
@@ -238,6 +249,7 @@ var vm = new Vue({
     },
 
     created: function () {
+        this.initSearch();
         this.initCondition();
     }
 });
