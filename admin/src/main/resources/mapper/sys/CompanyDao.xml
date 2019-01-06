@@ -34,6 +34,11 @@
         </if>
 
     </select>
+    <!-- 根据公司名称获取公司id START-->
+    <select id="getOneByName" resultType="java.lang.Integer">
+        SELECT id FROM tb_company WHERE is_delete = 0 AND name = #{name}
+    </select>
+    <!-- 根据公司名称获取公司id END-->
     <!--删除-->
     <update id="deleteComById">
         update tb_company set is_delete = 1 where id = #{id}

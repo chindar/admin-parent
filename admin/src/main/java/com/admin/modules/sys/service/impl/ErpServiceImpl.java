@@ -7,10 +7,13 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
+import com.admin.modules.sys.dao.CompanyDao;
 import com.admin.modules.sys.dao.ErpDao;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.admin.modules.sys.entity.vo.ErpVo;
@@ -18,27 +21,32 @@ import com.admin.modules.sys.service.ErpService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-
+@Log4j2
 @Service("erpService")
 @SuppressWarnings("ALL")
 public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements ErpService {
 
     @Autowired
     private ErpDao erpDao;
+    @Autowired
+    private CompanyDao companyDao;
 
     private static List<Object> templetList = CollUtil.newArrayList();
     static {
@@ -130,6 +138,7 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
      */
     @Override
     public void leadOut(HttpServletResponse res) {
+
         OutputStream bos = null;
         try {
             List<ErpVo> erpList = erpDao.selectAll();
@@ -198,10 +207,69 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
             wb.write(bos);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.info("ERP账号导出失败!", e);
         } finally {
             IoUtil.close(bos);
         }
+    }
+
+    /**
+     * 导入配送员信息
+     *
+     * @param file
+     * @return
+     */
+    @Override
+    public R upload(MultipartFile file) {
+        try {
+            InputStream is = file.getInputStream();
+            String filename = file.getOriginalFilename();
+            ExcelReader reader = ExcelUtil.getReader(is, 0);
+            // TODO: 2018/12/15 判断是否为规定模板
+            List<List<Object>> readFirstList = reader.read(0, 0);
+            List<Object> columnList = readFirstList.get(0);
+            if (isTemplet(columnList, templetList)) {
+                // TODO: 2018/12/15 读取文件
+                List<List<Object>> contentList = reader.read(1);
+                // TODO: 2018/12/15 解析数据
+                List<ErpEntity> erpList = CollUtil.newArrayList();
+                List<ErpEntity> failList = CollUtil.newArrayList();
+                contentList.forEach(lineList -> {
+                    ErpEntity erp = new ErpEntity();
+                    // ERP账号
+                    String erpNumber = Convert.toStr(lineList.get(0));
+                    if (StrUtil.isBlank(erpNumber)) {
+                        throw new RuntimeException();
+                    }
+                    erp.setErpNumber(erpNumber);
+                    // 公司名称
+                    String companyName = Convert.toStr(lineList.get(1));
+                    if (StrUtil.isBlank(companyName)) {
+                        throw new RuntimeException();
+                    }
+                    Integer companyId = companyDao.getOneByName(companyName);
+                    erp.setCompanyId(companyId);
+                    if (existErp(erp)) {
+                        failList.add(erp);
+                    }
+                    erpList.add(erp);
+                });
+                if (CollUtil.isNotEmpty(failList)) {
+                    return R.error("上传失败: 数据重复!");
+                }
+                //  存入数据库
+                if (CollUtil.isNotEmpty(erpList)) {
+                    this.insertBatch(erpList);
+                }
+            }
+        } catch (RuntimeException e) {
+            return R.error("上传失败, 数据出错!");
+        } catch (IOException e) {
+            return R.error("上传失败, 解析EXCEL失败!");
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok();
     }
 
     /**
@@ -216,5 +284,29 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
         return this.selectCount(new EntityWrapper<ErpEntity>()
                 .eq(StrUtil.isNotBlank(erp.getErpNumber()), "erp_number", erpNumber)
                 .eq(ObjectUtil.isNotNull(companyId), "company_id", companyId)) > 0 ? true : false;
+    }
+
+    /**
+     * 是否为Excel模板
+     *
+     * @param columnList
+     * @param templetList
+     * @return
+     */
+    private boolean isTemplet(List<Object> columnList, List<Object> templetList) {
+        int templetSize = templetList.size();
+        int colSize = columnList.size();
+        if (templetSize == colSize) {
+            int count = 0;
+            for (int i = 0; i < colSize; i++) {
+                if (templetList.get(i).equals(columnList.get(i))) {
+                    count++;
+                }
+            }
+            if (count == templetSize) {
+                return true;
+            }
+        }
+        return false;
     }
 }

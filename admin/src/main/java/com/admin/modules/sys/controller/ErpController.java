@@ -6,6 +6,7 @@ import com.admin.modules.sys.service.ErpService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -86,6 +87,15 @@ public class ErpController {
     @GetMapping("/leadOut")
     public void leadOut(HttpServletResponse res) {
         erpService.leadOut(res);
+    }
+
+    /**
+     * 导入配送员信息
+     * @return
+     */
+    @PostMapping("/upload")
+    public R upload(@RequestParam("file") MultipartFile file) {
+        return erpService.upload(file);
     }
 
 }

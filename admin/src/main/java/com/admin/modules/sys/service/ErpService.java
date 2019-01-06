@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.baomidou.mybatisplus.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -51,5 +52,12 @@ public interface ErpService extends IService<ErpEntity> {
      * @param res
      */
     void leadOut(HttpServletResponse res);
+
+    /**
+     * 导入配送员信息
+     * @param file
+     * @return
+     */
+    R upload(MultipartFile file);
 }
 

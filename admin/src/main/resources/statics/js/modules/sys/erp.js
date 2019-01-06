@@ -68,6 +68,26 @@ $(function () {
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         }
     });
+
+    new AjaxUpload('#upload', {
+        action: baseURL + "sys/erp/upload",
+        name: 'file',
+        autoSubmit: true,
+        responseType: "json",
+        onSubmit: function (file, extension) {
+            if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
+                alert('只支持xls, xlsx格式的文件！');
+                return false;
+            }
+        },
+        onComplete: function (file, r) {
+            if(r.code == 0){
+                vm.reload();
+            }else{
+                alert(r.msg);
+            }
+        },
+    });
 });
 
 var vm = new Vue({
