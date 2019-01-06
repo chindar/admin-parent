@@ -81,9 +81,9 @@ $(function () {
             }
         },
         onComplete: function (file, r) {
-            if(r.code == 0){
+            if (r.code == 0) {
                 vm.reload();
-            }else{
+            } else {
                 alert(r.msg);
             }
         },
@@ -146,6 +146,7 @@ var vm = new Vue({
                 }
             });
         },
+
         del: function (id) {
             confirm('确定要删除选中的记录？', function () {
                 $.ajax({
@@ -165,6 +166,7 @@ var vm = new Vue({
                 });
             });
         },
+
         getInfo: function (id) {
             $.get(baseURL + "sys/erp/info/" + id, function (r) {
                 vm.erp = r.erp;
@@ -178,6 +180,7 @@ var vm = new Vue({
         leadOut: function () {
             window.open(baseURL + "sys/erp/leadOut");
         },
+
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
@@ -213,6 +216,7 @@ var vm = new Vue({
                 return true;
             }
         },
+
         /**********************************************************************
          * 初始化查询条件下拉列表信息
          * @author Wang Chinda
@@ -221,6 +225,7 @@ var vm = new Vue({
             // 查询公司信息
             this.searchCompany();
         },
+
         /**********************************************************************
          * 查询公司信息
          * @author Wang Chinda
