@@ -262,6 +262,7 @@ var vm = new Vue({
             vm.disabled = false;
             vm.title = "编辑配送员";
             vm.getInfo(id);
+            vm.searchErpList();
         },
 
         saveOrUpdate: function (event) {
