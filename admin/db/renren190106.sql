@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50724
 File Encoding         : 65001
 
-Date: 2019-01-06 22:15:11
+Date: 2019-01-07 06:43:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -491,7 +491,7 @@ CREATE TABLE `sys_log` (
   `ip` varchar(64) DEFAULT NULL COMMENT 'IP地址',
   `create_date` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='系统日志';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='系统日志';
 
 -- ----------------------------
 -- Records of sys_log
@@ -504,6 +504,7 @@ INSERT INTO `sys_log` VALUES ('5', 'admin', '导出配送员信息', 'com.admin.
 INSERT INTO `sys_log` VALUES ('6', 'admin', '导出配送员信息', 'com.admin.modules.sys.controller.CourierController.exportCourier()', null, '22', '0:0:0:0:0:0:0:1', '2019-01-06 16:54:51');
 INSERT INTO `sys_log` VALUES ('7', 'admin', '导出配送员信息', 'com.admin.modules.sys.controller.CourierController.exportCourier()', null, '17', '0:0:0:0:0:0:0:1', '2019-01-06 16:55:18');
 INSERT INTO `sys_log` VALUES ('8', 'admin', '导入配送员信息', 'com.admin.modules.sys.controller.CourierController.importCourier()', '{\"part\":{\"fileItem\":{\"fieldName\":\"file\",\"contentType\":\"application/octet-stream\",\"isFormField\":false,\"fileName\":\"配送员信息模板.xlsx\",\"size\":-1,\"sizeThreshold\":0,\"repository\":{\"path\":\"C:\\\\Users\\\\chinda\\\\AppData\\\\Local\\\\Temp\\\\tomcat.778707974081828374.8099\\\\work\\\\Tomcat\\\\localhost\\\\admin\"},\"headers\":{\"headerNameToValueListMap\":{\"content-disposition\":[\"form-data; name\\u003d\\\"file\\\"; filename\\u003d\\\"配送员信息模板.xlsx\\\"\"],\"content-type\":[\"application/octet-stream\"]}},\"defaultCharset\":\"ISO-8859-1\"},\"location\":{\"path\":\"C:\\\\Users\\\\chinda\\\\AppData\\\\Local\\\\Temp\\\\tomcat.778707974081828374.8099\\\\work\\\\Tomcat\\\\localhost\\\\admin\"}},\"filename\":\"配送员信息模板.xlsx\"}', '416', '0:0:0:0:0:0:0:1', '2019-01-06 17:54:20');
+INSERT INTO `sys_log` VALUES ('9', 'admin', '修改菜单', 'com.admin.modules.sys.controller.SysMenuController.update()', '{\"menuId\":92,\"parentId\":1,\"parentName\":\"系统管理\",\"name\":\"运营数据管理\",\"url\":\"modules/sys/dispatch.html\",\"type\":1,\"icon\":\"fa fa-file-code-o\",\"orderNum\":6}', '19', '0:0:0:0:0:0:0:1', '2019-01-07 06:10:37');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -614,7 +615,7 @@ INSERT INTO `sys_menu` VALUES ('88', '87', '查看', null, 'sys:company:list,sys
 INSERT INTO `sys_menu` VALUES ('89', '87', '新增', null, 'sys:company:save', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('90', '87', '修改', null, 'sys:company:update', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('91', '87', '删除', null, 'sys:company:delete', '2', null, '6');
-INSERT INTO `sys_menu` VALUES ('92', '1', '配送信息表', 'modules/sys/dispatch.html', null, '1', 'fa fa-file-code-o', '6');
+INSERT INTO `sys_menu` VALUES ('92', '1', '运营数据管理', 'modules/sys/dispatch.html', null, '1', 'fa fa-file-code-o', '6');
 INSERT INTO `sys_menu` VALUES ('93', '92', '查看', null, 'sys:dispatch:list,sys:dispatch:info', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('94', '92', '新增', null, 'sys:dispatch:save', '2', null, '6');
 INSERT INTO `sys_menu` VALUES ('95', '92', '修改', null, 'sys:dispatch:update', '2', null, '6');
@@ -907,7 +908,7 @@ DROP TABLE IF EXISTS `tb_dispatch`;
 CREATE TABLE `tb_dispatch` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `month` varchar(30) DEFAULT NULL COMMENT '月份',
-  `courier_id` int(20) NOT NULL COMMENT '配送员id',
+  `erp_id` int(20) NOT NULL COMMENT '配送员ERP账号id',
   `all_order_count` int(20) DEFAULT NULL COMMENT '总单量',
   `total_order_count` int(20) DEFAULT NULL COMMENT '合计单量',
   `total_money` decimal(10,2) DEFAULT NULL COMMENT '费用合计',
@@ -932,13 +933,13 @@ CREATE TABLE `tb_dispatch` (
 -- ----------------------------
 -- Records of tb_dispatch
 -- ----------------------------
-INSERT INTO `tb_dispatch` VALUES ('1', '3', '11111', '45', '60', null, '22', '44', '9', '10', null, null, null, null, null, null, '11.11', '50.00', null, null, null);
-INSERT INTO `tb_dispatch` VALUES ('2', '2018-03', '22222', '60', '41', null, '12', '55', '0', '84', null, null, null, null, null, null, '11.11', '60.45', 'wqwq', null, null);
-INSERT INTO `tb_dispatch` VALUES ('3', '3', '33333', '45', '60', '55.66', '22', '44', '9', '10', '20', null, '60', null, null, null, '11.11', '50.23', null, null, null);
-INSERT INTO `tb_dispatch` VALUES ('4', '2018-03', '44444', '60', '41', '11.22', '12', '55', '0', '84', '10', '5', '6', '61', '4', '44.66', '11.11', '60.66', 'wqwq', null, null);
-INSERT INTO `tb_dispatch` VALUES ('5', '2018-03', '55555', '60', '41', '33.00', '12', '55', '0', '84', '4', '45', '7', '2', '1', '45.00', '11.11', '60.00', 'wqwq', null, null);
-INSERT INTO `tb_dispatch` VALUES ('6', '2018-03', '44444', '60', '41', '11.22', '12', '55', '0', '84', '10', '5', '6', '61', '4', '44.66', '11.11', '60.66', 'wqwq', null, null);
-INSERT INTO `tb_dispatch` VALUES ('7', '2018-03', '55555', '60', '41', '33.00', '12', '55', '0', '84', '4', '45', '7', '2', '1', '45.00', '11.11', '60.00', 'wqwq', null, null);
+INSERT INTO `tb_dispatch` VALUES ('1', '3', '11111', '45', '60', null, '22', '44', '9', '10', null, null, null, null, null, null, '11.11', '50.00', null, null, '0');
+INSERT INTO `tb_dispatch` VALUES ('2', '2018-03', '22222', '60', '41', null, '12', '55', '0', '84', null, null, null, null, null, null, '11.11', '60.45', 'wqwq', null, '0');
+INSERT INTO `tb_dispatch` VALUES ('3', '3', '33333', '45', '60', '55.66', '22', '44', '9', '10', '20', null, '60', null, null, null, '11.11', '50.23', null, null, '0');
+INSERT INTO `tb_dispatch` VALUES ('4', '2018-03', '44444', '60', '41', '11.22', '12', '55', '0', '84', '10', '5', '6', '61', '4', '44.66', '11.11', '60.66', 'wqwq', null, '0');
+INSERT INTO `tb_dispatch` VALUES ('5', '2018-03', '55555', '60', '41', '33.00', '12', '55', '0', '84', '4', '45', '7', '2', '1', '45.00', '11.11', '60.00', 'wqwq', null, '0');
+INSERT INTO `tb_dispatch` VALUES ('6', '2018-03', '44444', '60', '41', '11.22', '12', '55', '0', '84', '10', '5', '6', '61', '4', '44.66', '11.11', '60.66', 'wqwq', null, '0');
+INSERT INTO `tb_dispatch` VALUES ('7', '2018-03', '55555', '60', '41', '33.00', '12', '55', '0', '84', '4', '45', '7', '2', '1', '45.00', '11.11', '60.00', 'wqwq', null, '0');
 
 -- ----------------------------
 -- Table structure for tb_dispatch_info

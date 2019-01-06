@@ -408,6 +408,18 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     }
 
     /**
+     * 获取运营数据相关信息
+     *
+     * @param erpNumber
+     * @return
+     */
+    @Override
+    public R getCourier(String erpNumber) {
+        List<CourierVo> courierList = courierDao.getListByErpNumber(erpNumber);
+        return R.ok().put("list", courierList);
+    }
+
+    /**
      * 判断配送员信息在公司中是否存在
      *
      * @param courier

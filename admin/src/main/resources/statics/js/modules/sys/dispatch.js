@@ -86,6 +86,16 @@ $(function () {
                 name: 'remark',
                 index: 'remark',
                 width: 80
+            },
+            {
+                label: '操作',
+                name: 'id',
+                index: 'id',
+                width: 120,
+                formatter: function (value, options, row) {
+                    return "<a onclick=\"vm.edit(" + value + ")\">编辑</a>" +
+                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + value + ")\">详情</a>";
+                }
             }
         ],
         viewrecords: true,
@@ -119,36 +129,47 @@ var vm = new Vue({
     el: '#rrapp',
     data: {
         showList: true,
+        disabled: false,
         title: null,
         q: {},
         dispatch: {},
         companyList: [],
         areaList: [],
         cityList: [],
-        siteList: []
+        siteList: [],
+        erpList: []
     },
     methods: {
         query: function () {
             vm.reload();
-        }
-        ,
+        },
+        search: function (erpNumber) {
+            getCourier(erpNumber);
+        },
         add: function () {
             vm.showList = false;
             vm.title = "新增";
             vm.dispatch = {};
-        }
-        ,
-        update: function (event) {
-            var id = getSelectedRow();
-            if (id == null) {
-                return;
-            }
+        },
+        edit: function (id) {
             vm.showList = false;
-            vm.title = "修改";
+            vm.disabled = false;
+            vm.title = "编辑运营数据";
+            vm.getInfo(id);
+            vm.searchErpList();
+        },
 
-            vm.getInfo(id)
-        }
-        ,
+        /**********************************************************************
+         * 营运数据详情
+         * @author Wang Chinda
+         **********************************************************************/
+        info: function (id) {
+            vm.showList = false;
+            vm.disabled = true;
+            vm.title = "配送员详情";
+            vm.getInfo(id);
+        },
+
         saveOrUpdate: function (event) {
             var url = vm.dispatch.id == null ? "sys/dispatch/save" : "sys/dispatch/update";
             if (this.validator()) {
@@ -170,8 +191,7 @@ var vm = new Vue({
                     }
                 }
             });
-        }
-        ,
+        },
         del: function (event) {
             var ids = getSelectedRows();
             if (ids == null) {
@@ -195,14 +215,12 @@ var vm = new Vue({
                     }
                 });
             });
-        }
-        ,
+        },
         getInfo: function (id) {
             $.get(baseURL + "sys/dispatch/info/" + id, function (r) {
                 vm.dispatch = r.dispatch;
             });
-        }
-        ,
+        },
         reload: function (event) {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
@@ -310,6 +328,15 @@ var vm = new Vue({
          **********************************************************************/
         searchErpList: function () {
             $.get(baseURL + "sys/erp/listByCourier", function (r) {
+                vm.erpList = r.list;
+            });
+        },
+        /**********************************************************************
+         * 根据erpnumber获取配送员信息
+         * @author Wang Chinda
+         **********************************************************************/
+        getCourier: function (erpNumber) {
+            $.get(baseURL + "sys/courier/getCourier/" + erpNumber, function (r) {
                 vm.erpList = r.list;
             });
         },

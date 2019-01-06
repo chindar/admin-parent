@@ -69,132 +69,179 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">月份</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.month" placeholder="月份"/>
+                    <input type="text" class="form-control" v-model="dispatch.month" placeholder="月份" :disabled="disabled"/>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-sm-2 control-label">公司</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.companyId" placeholder="公司id"/>
+                    <select class="form-control" v-model="dispatch.companyId" placeholder="请选择公司" disabled>
+                        <option value="">请选择公司</option>
+                        <option v-for="company in companyList" :value="company.id" :key="company.id">
+                            {{ company.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">ERP账号id</div>
+                <div class="col-sm-2 control-label">ERP账号</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.erpId" placeholder="ERP账号id"/>
+                    <input type="text" class="form-control" v-model="dispatch.erpNumber" placeholder="请输入ERP账号">
+                </div>
+                <div class="col-sm-2 control-buttons-tab"><a class="btn btn-default" @click="search(dispatch.erpNumber)"></i>&nbsp;查询</a></div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">片区</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="dispatch.areaId" placeholder="请选择片区" disabled>
+                        <option value="">请选择片区</option>
+                        <option v-for="area in areaList" :value="area.id" :key="area.id">
+                            {{ area.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">城市</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="dispatch.cityId" placeholder="请选择城市" disabled>
+                        <option value="">请选择城市</option>
+                        <option v-for="city in cityList" :value="city.id" :key="city.id">
+                            {{ city.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">站点</div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="dispatch.siteId" placeholder="请选择站点" disabled>
+                        <option value="">请选择站点</option>
+                        <option v-for="site in siteList" :value="site.id" :key="site.id">
+                            {{ site.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">姓名</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="dispatch.courierName" placeholder="姓名" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">身份证</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="dispatch.cardId" placeholder="身份证" disabled/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">总单量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.allOrderCount" placeholder="总单量"/>
+                    <input type="text" class="form-control" v-model="dispatch.allOrderCount" placeholder="总单量" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">合计单量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.totalOrderCount" placeholder="合计单量"/>
+                    <input type="text" class="form-control" v-model="dispatch.totalOrderCount" placeholder="合计单量" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">费用合计</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.totalMoney" placeholder="费用合计"/>
+                    <input type="text" class="form-control" v-model="dispatch.totalMoney" placeholder="费用合计" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">小件</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.small" placeholder="小件"/>
+                    <input type="text" class="form-control" v-model="dispatch.small" placeholder="小件" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">大件</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.large" placeholder="大件"/>
+                    <input type="text" class="form-control" v-model="dispatch.large" placeholder="大件" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">三同</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.thrIdentical" placeholder="三同"/>
+                    <input type="text" class="form-control" v-model="dispatch.thrIdentical" placeholder="三同" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">售后取件</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.afterSaleCount" placeholder="售后取件"/>
+                    <input type="text" class="form-control" v-model="dispatch.afterSaleCount" placeholder="售后取件" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">接货首单量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.firstCount" placeholder="接货首单量"/>
+                    <input type="text" class="form-control" v-model="dispatch.firstCount" placeholder="接货首单量" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">接货续单量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.againCount" placeholder="接货续单量"/>
+                    <input type="text" class="form-control" v-model="dispatch.againCount" placeholder="接货续单量" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">其他单量</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.otherCount" placeholder="其他单量"/>
+                    <input type="text" class="form-control" v-model="dispatch.otherCount" placeholder="其他单量" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">差评数</div>
+                <div class="col-sm-2 control-label">差评</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.badCount" placeholder="差评数"/>
+                    <input type="text" class="form-control" v-model="dispatch.badCount" placeholder="差评数" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-sm-2 control-label">投诉数</div>
+                <div class="col-sm-2 control-label">投诉</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.complaintCount" placeholder="投诉数"/>
+                    <input type="text" class="form-control" v-model="dispatch.complaintCount" placeholder="投诉数" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">罚款合计</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.fineMoney" placeholder="罚款合计"/>
+                    <input type="text" class="form-control" v-model="dispatch.fineMoney" placeholder="罚款合计" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">其他扣款</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.deductMoney" placeholder="其他扣款"/>
+                    <input type="text" class="form-control" v-model="dispatch.deductMoney" placeholder="其他扣款" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">工资</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.salary" placeholder="工资"/>
+                    <input type="text" class="form-control" v-model="dispatch.salary" placeholder="工资" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">备注</div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.remark" placeholder="备注"/>
+                    <input type="text" class="form-control" v-model="dispatch.remark" placeholder="备注" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.createTime" placeholder=""/>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-2 control-label">1:删除0:正常</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.isDelete" placeholder="1:删除0:正常"/>
+                    <input type="text" class="form-control" v-model="dispatch.createTime" placeholder="" :disabled="disabled"/>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
-                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" v-show="!disabled"/>
                 &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
             </div>
         </form>

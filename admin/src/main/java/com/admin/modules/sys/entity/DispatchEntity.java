@@ -36,7 +36,7 @@ public class DispatchEntity implements Serializable {
 	/**
 	 * 配送员id
 	 */
-	private Integer courierId;
+	private Integer erpId;
 	/**
 	 * 总单量
 	 */

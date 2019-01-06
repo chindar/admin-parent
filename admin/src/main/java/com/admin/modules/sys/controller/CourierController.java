@@ -41,7 +41,6 @@ public class CourierController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:courier:info")
     public R info(@PathVariable("id") Integer id){
         CourierEntity courier = courierService.selectById(id);
 
@@ -52,7 +51,6 @@ public class CourierController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:courier:save")
     public R save(@RequestBody CourierEntity courier){
         return courierService.save(courier);
     }
@@ -94,6 +92,16 @@ public class CourierController {
     public R delete(@RequestBody Integer id){
         courierService.deleteById(id);
         return R.ok();
+    }
+
+    /**
+     * 获取运营数据相关信息
+     * @param erpNumber
+     * @return
+     */
+    @GetMapping("/getCourier/{erpNumber}")
+    public R getCourier(@PathVariable("erpNumber") String erpNumber) {
+        return courierService.getCourier(erpNumber);
     }
 
 }

@@ -44,4 +44,11 @@ public interface CourierDao extends BaseMapper<CourierEntity> {
      * @return
      */
     List<CourierVo> queryCourierList(Page<CourierVo> page, CourierVo courierVo);
+
+    /**
+     * 获取运营数据中配送员相关信息
+     * @param erpNumber
+     * @return
+     */
+    List<CourierVo> getListByErpNumber(@Param("erpNumber") String erpNumber);
 }

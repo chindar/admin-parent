@@ -63,5 +63,12 @@ public interface CourierService extends IService<CourierEntity> {
      * @return
      */
     R update(CourierEntity courier);
+
+    /**
+     * 获取运营数据相关信息
+     * @param erpNumber
+     * @return
+     */
+    R getCourier(String erpNumber);
 }
 

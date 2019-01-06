@@ -180,4 +180,8 @@
         </if>
                AND a.is_delete = 0
     </select>
+    <!-- 获取运营数据中配送员相关信息 START -->
+    <select id="getListByErpNumber" resultType="com.admin.modules.sys.entity.vo.CourierVo">
+
+    </select>
 </mapper>

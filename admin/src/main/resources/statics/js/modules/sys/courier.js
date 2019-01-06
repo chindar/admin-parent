@@ -260,7 +260,7 @@ var vm = new Vue({
             vm.showList = false;
             vm.showStatus = true;
             vm.disabled = false;
-            vm.title = "编辑配送员";
+            vm.title = "编辑配送员信息";
             vm.getInfo(id);
             vm.searchErpList();
         },

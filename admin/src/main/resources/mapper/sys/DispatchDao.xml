@@ -39,8 +39,8 @@
              , a.salary
              , a.remark
         FROM tb_dispatch a
-               LEFT JOIN tb_courier b ON a.courier_id = b.id
-               LEFT JOIN tb_erp c ON b.erp_id = c.id
+               LEFT JOIN tb_erp c ON a.erp_id = c.id
+               LEFT JOIN tb_courier b ON c.id = b.erp_id AND a.erp_id = b.erp_id
                LEFT JOIN tb_company d ON c.company_id = d.id
                LEFT JOIN tb_site e ON e.id = b.site_id
                LEFT JOIN tb_city f ON f.id = e.city_id
@@ -75,6 +75,5 @@
         </if>
           AND a.is_delete = 0
     </select>
-
 
 </mapper>
