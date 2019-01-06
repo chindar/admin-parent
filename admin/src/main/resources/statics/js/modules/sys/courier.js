@@ -333,9 +333,8 @@ var vm = new Vue({
          * 导出配送员信息
          * @author Wang Chinda
          **********************************************************************/
-        leadOut: function () {
-
-            window.open("/admin/sys/courier/leadOut");
+        exportFile: function () {
+            window.open(baseURL + "sys/courier/leadOut");
         },
 
         /**********************************************************************
@@ -382,7 +381,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         download: function () {
-            location.href = encodeURI("/admin/statics/录入快递员模板.xlsx");
+            location.href = encodeURI(baseURL + "statics/录入快递员模板.xlsx");
         },
 
         /**********************************************************************
