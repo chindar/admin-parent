@@ -170,13 +170,13 @@ var vm = new Vue({
                 vm.erp = r.erp;
             });
         },
+
         /**********************************************************************
          * 导出配送员信息
          * @author Wang Chinda
          **********************************************************************/
         leadOut: function () {
-
-            window.open("/admin/sys/erp/leadOut");
+            window.open(baseURL + "sys/erp/leadOut");
         },
         reload: function (event) {
             vm.showList = true;
@@ -190,6 +190,15 @@ var vm = new Vue({
                 page: page
             }).trigger("reloadGrid");
         },
+
+        /**********************************************************************
+         * 下载配送员信息导入模板
+         * @author Wang Chinda
+         **********************************************************************/
+        download: function () {
+            location.href = encodeURI(baseURL + "statics/ERP账号模板.xlsx");
+        },
+
         /**********************************************************************
          * 表单校验
          * @author Wang Chinda
