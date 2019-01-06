@@ -33,11 +33,38 @@
         LEFT JOIN tb_company b
         ON a.company_id = b.id
         where a.is_delete = 0
+        <if test="name != null and name != ''">
+            and a.name like CONCAT('%',ltrim(rtrim(#{name})),'%')
+        </if>
         <if test="businessName != null and businessName != ''">
             and a.business_name like CONCAT('%',ltrim(rtrim(#{businessName})),'%')
         </if>
         <if test="companyId != null and companyId != ''">
             and a.company_id = #{companyId}
+        </if>
+        <if test="timeType == 1">
+            <if test="startDate != null and startDate != ''">
+                and a.create_time >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and #{endDate} >= a.create_time
+            </if>
+        </if>
+        <if test="timeType == 2">
+            <if test="startDate != null and startDate != ''">
+                and a.start_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and #{endDate} >= a.start_date
+            </if>
+        </if>
+        <if test="timeType == 3">
+            <if test="startDate != null and startDate != ''">
+                and a.end_date >= #{startDate}
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and #{endDate} >= a.end_date
+            </if>
         </if>
         <if test="(pactStatus != null and pactStatus != '') or pactStatus == 0">
             having pactStatus = #{pactStatus}

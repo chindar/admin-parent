@@ -35,10 +35,18 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
         Page page = new Query<PactEntityVo>(params).getPage();
         if (params.get("businessName") != null && Tools.notEmpty(params.get("businessName").toString()))
             entity.setBusinessName(params.get("businessName").toString());
-        if (params.get("businessName") != null && Tools.notEmpty(params.get("cityId").toString()))
-            entity.setCityId(Integer.valueOf(params.get("cityId").toString()));
-//        if (params.get("businessName") != null && Tools.notEmpty(params.get("pactStatus").toString()))
-//            entity.setPactStatus(Integer.valueOf(params.get("pactStatus").toString()));
+        if (params.get("name") != null && Tools.notEmpty(params.get("name").toString()))
+            entity.setName(params.get("name").toString());
+        if (params.get("pactStatus") != null && Tools.notEmpty(params.get("pactStatus").toString()))
+            entity.setPactStatus(Integer.valueOf(params.get("pactStatus").toString()));
+        if (params.get("companyId") != null && Tools.notEmpty(params.get("companyId").toString()))
+            entity.setCompanyId(Integer.valueOf(params.get("companyId").toString()));
+        if (params.get("timeType") != null && Tools.notEmpty(params.get("timeType").toString()))
+            entity.setTimeType(Integer.valueOf(params.get("timeType").toString()));
+        if (params.get("startDate") != null && Tools.notEmpty(params.get("startDate").toString()))
+            entity.setStartDate(params.get("startDate").toString());
+        if (params.get("endDate") != null && Tools.notEmpty(params.get("endDate").toString()))
+            entity.setEndDate(params.get("endDate").toString());
         List<PactEntityVo> list = dao.getPactList(page,entity);
         if (list.size() > 0){
             for (PactEntityVo info: list) {

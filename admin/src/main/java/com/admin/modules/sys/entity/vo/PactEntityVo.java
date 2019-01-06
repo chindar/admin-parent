@@ -68,6 +68,18 @@ public class PactEntityVo implements Serializable {
         private Integer pactStatus;
 
         private Integer overDays;
+    /**
+     * 1创建2开始3结束
+     */
+    private Integer timeType;
+
+    public Integer getTimeType() {
+        return timeType;
+    }
+
+    public void setTimeType(Integer timeType) {
+        this.timeType = timeType;
+    }
 
     public String getCompanyName() {
         return companyName;
