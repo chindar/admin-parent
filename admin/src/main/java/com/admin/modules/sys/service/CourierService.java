@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.CourierEntity;
 import com.baomidou.mybatisplus.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -19,12 +20,12 @@ public interface CourierService extends IService<CourierEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-//    /**
-//     * 上传文件
-//     * @param file
-//     * @return
-//     */
-//    R importCourier(MultipartFile file);
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    R importCourier(MultipartFile file);
 //
 //    PageUtils selectMyPage(Map<String, Object> params);
 //

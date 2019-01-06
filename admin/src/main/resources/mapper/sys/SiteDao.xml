@@ -38,6 +38,11 @@
         </if>
     </select>
 
+    <!-- 根据站点名称获取站点id START -->
+    <select id="getOneByName" resultType="java.lang.Integer">
+        SELECT id FROM tb_site WHERE is_delete = 0 AND name = #{siteName}
+    </select>
+
     <!--删除-->
     <update id="deleteSiteById">
         update tb_site set is_delete = 1 where id = #{id}

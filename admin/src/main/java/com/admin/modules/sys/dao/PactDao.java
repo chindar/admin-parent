@@ -26,4 +26,10 @@ public interface PactDao extends BaseMapper<PactEntity> {
 
     PactEntityVo getPactInfoById(@Param("id")Integer id);
 
+    /**
+     * 根据合同名称获取合同id
+     * @param pactName
+     * @return
+     */
+    Integer getOneByName(@Param("pactName") String pactName);
 }

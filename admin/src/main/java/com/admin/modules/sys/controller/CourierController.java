@@ -7,6 +7,7 @@ import com.admin.modules.sys.service.CourierService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -56,24 +57,18 @@ public class CourierController {
         return courierService.save(courier);
     }
 
-//    /**
-//     * 导入配送员信息
-//     * @param file
-//     * @return
-//     */
-//    @SysLog("导入配送员信息")
-//    @PostMapping("/import")
-//    public R importCourier(@RequestParam("file") MultipartFile file) {
-//
-//        return courierService.importCourier(file);
-//    }
-//
-//    @SysLog("批量更新配送员信息")
-//    @PostMapping("/editPact")
-//    public R editPact(String batchId, String pactId) {
-//        return courierService.editBatch(batchId, pactId);
-//    }
-//
+    /**
+     * 导入配送员信息
+     * @param file
+     * @return
+     */
+    @SysLog("导入配送员信息")
+    @PostMapping("/upload")
+    public R importCourier(@RequestParam("file") MultipartFile file) {
+
+        return courierService.importCourier(file);
+    }
+
     /**
      * 导出配送员信息
      * @return

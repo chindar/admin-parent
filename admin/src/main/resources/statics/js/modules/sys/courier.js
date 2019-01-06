@@ -141,30 +141,26 @@ $(function () {
             "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + cellValue + ")\">删除</a>";
     }
 
-    // new AjaxUpload('#upload', {
-    //     action: baseURL + "sys/courier/import",
-    //     name: 'file',
-    //     autoSubmit: true,
-    //     responseType: "json",
-    //     onSubmit: function (file, extension) {
-    //
-    //         if (vm.pactId == '') {
-    //             alert("录入之前请先选择某一个合同, 之后再操作!");
-    //             return false;
-    //         }
-    //         if (!(extension && /^(xlsx)$/.test(extension.toLowerCase()))) {
-    //             alert('只支持xlsx格式的文件！');
-    //             return false;
-    //         }
-    //     },
-    //     onComplete: function (file, r) {
-    //         if (r.code == 0) {
-    //             vm.batchId = r.batchId;
-    //         } else {
-    //             alert(r.msg);
-    //         }
-    //     },
-    // });
+    new AjaxUpload('#upload', {
+        action: baseURL + "sys/courier/upload",
+        name: 'file',
+        autoSubmit: true,
+        responseType: "json",
+        onSubmit: function (file, extension) {
+            if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
+                alert('只支持xls, xlsx格式的文件！');
+                return false;
+            }
+        },
+        onComplete: function (file, r) {
+            if (r.code == 0) {
+                vm.initSearch();
+                vm.reload();
+            } else {
+                alert(r.msg);
+            }
+        },
+    });
 });
 
 var vm = new Vue({
@@ -197,20 +193,7 @@ var vm = new Vue({
         batchId: null
     },
     watch: {
-        batchId: function (newBatchId, oldBatchId) {
-            if (newBatchId != null) {
-                this.editBatch(newBatchId);
-            }
-        },
-        /**********************************************************************
-         * 监听keyword是否切换
-         * @author Wang Chinda
-         **********************************************************************/
-        keyword: function (newKey, oldKey) {
-            if (newKey != oldKey) {
-                vm.q.name = null;
-            }
-        }
+
     },
     methods: {
         query: function () {
@@ -279,24 +262,6 @@ var vm = new Vue({
             vm.disabled = false;
             vm.title = "编辑配送员";
             vm.getInfo(id);
-        },
-
-        /**********************************************************************
-         * 批量导入
-         * @author Wang Chinda
-         **********************************************************************/
-        batchEnter: function () {
-            layer.open({
-                type: 1,
-                offset: '100px',
-                skin: 'layui-layer-molv',
-                title: "批量添加配送员",
-                area: ['400px', '250px'],
-                shade: 0,
-                shadeClose: false,
-                content: jQuery("#dialog")
-            });
-
         },
 
         saveOrUpdate: function (event) {
@@ -381,7 +346,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         download: function () {
-            location.href = encodeURI(baseURL + "statics/录入快递员模板.xlsx");
+            location.href = encodeURI(baseURL + "statics/配送员信息模板.xlsx");
         },
 
         /**********************************************************************

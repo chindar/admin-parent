@@ -3,16 +3,19 @@ package com.admin.modules.sys.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateException;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
-import com.admin.modules.sys.dao.CityInfoDao;
-import com.admin.modules.sys.dao.CourierDao;
+import com.admin.modules.sys.dao.*;
 import com.admin.modules.sys.entity.CourierEntity;
 import com.admin.modules.sys.entity.vo.CourierVo;
 import com.admin.modules.sys.service.CourierService;
@@ -26,10 +29,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
@@ -44,10 +49,17 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     private CityInfoDao cityInfoDao;
     @Autowired
     private CourierDao courierDao;
+    @Autowired
+    private CompanyDao companyDao;
+    @Autowired
+    private PactDao pactDao;
+    @Autowired
+    private ErpDao erpDao;
+    @Autowired
+    private SiteDao siteDao;
 
 
     private static List<Object> templetList = CollUtil.newArrayList();
-
     static {
         // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
         templetList.add("公司");
@@ -114,82 +126,100 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         return new PageUtils(page);
     }
 
-//    /**
-//     * 上传文件
-//     *
-//     * @param multipartFile
-//     * @return
-//     */
-//    @Override
-//    public R importCourier(MultipartFile multipartFile) {
-//        final String batchId = RandomUtil.simpleUUID();
-//        try {
-//            InputStream is = multipartFile.getInputStream();
-//            String filename = multipartFile.getOriginalFilename();
-//            ExcelReader reader = ExcelUtil.getReader(is, 0);
-//            // TODO: 2018/12/15 判断是否为规定模板
-//            List<List<Object>> readFirstList = reader.read(0, 0);
-//            List<Object> columnList = readFirstList.get(0);
-//            if (isTemplet(columnList, templetList)) {
-//                // TODO: 2018/12/15 读取文件
-//                List<List<Object>> contentList = reader.read(1);
-//                // TODO: 2018/12/15 解析数据
-//                List<CourierEntity> courierList = CollUtil.newArrayList();
-//                contentList.forEach(lineList -> {
-//                    CourierEntity courierEntity = new CourierEntity();
-//                    // 片区 城市 站点 erp账号 姓名 身份证号码 电话 银行卡号 开户行 联行号 入职时间 离职时间 状态 备注
-//                    courierEntity.setArea(Convert.toStr(lineList.get(0)));
-//                    // 根据城市名称获取城市id
-//                    Integer cityId = cityInfoDao.getIdByCityName(lineList.get(1));
-//                    courierEntity.setCityId(cityId);
-//                    courierEntity.setSite(Convert.toStr(lineList.get(2)));
-//                    courierEntity.setErpId(Convert.toStr(lineList.get(3)));
-//                    courierEntity.setName(Convert.toStr(lineList.get(4)));
-//                    courierEntity.setCardId(Convert.toStr(lineList.get(5)));
-//                    courierEntity.setPhone(Convert.toStr(lineList.get(6)));
-//                    courierEntity.setBankCardId(Convert.toStr(lineList.get(7)));
-//                    courierEntity.setDepositBank(Convert.toStr(lineList.get(8)));
-//                    courierEntity.setJoinBankNumber(Convert.toStr(lineList.get(9)));
-//                    courierEntity.setEntryDate(DateUtil.parse(Convert.toStr(lineList.get(10))));
-//                    courierEntity.setLeaveDate(DateUtil.parse(Convert.toStr(lineList.get(11))));
-//                    String statusStr = Convert.toStr(lineList.get(12));
-//                    int status = StrUtil.equals(statusStr, "在职") ? 1 : 0;
-//                    courierEntity.setStatus(status);
-//                    courierEntity.setComment(Convert.toStr(lineList.get(13)));
-//                    courierEntity.setIsDelete(0);
-//                    String username = ((SysUserEntity) SecurityUtils.getSubject().getPrincipal()).getUsername();
-//                    courierEntity.setCreater(username);
-//                    courierEntity.setCreateDate(DateUtil.date());
-//                    courierEntity.setBatchId(batchId);
-//                    courierList.add(courierEntity);
-//                });
-//                // TODO: 2018/12/15 存入数据库
-//                if (CollUtil.isNotEmpty(courierList)) {
-//                    this.insertBatch(courierList);
-//                }
-//            }
-//        } catch (IOException e) {
-//            return R.error("导入失败, 解析Excel异常!");
-//        } catch (DateException e) {
-//            return R.error("导入失败, 时间解析异常!");
-//        } catch (Exception e) {
-//            return R.error();
-//        }
-//        return R.ok().put("batchId", batchId);
-//    }
+    /**
+     * 上传文件
+     *
+     * @param multipartFile
+     * @return
+     */
+    @Override
+    public R importCourier(MultipartFile multipartFile) {
+        final String batchId = RandomUtil.simpleUUID();
+        try {
+            InputStream is = multipartFile.getInputStream();
+            String filename = multipartFile.getOriginalFilename();
+            ExcelReader reader = ExcelUtil.getReader(is, 0);
+            // TODO: 2018/12/15 判断是否为规定模板
+            List<List<Object>> readFirstList = reader.read(0, 0);
+            List<Object> columnList = readFirstList.get(0);
+            if (isTemplet(columnList, templetList)) {
+                // TODO: 2018/12/15 读取文件
+                List<List<Object>> contentList = reader.read(1);
+                // TODO: 2018/12/15 解析数据
+                List<CourierEntity> courierList = CollUtil.newArrayList();
+                List<CourierEntity> failList = CollUtil.newArrayList();
+                contentList.forEach(lineList -> {
+                    CourierEntity courier = new CourierEntity();
+                    // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
+                    String companyName = Convert.toStr(lineList.get(0));
+                    if (StrUtil.isBlank(companyName)) {
+                        throw new RuntimeException();
+                    }
+                    Integer companyId = companyDao.getOneByName(companyName);
+                    courier.setCompanyId(companyId);
+                    String name = Convert.toStr(lineList.get(1));
+                    if (StrUtil.isBlank(name)) {
+                        throw new RuntimeException();
+                    }
+                    courier.setName(name);
+                    String cardId = Convert.toStr(lineList.get(2));
+                    if (StrUtil.isBlank(cardId)) {
+                        throw new RuntimeException();
+                    }
+                    courier.setCardId(cardId);
+                    String phone = Convert.toStr(lineList.get(3));
+                    if (StrUtil.isBlank(phone)) {
+                        throw new RuntimeException();
+                    }
+                    courier.setPhone(phone);
+                    String bankCardId = Convert.toStr(lineList.get(4));
+                    courier.setBankCardId(bankCardId);
+                    String depositBank = Convert.toStr(lineList.get(5));
+                    courier.setDepositBank(depositBank);
+                    String joinBankNumber = Convert.toStr(lineList.get(6));
+                    courier.setJoinBankNumber(joinBankNumber);
+                    Date enterDate = DateUtil.parse(Convert.toStr(lineList.get(7)));
+                    courier.setEntryDate(enterDate);
+                    Date leaveDate = DateUtil.parse(Convert.toStr(lineList.get(8)));
+                    courier.setLeaveDate(leaveDate);
+                    String pactName = Convert.toStr(lineList.get(9));
+                    Integer pactId = pactDao.getOneByName(pactName);
+                    courier.setPactId(pactId);
+                    String erpNumber = Convert.toStr(lineList.get(10));
+                    Integer erpId = erpDao.getOneByNumber(erpNumber);
+                    courier.setErpId(erpId);
+                    String siteName = Convert.toStr(lineList.get(11));
+                    Integer siteId = siteDao.getOneByName(siteName);
+                    courier.setSiteId(siteId);
+                    String remark = Convert.toStr(lineList.get(12));
+                    courier.setRemark(remark);
 
-//    /**
-//     * 批量更新配送员信息
-//     *
-//     * @param batchId
-//     * @param pactId
-//     * @return
-//     */
-//    @Override
-//    public R editBatch(String batchId, String pactId) {
-//        courierDao.updateByBatch(batchId, pactId);
-//        return R.ok();
-//    }
+                    if (isExist(courier)) {
+                        failList.add(courier);
+                    }
+                    courierList.add(courier);
+                });
+
+                if (CollUtil.isNotEmpty(failList)) {
+                    return R.error("上传失败：数据重复！");
+                }
+
+                // TODO: 2018/12/15 存入数据库
+                if (CollUtil.isNotEmpty(courierList)) {
+                    this.insertBatch(courierList);
+                }
+            }
+        } catch (IOException e) {
+            return R.error("上传失败: 解析Excel异常!");
+        } catch (DateException e) {
+            return R.error("上传失败: 时间解析异常!");
+        } catch (RuntimeException e) {
+            return R.error("上传失败: 数据出错!");
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok().put("batchId", batchId);
+    }
 
     /**
      * 导出配送员信息
@@ -371,9 +401,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
      */
     @Override
     public R update(CourierEntity courier) {
-        if (isExist(courier)) {
-            return R.error("该员工已在公司中入职!");
-        }
+
         ValidatorUtils.validateEntity(courier);
         this.updateAllColumnById(courier);//全部更新
         return R.ok();

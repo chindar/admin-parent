@@ -4,6 +4,7 @@ import com.admin.modules.sys.entity.ErpEntity;
 import com.admin.modules.sys.entity.vo.ErpVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -35,4 +36,11 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
      * @return
      */
     List<ErpVo> selectAll();
+
+    /**
+     * 根据ERP账号获取erpId
+     * @param erpNumber
+     * @return
+     */
+    Integer getOneByNumber(@Param("erpNumber") String erpNumber);
 }

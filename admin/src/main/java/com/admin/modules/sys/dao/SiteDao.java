@@ -20,4 +20,11 @@ public interface SiteDao extends BaseMapper<SiteEntity> {
     List<SiteEntityVo> getSiteList(RowBounds var1, SiteEntity params);
 
     int deleteSiteById(@Param("id") Integer id);
+
+    /**
+     * 根据站点名称获取站点id
+     * @param siteName
+     * @return
+     */
+    Integer getOneByName(@Param("siteName") String siteName);
 }

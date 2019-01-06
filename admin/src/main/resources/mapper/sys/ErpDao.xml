@@ -69,6 +69,10 @@
         WHERE 1 = 1
         AND a.is_delete = 0
     </select>
+    <!-- 根据ERP账号获取erpId -->
+    <select id="getOneByNumber" resultType="java.lang.Integer">
+        SELECT id FROM tb_erp WHERE is_delete = 0 AND erp_number = #{erpNumber}
+    </select>
 
 
 </mapper>

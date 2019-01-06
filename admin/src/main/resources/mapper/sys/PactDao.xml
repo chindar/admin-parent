@@ -99,4 +99,8 @@
     <select id="getPactInfoById" resultMap="pactMap">
         select * from tb_pact where id = #{id}
     </select>
+    <!-- 根据合同名称获取合同id START -->
+    <select id="getOneByName" resultType="java.lang.Integer">
+        SELECT id FROM tb_pact WHERE is_delete = 0 AND name = #{pactName}
+    </select>
 </mapper>

@@ -81,11 +81,7 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
      */
     @Override
     public R update(ErpEntity erp) {
-        // 查询该公司未删除的ERP账号中该ERP账号是否存在
-        boolean isExist = existErp(erp);
-        if (isExist) {
-            return R.error("该账号已存在!");
-        }
+
         ValidatorUtils.validateEntity(erp);
         //全部更新
         this.updateAllColumnById(erp);
