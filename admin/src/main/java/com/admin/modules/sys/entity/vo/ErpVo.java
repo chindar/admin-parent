@@ -12,6 +12,8 @@ import com.admin.modules.sys.entity.ErpEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author Wang Chinda
  * @date 2019/1/5
@@ -20,7 +22,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class ErpVo extends ErpEntity {
+public class ErpVo extends ErpEntity implements Serializable {
+
+    private static final long serialVersionUID = -6143299359821466784L;
 
     private String companyName;
 }

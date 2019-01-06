@@ -10,7 +10,10 @@ package com.admin.modules.sys.entity.vo;
 
 import com.admin.modules.sys.entity.DispatchEntity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
  * 运营数据Vo
@@ -21,14 +24,21 @@ import lombok.NoArgsConstructor;
  * @since 1.0
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class DispatchVo extends DispatchEntity {
+public class DispatchVo extends DispatchEntity implements Serializable {
 
+    private static final long serialVersionUID = -7607605004887049942L;
+
+    private String companyId;
     /** 片区名称 */
+    private Integer areaId;
     private String areaName;
     /** 城市名称 */
+    private Integer cityId;
     private String cityName;
     /** 站点名称 */
+    private Integer siteId;
     private String siteName;
     /** ERP账号 */
     private String erpNumber;
@@ -36,6 +46,10 @@ public class DispatchVo extends DispatchEntity {
     private String courierName;
     /** 身份证 */
     private String cardId;
+    /** 状态 */
+    private Integer status;
+    /** 合同id */
+    private Integer pactId;
     
 
 

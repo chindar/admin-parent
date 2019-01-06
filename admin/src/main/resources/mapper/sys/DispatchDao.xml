@@ -46,6 +46,33 @@
                LEFT JOIN tb_city f ON f.id = e.city_id
                LEFT JOIN tb_area g ON g.id = f.area_id
         WHERE 1 = 1
+        <if test="courierName != null and courierName != ''">
+            AND b.name = #{courierName}
+        </if>
+        <if test="month != null and month != ''">
+            AND a.month = #{month}
+        </if>
+        <if test="cardId != null and cardId != ''">
+            AND b.card_id = #{cardId}
+        </if>
+        <if test="companyId != null and companyId != ''">
+            AND b.company_id = #{companyId}
+        </if>
+        <if test="status != null">
+            AND b.status = #{status}
+        </if>
+        <if test="pactId != null and pactId != ''">
+            AND b.pact_id = #{pactId}
+        </if>
+        <if test="cityId != null and cityId != ''">
+            AND b.city_id = #{cityId}
+        </if>
+        <if test="areaId != null and areaId != ''">
+            AND b.area_id = #{areaId}
+        </if>
+        <if test="siteId != null and siteId != ''">
+            AND b.site_id = #{siteId}
+        </if>
           AND a.is_delete = 0
     </select>
 

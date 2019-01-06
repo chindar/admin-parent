@@ -167,7 +167,7 @@
                AND a.status = #{status}
         </if>
         <if test="pactId != null and pactId != ''">
-               AND a.erp_id = #{pactId}
+               AND a.pact_id = #{pactId}
         </if>
         <if test="cityId != null and cityId != ''">
                AND a.city_id = #{cityId}

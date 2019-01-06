@@ -32,7 +32,7 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
         page.setRecords(dispatchVoList);
 
         PageUtils pageUtils = new PageUtils(page);
-        return R.ok().put("list", pageUtils);
+        return R.ok().put("page", pageUtils);
     }
 
 }

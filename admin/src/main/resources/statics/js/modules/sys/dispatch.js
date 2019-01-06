@@ -208,7 +208,7 @@ var vm = new Vue({
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
                 postData: {
-                    'name': vm.q.name,
+                    'courierName': vm.q.name,
                     'month': vm.q.month,
                     'cardId': vm.q.cardId,
                     'companyId': vm.q.companyId,
