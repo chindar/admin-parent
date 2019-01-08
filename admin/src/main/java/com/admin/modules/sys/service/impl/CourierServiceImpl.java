@@ -415,8 +415,8 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
      */
     @Override
     public R getCourier(String erpNumber) {
-        List<CourierVo> courierList = courierDao.getListByErpNumber(erpNumber);
-        return R.ok().put("list", courierList);
+        CourierVo courier = courierDao.getListByErpNumber(erpNumber);
+        return R.ok().put("courier", courier);
     }
 
     /**

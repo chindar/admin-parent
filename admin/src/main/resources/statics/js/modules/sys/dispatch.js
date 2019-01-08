@@ -29,8 +29,8 @@ $(function () {
             },
             {
                 label: 'ERP账号',
-                name: 'erpId',
-                index: 'erp_id',
+                name: 'erpNumber',
+                index: 'erp_number',
                 width: 80
             },
             {
@@ -133,6 +133,7 @@ var vm = new Vue({
         title: null,
         q: {},
         dispatch: {},
+        courier: {},
         companyList: [],
         areaList: [],
         cityList: [],
@@ -144,7 +145,7 @@ var vm = new Vue({
             vm.reload();
         },
         search: function (erpNumber) {
-            getCourier(erpNumber);
+            this.getCourier(erpNumber);
         },
         add: function () {
             vm.showList = false;
@@ -337,7 +338,33 @@ var vm = new Vue({
          **********************************************************************/
         getCourier: function (erpNumber) {
             $.get(baseURL + "sys/courier/getCourier/" + erpNumber, function (r) {
-                vm.erpList = r.list;
+                let dispatchVo = {};
+                dispatchVo = r.courier;
+                dispatchVo.courierName = r.courier.name;
+                dispatchVo.leaveDate = r.courier.leaveDate;
+                dispatchVo.afterSaleCount = vm.dispatch.afterSaleCount;
+                dispatchVo.againCount = vm.dispatch.againCount;
+                dispatchVo.allOrderCount = vm.dispatch.allOrderCount;
+                dispatchVo.badCount = vm.dispatch.badCount;
+                dispatchVo.complaintCount = vm.dispatch.complaintCount;
+                dispatchVo.createTime = vm.dispatch.createTime;
+                dispatchVo.deductMoney = vm.dispatch.deductMoney;
+                dispatchVo.erpId = vm.dispatch.erpId;
+                dispatchVo.erpNumber = vm.dispatch.erpNumber;
+                dispatchVo.fineMoney = vm.dispatch.fineMoney;
+                dispatchVo.firstCount = vm.dispatch.firstCount;
+                dispatchVo.id = vm.dispatch.id;
+                dispatchVo.isDelete = vm.dispatch.isDelete;
+                dispatchVo.large = vm.dispatch.large;
+                dispatchVo.month = vm.dispatch.month;
+                dispatchVo.otherCount = vm.dispatch.otherCount;
+                dispatchVo.remark = vm.dispatch.remark;
+                dispatchVo.salary = vm.dispatch.salary;
+                dispatchVo.small = vm.dispatch.small;
+                dispatchVo.thrIdentical = vm.dispatch.thrIdentical;
+                dispatchVo.totalMoney = vm.dispatch.totalMoney;
+                dispatchVo.totalOrderCount = vm.dispatch.totalOrderCount;
+                vm.dispatch = dispatchVo;
             });
         },
 
@@ -346,30 +373,10 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         validator: function () {
-            if (isBlank(vm.courier.name)) {
-                alert("配送员姓名不能为空");
-                return true;
-            }
-            if (isBlank(vm.courier.cardId)) {
-                alert("身份证号不能为空");
-                return true;
-            }
-            if (isBlank(vm.courier.phone)) {
-                alert("手机号不能为空");
-                return true;
-            }
-            if (isBlank(vm.courier.bankCardId)) {
-                alert("银行卡号不能为空");
-                return true;
-            }
-            if (isBlank(vm.courier.entryDate)) {
-                alert("入职时间不能为空");
-                return true;
-            }
-            if (isBlank(vm.courier.leaveDate)) {
-                alert("离职时间不能为空");
-                return true;
-            }
+            // if (isBlank(vm.courier.name)) {
+            //     alert("配送员姓名不能为空");
+            //     return true;
+            // }
         }
     },
 
