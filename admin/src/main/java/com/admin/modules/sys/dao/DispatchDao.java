@@ -23,4 +23,10 @@ public interface DispatchDao extends BaseMapper<DispatchEntity> {
      * @return
      */
     List<DispatchVo> queryPage(Page<DispatchVo> page, DispatchVo dispatchVo);
+
+    /**
+     * 获取全部导出数据
+     * @return
+     */
+    List<DispatchVo> selectAll();
 }

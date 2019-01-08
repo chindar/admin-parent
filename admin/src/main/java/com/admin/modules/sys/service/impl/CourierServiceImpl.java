@@ -58,7 +58,6 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     @Autowired
     private SiteDao siteDao;
 
-
     private static List<Object> templetList = CollUtil.newArrayList();
     static {
         // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注

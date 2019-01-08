@@ -1,5 +1,6 @@
 package com.admin.modules.sys.controller;
 
+import com.admin.common.annotation.SysLog;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.DispatchEntity;
@@ -8,6 +9,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -78,6 +80,16 @@ public class DispatchController {
         dispatchService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();
+    }
+
+    /**
+     * 导出配送员信息
+     * @return
+     */
+    @SysLog("导出配送员信息")
+    @GetMapping("/leadOut")
+    public void exportDispatch(HttpServletResponse res) {
+        dispatchService.exportDispatch(res);
     }
 
 }

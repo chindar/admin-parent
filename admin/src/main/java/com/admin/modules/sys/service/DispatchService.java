@@ -4,6 +4,7 @@ import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.DispatchEntity;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface DispatchService extends IService<DispatchEntity> {
 
     R queryPage(Map<String, Object> params);
+
+    void exportDispatch(HttpServletResponse res);
 }
 

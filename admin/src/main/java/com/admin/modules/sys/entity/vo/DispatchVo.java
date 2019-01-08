@@ -30,7 +30,8 @@ public class DispatchVo extends DispatchEntity implements Serializable {
 
     private static final long serialVersionUID = -7607605004887049942L;
 
-    private String companyId;
+    private Integer companyId;
+    private String companyName;
     /** 片区名称 */
     private Integer areaId;
     private String areaName;
