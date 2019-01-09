@@ -8,6 +8,7 @@ import com.admin.modules.sys.service.DispatchService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
@@ -90,6 +91,18 @@ public class DispatchController {
     @GetMapping("/leadOut")
     public void exportDispatch(HttpServletResponse res) {
         dispatchService.exportDispatch(res);
+    }
+
+    /**
+     * 导入运营数据
+     * @param file
+     * @return
+     */
+    @SysLog("导入运营数据")
+    @PostMapping("/upload")
+    public R importCourier(@RequestParam("file") MultipartFile file) {
+
+        return dispatchService.importDispatch(file);
     }
 
 }

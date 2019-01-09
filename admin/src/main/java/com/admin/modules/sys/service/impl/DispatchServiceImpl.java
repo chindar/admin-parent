@@ -3,13 +3,19 @@ package com.admin.modules.sys.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.date.DateException;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
+import com.admin.modules.sys.dao.CompanyDao;
 import com.admin.modules.sys.dao.DispatchDao;
+import com.admin.modules.sys.dao.ErpDao;
 import com.admin.modules.sys.entity.DispatchEntity;
 import com.admin.modules.sys.entity.vo.DispatchVo;
 import com.admin.modules.sys.service.DispatchService;
@@ -22,10 +28,12 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.List;
@@ -38,8 +46,13 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
 
     @Autowired
     private DispatchDao dispatchDao;
+    @Autowired
+    private CompanyDao companyDao;
+    @Autowired
+    private ErpDao erpDao;
 
     private static List<Object> templetList = CollUtil.newArrayList();
+
     static {
         // 公司 ERP账号 总单量 合计单量 费用合计 小件 大件 三同 售后取件 接货首单量 接货续单量 其他单量 差评 投诉 罚款合计 其他扣款 工资 备注
         templetList.add("公司");
@@ -232,7 +245,7 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                 }
             }
 
-            String filename = "运营数据.xlsx";
+            String filename = "运营数据模板.xlsx";
             res.setHeader("Content-Disposition", "attachment;filename=" + new String(filename.getBytes("gb2312"), "iso8859-1"));
             res.addHeader("Pargam", "no-cache");
             res.addHeader("Cache-Control", "no-cache");
@@ -245,5 +258,149 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
         } finally {
             IoUtil.close(bos);
         }
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param multipartFile
+     * @return
+     */
+    @Override
+    public R importDispatch(MultipartFile multipartFile) {
+        final String batchId = RandomUtil.simpleUUID();
+        try {
+            InputStream is = multipartFile.getInputStream();
+            String filename = multipartFile.getOriginalFilename();
+            ExcelReader reader = ExcelUtil.getReader(is, 0);
+            // TODO: 2018/12/15 判断是否为规定模板
+            List<List<Object>> readFirstList = reader.read(0, 0);
+            List<Object> columnList = readFirstList.get(0);
+            if (isTemplet(columnList, templetList)) {
+                // TODO: 2018/12/15 读取文件
+                List<List<Object>> contentList = reader.read(1);
+                // TODO: 2018/12/15 解析数据
+                List<DispatchEntity> dispatchList = CollUtil.newArrayList();
+                contentList.forEach(lineList -> {
+                    DispatchEntity dispatch = new DispatchEntity();
+                    // 公司 ERP账号 总单量 合计单量 费用合计 小件 大件 三同 售后取件 接货首单量 接货续单量 其他单量 差评 投诉 罚款合计 其他扣款 工资 备注
+                    String companyName = Convert.toStr(lineList.get(0));
+                    if (StrUtil.isBlank(companyName)) {
+                        throw new RuntimeException();
+                    }
+                    Integer companyId = companyDao.getOneByName(companyName);
+//                    dispatch.set(companyId);
+
+                    String erpNumber = Convert.toStr(lineList.get(1));
+                    Integer erpId = erpDao.getOneByNumber(erpNumber);
+                    dispatch.setErpId(erpId);
+
+                    // 总单量
+                    Integer allOrderCount = Convert.toInt(lineList.get(2));
+                    dispatch.setAllOrderCount(allOrderCount);
+
+                    // 合计单量
+                    Integer totalOrderCount = Convert.toInt(lineList.get(3));
+                    dispatch.setTotalOrderCount(totalOrderCount);
+
+                    // 费用合计
+                    BigDecimal totalMoney = Convert.toBigDecimal(lineList.get(4));
+                    dispatch.setTotalMoney(totalMoney);
+
+                    // 小件
+                    Integer small = Convert.toInt(lineList.get(5));
+                    dispatch.setSmall(small);
+
+                    // 大件
+                    Integer large = Convert.toInt(lineList.get(6));
+                    dispatch.setLarge(large);
+
+                    // 三同
+                    Integer thrIdentical = Convert.toInt(lineList.get(7));
+                    dispatch.setThrIdentical(thrIdentical);
+
+                    // 售后取件
+                    Integer afterSaleCount = Convert.toInt(lineList.get(8));
+                    dispatch.setAfterSaleCount(afterSaleCount);
+
+                    // 接货首单量
+                    Integer firstCount = Convert.toInt(lineList.get(9));
+                    dispatch.setFirstCount(firstCount);
+
+                    // 接货续单量
+                    Integer againCount = Convert.toInt(lineList.get(10));
+                    dispatch.setAgainCount(againCount);
+
+                    // 其他单量
+                    Integer otherCount = Convert.toInt(lineList.get(11));
+                    dispatch.setOtherCount(otherCount);
+
+                    // 差评
+                    Integer badCount = Convert.toInt(lineList.get(12));
+                    dispatch.setBadCount(badCount);
+
+                    // 投诉
+                    Integer complaintCount = Convert.toInt(lineList.get(13));
+                    dispatch.setComplaintCount(complaintCount);
+
+                    // 罚款合计
+                    BigDecimal fineMoney = Convert.toBigDecimal(lineList.get(14));
+                    dispatch.setFineMoney(fineMoney);
+
+                    // 其他扣款
+                    BigDecimal deductMoney = Convert.toBigDecimal(lineList.get(15));
+                    dispatch.setDeductMoney(deductMoney);
+
+                    // 工资
+                    BigDecimal salary = Convert.toBigDecimal(lineList.get(16));
+                    dispatch.setSalary(salary);
+
+                    // 备注
+                    String remark = Convert.toStr(lineList.get(17));
+                    dispatch.setRemark(remark);
+
+
+                    dispatchList.add(dispatch);
+                });
+
+                // TODO: 2018/12/15 存入数据库
+                if (CollUtil.isNotEmpty(dispatchList)) {
+                    this.insertBatch(dispatchList);
+                }
+            }
+        } catch (IOException e) {
+            return R.error("上传失败: 解析Excel异常!");
+        } catch (DateException e) {
+            return R.error("上传失败: 时间解析异常!");
+        } catch (RuntimeException e) {
+            return R.error("上传失败: 数据出错!");
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok();
+    }
+
+    /**
+     * 是否为Excel模板
+     *
+     * @param columnList
+     * @param templetList
+     * @return
+     */
+    private boolean isTemplet(List<Object> columnList, List<Object> templetList) {
+        int templetSize = templetList.size();
+        int colSize = columnList.size();
+        if (templetSize == colSize) {
+            int count = 0;
+            for (int i = 0; i < colSize; i++) {
+                if (templetList.get(i).equals(columnList.get(i))) {
+                    count++;
+                }
+            }
+            if (count == templetSize) {
+                return true;
+            }
+        }
+        return false;
     }
 }

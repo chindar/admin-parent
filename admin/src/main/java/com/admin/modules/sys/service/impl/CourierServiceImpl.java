@@ -217,7 +217,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         } catch (Exception e) {
             return R.error();
         }
-        return R.ok().put("batchId", batchId);
+        return R.ok();
     }
 
     /**

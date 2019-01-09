@@ -123,6 +123,27 @@ $(function () {
             $("#jqGrid").closest(".ui-jqgrid-bdiv").css({"overflow-x": "hidden"});
         }
     });
+
+    new AjaxUpload('#upload', {
+        action: baseURL + "sys/dispatch/upload",
+        name: 'file',
+        autoSubmit: true,
+        responseType: "json",
+        onSubmit: function (file, extension) {
+            if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
+                alert('只支持xls, xlsx格式的文件！');
+                return false;
+            }
+        },
+        onComplete: function (file, r) {
+            if (r.code == 0) {
+                vm.initSearch();
+                vm.reload();
+            } else {
+                alert(r.msg);
+            }
+        },
+    });
 });
 
 var vm = new Vue({
@@ -374,6 +395,14 @@ var vm = new Vue({
          **********************************************************************/
         exportFile: function () {
             window.open(baseURL + "sys/dispatch/leadOut");
+        },
+
+        /**********************************************************************
+         * 下载运营数据导入模板
+         * @author Wang Chinda
+         **********************************************************************/
+        download: function () {
+            location.href = encodeURI(baseURL + "statics/运营数据模板.xlsx");
         },
 
         /**********************************************************************

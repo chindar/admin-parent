@@ -3,6 +3,7 @@ package com.admin.modules.sys.service;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.DispatchEntity;
 import com.baomidou.mybatisplus.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
@@ -19,5 +20,12 @@ public interface DispatchService extends IService<DispatchEntity> {
     R queryPage(Map<String, Object> params);
 
     void exportDispatch(HttpServletResponse res);
+
+    /**
+     * 上传文件
+     * @param file
+     * @return
+     */
+    R importDispatch(MultipartFile file);
 }
 
