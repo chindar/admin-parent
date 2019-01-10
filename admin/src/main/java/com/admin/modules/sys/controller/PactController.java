@@ -3,6 +3,7 @@ package com.admin.modules.sys.controller;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
+import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.PactEntity;
 import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.admin.modules.sys.service.PactService;
@@ -70,6 +71,7 @@ public class PactController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:pact:save")
     public R save(@RequestBody PactEntity pact){
+        ValidatorUtils.validateEntity(pact,UpdateGroup.class);
         pactService.insert(pact);
 
         return R.ok();

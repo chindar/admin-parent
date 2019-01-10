@@ -28,7 +28,7 @@
         case WHEN NOW()>end_date THEN 2
         WHEN start_date > NOW()  THEN 0
         ELSE 1 END pactStatus,
-        TIMESTAMPDIFF(DAY,NOW(),end_date) as overDays
+        TIMESTAMPDIFF(DAY,date_format(NOW(), '%Y-%m-%d'),end_date) as overDays
         from tb_pact a
         LEFT JOIN tb_company b
         ON a.company_id = b.id

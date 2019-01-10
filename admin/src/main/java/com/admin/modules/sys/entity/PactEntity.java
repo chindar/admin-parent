@@ -1,8 +1,12 @@
 package com.admin.modules.sys.entity;
 
+import com.admin.common.validator.group.AddGroup;
+import com.admin.common.validator.group.UpdateGroup;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,10 +29,12 @@ public class PactEntity implements Serializable {
 	/**
 	 * 合同名称
 	 */
+	@NotBlank(message="合同名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 业务名称
 	 */
+	@NotBlank(message="业务名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String businessName;
 	/**
 	 * 
@@ -37,10 +43,12 @@ public class PactEntity implements Serializable {
 	/**
 	 * 开始时间
 	 */
+	@NotBlank(message="开始时间不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String startDate;
 	/**
 	 * 结束时间
 	 */
+	@NotBlank(message="结束时间不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String endDate;
 	/**
 	 * 
@@ -49,6 +57,7 @@ public class PactEntity implements Serializable {
 	/**
 	 * 合同文件id
 	 */
+	@NotNull(message="合同文件不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String fileId;
 	/**
 	 * 
@@ -57,14 +66,17 @@ public class PactEntity implements Serializable {
 	/**
 	 * 公司id
 	 */
+	@NotNull(message="公司不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer companyId;
 	/**
 	 * 省份
 	 */
+	@NotBlank(message="省份不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String provinceName;
 	/**
 	 * 城市
 	 */
+	@NotBlank(message="城市不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String cityName;
 	/**
 	 * 1:删除0:正常

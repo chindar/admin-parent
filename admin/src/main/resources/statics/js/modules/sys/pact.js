@@ -171,8 +171,8 @@ $(function () {
         onComplete : function(file, r){
             if(r.code == 0){
                 // alert(r.url);
-                vm.pactInfo.fileId = r.data.fileId
-                vm.pactInfo.fileName = r.data.fileName
+                vm.pact.fileId = r.data.fileId
+                vm.pact.fileName = r.data.fileName
                 $(".filename_class").text(r.data.fileName)
                 // vm.reload();
             }else{
@@ -319,6 +319,7 @@ methods: {
         vm.showList = true;
         var page = $("#jqGrid").jqGrid('getGridParam', 'page');
         $("#jqGrid").jqGrid('setGridParam', {
+            postData:{'businessName': vm.q.businessName,'timeType':vm.q.timeType,'pactStatus':vm.q.pactStatus,'name':vm.q.name,'companyId':vm.q.companyId,'startDate':vm.q.startDate,'endDate':vm.q.endDate},
             page: page
         }).trigger("reloadGrid");
     },
@@ -376,6 +377,7 @@ methods: {
         if (typeof(data) != "undefined"){
             setTimeout(function(){
                 vm.pact = data
+                $(".filename_class").text(data.fileName)
             },1);
         }else {
             vm.pact.cityName = ""
