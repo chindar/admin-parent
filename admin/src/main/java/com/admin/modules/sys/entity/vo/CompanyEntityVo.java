@@ -89,25 +89,25 @@ public class CompanyEntityVo implements Serializable {
 	private Integer isDelete;
 
 
-//	private String businessFileUrl;
-//
-//	private String cardFileUrl;
-//
-//	public String getBusinessFileUrl() {
-//		return businessFileUrl;
-//	}
-//
-//	public void setBusinessFileUrl(String businessFileUrl) {
-//		this.businessFileUrl = businessFileUrl;
-//	}
-//
-//	public String getCardFileUrl() {
-//		return cardFileUrl;
-//	}
-//
-//	public void setCardFileUrl(String cardFileUrl) {
-//		this.cardFileUrl = cardFileUrl;
-//	}
+	private String businessFileUrl;
+
+	private String cardFileUrl;
+
+	public String getBusinessFileUrl() {
+		return businessFileUrl;
+	}
+
+	public void setBusinessFileUrl(String businessFileUrl) {
+		this.businessFileUrl = businessFileUrl;
+	}
+
+	public String getCardFileUrl() {
+		return cardFileUrl;
+	}
+
+	public void setCardFileUrl(String cardFileUrl) {
+		this.cardFileUrl = cardFileUrl;
+	}
 
 
 	public static long getSerialVersionUID() {

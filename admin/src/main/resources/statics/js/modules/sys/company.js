@@ -2,7 +2,7 @@ var url= "/admin/statics/js/city.min.js"
 var city_json;
 $(function () {
     $("#jqGrid").jqGrid({
-        url: baseURL + 'sys/company/list',
+        url: baseURL + 'sys/company/list2',
         datatype: "json",
         colModel: [
             // {
@@ -186,7 +186,7 @@ $(function () {
         },
         onComplete : function(file, r){
             if(r.code == 0){
-                vm.companyInfo.cardFileid = r.data.fileId
+                vm.company.cardFileid = r.data.fileId
                 $("#bbb").attr("src",r.data.fileUrl)
                 // vm.company.cardFileUrl = r.data.fileUrl
             }else{
@@ -353,6 +353,8 @@ var vm = new Vue({
                 $.getJSON(url,function(json){
                     city_json=json;
                     vm.init(r.company);
+                    $("#aaa").attr("src", r.company.businessFileUrl)
+                    $("#bbb").attr("src", r.company.cardFileUrl)
                 });
             });
         }

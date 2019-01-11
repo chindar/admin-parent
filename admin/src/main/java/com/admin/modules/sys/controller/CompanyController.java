@@ -3,9 +3,11 @@ package com.admin.modules.sys.controller;
 import com.admin.common.utils.MongoUtils;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
+import com.admin.common.utils.Tools;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.CompanyEntity;
+import com.admin.modules.sys.entity.vo.CompanyEntityVo;
 import com.admin.modules.sys.service.CompanyService;
 import com.mongodb.gridfs.GridFSDBFile;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -61,15 +63,37 @@ public class CompanyController {
         return R.ok().put("page", page);
     }
 
+    @RequestMapping("/list2")
+    @RequiresPermissions("sys:companyinfo:list")
+    public R list2(@RequestParam Map<String, Object> params,HttpServletRequest request){
+
+        String QUERY_FILE_PATH = request.getScheme() + "://" +
+                request.getServerName() + ":" + request.getServerPort() +
+                request.getContextPath() + "/";
+        PageUtils page = companyService.getCompanyList(params,QUERY_FILE_PATH);
+
+        return R.ok().put("page", page);
+    }
 
     /**
      * 信息
      */
     @RequestMapping("/info/{id}")
     @RequiresPermissions("sys:company:info")
-    public R info(@PathVariable("id") Integer id){
-        CompanyEntity company = companyService.selectById(id);
-
+    public R info(@PathVariable("id") Integer id,HttpServletRequest request){
+//        CompanyEntity company = companyService.selectById(id);
+        String path = request.getScheme() + "://" +
+                request.getServerName() + ":" + request.getServerPort() +
+                request.getContextPath() + "/";
+        CompanyEntityVo company = companyService.getCompanyById(id);
+        if (company != null){
+            if (Tools.notEmpty(company.getBusinessFileid())){
+                company.setBusinessFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, company.getBusinessFileid(),"businessFile"));
+            }
+            if (Tools.notEmpty(company.getBusinessFileid())){
+                company.setCardFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, company.getCardFileid(),"cardFile"));
+            }
+        }
         return R.ok().put("company", company);
     }
 

@@ -34,4 +34,6 @@ public interface CompanyDao extends BaseMapper<CompanyEntity> {
      * @return
      */
     Integer getOneByName(@Param("name") String companyName);
+
+    CompanyEntityVo getCompanyById(@Param("id") Integer id);
 }

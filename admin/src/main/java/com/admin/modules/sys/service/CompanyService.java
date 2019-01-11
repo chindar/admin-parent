@@ -1,5 +1,6 @@
 package com.admin.modules.sys.service;
 
+import com.admin.modules.sys.entity.vo.CompanyEntityVo;
 import com.baomidou.mybatisplus.service.IService;
 import com.admin.common.utils.PageUtils;
 import com.admin.modules.sys.entity.CompanyEntity;
@@ -23,5 +24,7 @@ public interface CompanyService extends IService<CompanyEntity> {
     PageUtils getCompanyList(Map<String, Object> params,String path);
 
     int deleteComById(Integer id);
+
+    CompanyEntityVo getCompanyById(Integer id);
 }
 

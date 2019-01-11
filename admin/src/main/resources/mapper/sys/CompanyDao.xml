@@ -4,7 +4,7 @@
 <mapper namespace="com.admin.modules.sys.dao.CompanyDao">
 
     <!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.admin.modules.sys.entity.CompanyEntity" id="companyMap">
+    <resultMap type="com.admin.modules.sys.entity.vo.CompanyEntityVo" id="companyMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="legalPersonName" column="legal_person_name"/>
@@ -26,6 +26,9 @@
         select * from tb_company where is_delete = 0 order by  create_time desc
     </select>
 
+    <select id="getCompanyById" resultMap="companyMap">
+        select * from tb_company where id = #{id}
+    </select>
 
     <select id="getComList" parameterType="com.admin.modules.sys.entity.CompanyEntity" resultMap="companyMap">
         select * from tb_company a where is_delete = 0

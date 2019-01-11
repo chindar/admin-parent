@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -50,18 +51,18 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyDao, CompanyEntity> i
     @Override
     public PageUtils getCompanyList(Map<String, Object> params,String path) {
         CompanyEntity entity = new CompanyEntity();
-        Page page = new Query<CompanyEntity>(params).getPage();
-        List<CompanyEntity> list = dao.getCompanyList(page,entity);
-//        if (list.size() > 0){
-//            for (CompanyEntityVo info: list) {
-//                if (Tools.notEmpty(info.getBusinessFileid())){
-//                    info.setBusinessFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, info.getBusinessFileid(),"businessFile"));
-//                }
-//                if (Tools.notEmpty(info.getBusinessFileid())){
-//                    info.setCardFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, info.getCardFileid(),"cardFile"));
-//                }
-//            }
-//        }
+        Page page = new Query<CompanyEntityVo>(params).getPage();
+        List<CompanyEntityVo> list = dao.getComList(page,entity);
+        if (list.size() > 0){
+            for (CompanyEntityVo info: list) {
+                if (Tools.notEmpty(info.getBusinessFileid())){
+                    info.setBusinessFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, info.getBusinessFileid(),"businessFile"));
+                }
+                if (Tools.notEmpty(info.getBusinessFileid())){
+                    info.setCardFileUrl(MessageFormat.format("{0}sys/company/getFile?fileId={1}&dbname={2}", path, info.getCardFileid(),"cardFile"));
+                }
+            }
+        }
         page.setRecords(list);
         return new PageUtils(page);
     }
@@ -70,5 +71,10 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyDao, CompanyEntity> i
     public int deleteComById(Integer id) {
         int count = dao.deleteComById(id);
         return count;
+    }
+
+    @Override
+    public CompanyEntityVo getCompanyById(Integer id) {
+        return dao.getCompanyById(id);
     }
 }

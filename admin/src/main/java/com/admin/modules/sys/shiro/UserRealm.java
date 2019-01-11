@@ -65,15 +65,15 @@ public class UserRealm extends AuthorizingRealm {
 		List<String> permsList;
 		
 		//系统管理员，拥有最高权限
-		if(userId == Constant.SUPER_ADMIN){
+//		if(userId == Constant.SUPER_ADMIN){
 			List<SysMenuEntity> menuList = sysMenuDao.selectList(null);
 			permsList = new ArrayList<>(menuList.size());
 			for(SysMenuEntity menu : menuList){
 				permsList.add(menu.getPerms());
 			}
-		}else{
-			permsList = sysUserDao.queryAllPerms(userId);
-		}
+//		}else{
+//			permsList = sysUserDao.queryAllPerms(userId);
+//		}
 
 		//用户权限列表
 		Set<String> permsSet = new HashSet<>();
