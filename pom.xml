@@ -209,8 +209,10 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
+
     <build>
         <plugins>
+            <!-- 注意: 打包是将此插件注释掉 START -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -223,6 +225,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <!-- 注意: 打包是将此插件注释掉 END -->
         </plugins>
     </build>
 </project>
