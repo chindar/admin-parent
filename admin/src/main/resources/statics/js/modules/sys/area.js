@@ -71,8 +71,8 @@ $(function () {
     });
     //格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<button class='btn btn-info	 ' onclick=\"editArea("+ cellValue + ")\">编辑</button>"+
-        "&nbsp;&nbsp;&nbsp;<button class='btn btn-info	 ' onclick=\"deleteArea("+ cellValue + ")\">删除</button>";
+        return "<a onclick=\"editArea("+ cellValue + ")\">编辑</a>"+
+        "&nbsp;&nbsp;&nbsp;<a onclick=\"deleteArea("+ cellValue + ")\">删除</a>";
     }
 });
 //编辑

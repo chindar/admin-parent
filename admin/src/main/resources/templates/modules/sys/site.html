@@ -20,13 +20,13 @@
             <div class="form-group col-sm-2" style="width:200px">
                 <select class="form-control" v-model="q.areaId" @change="changeArea(1)">
                     <option value="" >请选择片区</option>
-                    <option  v-for="area in arealist"  :value="area.id" >{{area.name}}</option>
+                    <option  v-for="area in arealist2"  :value="area.id" >{{area.name}}</option>
                 </select>
             </div>
             <div class="form-group col-sm-2" style="width:200px">
                 <select class="form-control" v-model="q.cityId">
                     <option value="" >请选择城市</option>
-                    <option  v-for="city in citylist"  :value="city.id" >{{city.name}}</option>
+                    <option  v-for="city in citylist2"  :value="city.id" >{{city.name}}</option>
                 </select>
             </div>
 

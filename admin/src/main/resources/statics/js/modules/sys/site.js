@@ -152,19 +152,19 @@ var vm = new Vue({
         },
         companylist:[],
         arealist:[],
-        citylist:[]
+        citylist:[],
+        arealist2:[],
+        citylist2:[]
     },
     watch:{
-        showList(newN, oldN) {
-            console.log(newN)
-            console.info(oldN)
-            if(newN){
-                vm.areaId='';
-                vm.cityId='';
-                vm.arealist = [];
-                vm.citylist = [];
-            }
-        }
+        // showList(newN, oldN) {
+        //     if(newN){
+        //         vm.q.areaId='';
+        //         vm.q.cityId='';
+        //         vm.arealist = [];
+        //         vm.citylist = [];
+        //     }
+        // }
     },
     methods: {
         query: function () {
@@ -208,7 +208,6 @@ var vm = new Vue({
                     success: function (r) {
                         if (r.code == 0) {
                             vm.arealist = r.list
-                            // vm.city = s.city;
                             $.ajax({
                                 type: "POST",
                                 url: baseURL + "sys/city/getAllCityList",
@@ -245,10 +244,10 @@ var vm = new Vue({
             if (event == 1) {
                 vm.q.areaId = ""
                 vm.q.cityId = ""
-                vm.arealist = []
-                vm.q.citylist = []
+                vm.arealist2 = []
+                vm.citylist2 = []
                 if (vm.q.companyId) {
-                    vm.getAllAreaList(vm.q.companyId)
+                    vm.getAllAreaList(vm.q.companyId,1)
                 }
             }
             //编辑
@@ -258,11 +257,11 @@ var vm = new Vue({
                 vm.arealist = []
                 vm.citylist = []
                 if (vm.site.companyId) {
-                    vm.getAllAreaList(vm.site.companyId)
+                    vm.getAllAreaList(vm.site.companyId,2)
                 }
             }
         },
-        getAllAreaList: function (event) {
+        getAllAreaList: function (event,i) {
             $.ajax({
                 type: "POST",
                 url: baseURL + "sys/area/getAllAreaList",
@@ -270,7 +269,11 @@ var vm = new Vue({
                 data:{companyId: event},
                 success: function (r) {
                     if (r.code == 0) {
-                        vm.arealist = r.list
+                        if (i==1){
+                            vm.arealist2 = r.list
+                        } else {
+                            vm.arealist = r.list
+                        }
                     } else {
                         alert(r.msg);
                     }
@@ -281,21 +284,21 @@ var vm = new Vue({
             //搜索条件
             if (event == 1) {
                 vm.q.cityId = ""
-                vm.q.citylist = []
-                if (vm.q.companyId) {
-                    vm.getAllCityList(vm.q.companyId)
+                vm.citylist2 = []
+                if (vm.q.areaId) {
+                    vm.getAllCityList(vm.q.areaId,1)
                 }
             }
             //编辑
             if (event == 2) {
                 vm.site.cityId = ""
                 vm.citylist = []
-                if (vm.site.companyId) {
-                    vm.getAllCityList(vm.site.companyId)
+                if (vm.site.areaId) {
+                    vm.getAllCityList(vm.site.areaId,2)
                 }
             }
         },
-        getAllCityList:function (event) {
+        getAllCityList:function (event,i) {
             $.ajax({
                 type: "POST",
                 url: baseURL + "sys/city/getAllCityList",
@@ -303,7 +306,11 @@ var vm = new Vue({
                 data: {areaId: event},
                 success: function (r) {
                     if (r.code == 0) {
-                        vm.citylist = r.list
+                        if (i==1){
+                            vm.citylist2 = r.list
+                        } else{
+                            vm.citylist = r.list
+                        }
                     } else {
                         alert(r.msg);
                     }

@@ -77,8 +77,8 @@ $(function () {
     });
     //格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<button class='btn btn-info	 ' onclick=\"editArea("+ cellValue + ")\">编辑</button>"+
-            "&nbsp;&nbsp;&nbsp;<button class='btn btn-info	 ' onclick=\"deleteArea("+ cellValue + ")\">删除</button>";
+        return "<a  onclick=\"editArea("+ cellValue + ")\">编辑</a>"+
+            "&nbsp;&nbsp;&nbsp;<a  onclick=\"deleteArea("+ cellValue + ")\">删除</a>";
     }
 });
 
@@ -122,7 +122,20 @@ var vm = new Vue({
             areaId:""
         },
         companylist:[],
-        arealist:[]
+        arealist:[],
+        companylist2:[],
+        arealist2:[]
+    },
+    watch:{
+        showList(newN, oldN) {
+            // if(newN){
+            //     console.info("**")
+            //     // vm.q.companyId=""
+            //     // vm.q.areaId='';
+            //     // vm.arealist = [];
+            //     // vm.reload();
+            // }
+        }
     },
 methods: {
     query: function () {
@@ -227,24 +240,22 @@ methods: {
     changeCompany: function (event) {
         //搜索条件
         if (event == 1) {
+            vm.q.areaId = ""
+            vm.arealist2 = []
             if (vm.q.companyId) {
-                vm.getAllAreaList(vm.q.companyId)
-            } else {
-                vm.q.areaId = ""
-                vm.arealist = []
+                vm.getAllAreaList(vm.q.companyId,1)
             }
         }
         //编辑
         if (event == 2) {
+            vm.city.areaId = ""
+            vm.arealist = []
             if (vm.city.companyId) {
-                vm.getAllAreaList(vm.city.companyId)
-                vm.city.areaId = ""
-            } else {
-                vm.arealist = []
+                vm.getAllAreaList(vm.city.companyId,2)
             }
         }
     },
-    getAllAreaList: function (event) {
+    getAllAreaList: function (event,i) {
         $.ajax({
             type: "POST",
             url: baseURL + "sys/area/getAllAreaList",
@@ -252,7 +263,11 @@ methods: {
             data:{companyId: event},
             success: function (r) {
                 if (r.code == 0) {
-                    vm.arealist = r.list
+                    if (i==1){
+                        vm.arealist2 = r.list
+                    } else {
+                        vm.arealist = r.list
+                    }
                 } else {
                     alert(r.msg);
                 }
