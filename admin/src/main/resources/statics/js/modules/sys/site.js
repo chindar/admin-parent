@@ -50,7 +50,7 @@ $(function () {
         rownumbers: true,
         rownumWidth: 25,
         autowidth: true,
-        multiselect: true,
+        multiselect: false,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -80,34 +80,34 @@ $(function () {
             }
         }
     });
-    $.ajax({
-        type: "POST",
-        url: baseURL + "sys/area/list",
-        contentType: "application/json",
-        success: function (r) {
-            if (r.code == 0) {
-                vm.arealist = r.page.list
-            } else {
-                alert(r.msg);
-            }
-        }
-    });
-    $.ajax({
-        type: "POST",
-        url: baseURL + "sys/city/list",
-        contentType: "application/json",
-        success: function (r) {
-            if (r.code == 0) {
-                vm.citylist = r.page.list
-            } else {
-                alert(r.msg);
-            }
-        }
-    });
+    // $.ajax({
+    //     type: "POST",
+    //     url: baseURL + "sys/area/list",
+    //     contentType: "application/json",
+    //     success: function (r) {
+    //         if (r.code == 0) {
+    //             vm.arealist = r.page.list
+    //         } else {
+    //             alert(r.msg);
+    //         }
+    //     }
+    // });
+    // $.ajax({
+    //     type: "POST",
+    //     url: baseURL + "sys/city/list",
+    //     contentType: "application/json",
+    //     success: function (r) {
+    //         if (r.code == 0) {
+    //             vm.citylist = r.page.list
+    //         } else {
+    //             alert(r.msg);
+    //         }
+    //     }
+    // });
     //格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<button class='btn btn-primary' onclick=\"editSite("+ cellValue + ")\">编辑</button>"+
-            "&nbsp;&nbsp;&nbsp;<button class='btn btn-primary' onclick=\"deleteSite("+ cellValue + ")\">删除</button>";
+        return "<a  onclick=\"editSite("+ cellValue + ")\">编辑</a>"+
+            "&nbsp;&nbsp;&nbsp;<a  onclick=\"deleteSite("+ cellValue + ")\">删除</a>";
     }
 });
 //编辑
@@ -154,6 +154,18 @@ var vm = new Vue({
         arealist:[],
         citylist:[]
     },
+    watch:{
+        showList(newN, oldN) {
+            console.log(newN)
+            console.info(oldN)
+            if(newN){
+                vm.areaId='';
+                vm.cityId='';
+                vm.arealist = [];
+                vm.citylist = [];
+            }
+        }
+    },
     methods: {
         query: function () {
             vm.reload();
@@ -187,8 +199,35 @@ var vm = new Vue({
         }
         ,
         getInfo: function (id) {
-            $.get(baseURL + "sys/site/info/" + id, function (r) {
-                vm.site = r.site;
+            $.get(baseURL + "sys/site/info/" + id, function (s) {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + "sys/area/getAllAreaList",
+                    dataType: "json",
+                    data:{companyId: s.site.companyId},
+                    success: function (r) {
+                        if (r.code == 0) {
+                            vm.arealist = r.list
+                            // vm.city = s.city;
+                            $.ajax({
+                                type: "POST",
+                                url: baseURL + "sys/city/getAllCityList",
+                                dataType: "json",
+                                data: {areaId: s.site.areaId},
+                                success: function (m) {
+                                    if (r.code == 0) {
+                                        vm.citylist = m.list
+                                        vm.site = s.site;
+                                    } else {
+                                        alert(m.msg);
+                                    }
+                                }
+                            });
+                        } else {
+                            alert(r.msg);
+                        }
+                    }
+                });
             });
         }
         ,
@@ -199,6 +238,77 @@ var vm = new Vue({
                 postData:{'name': vm.q.name,'companyId':vm.q.companyId,'cityId':vm.q.cityId,'areaId':vm.q.areaId},
                 page: page
             }).trigger("reloadGrid");
+        },
+        //改变城市
+        changeCompany: function (event) {
+            //搜索条件
+            if (event == 1) {
+                vm.q.areaId = ""
+                vm.q.cityId = ""
+                vm.arealist = []
+                vm.q.citylist = []
+                if (vm.q.companyId) {
+                    vm.getAllAreaList(vm.q.companyId)
+                }
+            }
+            //编辑
+            if (event == 2) {
+                vm.site.areaId = ""
+                vm.site.cityId = ""
+                vm.arealist = []
+                vm.citylist = []
+                if (vm.site.companyId) {
+                    vm.getAllAreaList(vm.site.companyId)
+                }
+            }
+        },
+        getAllAreaList: function (event) {
+            $.ajax({
+                type: "POST",
+                url: baseURL + "sys/area/getAllAreaList",
+                dataType: "json",
+                data:{companyId: event},
+                success: function (r) {
+                    if (r.code == 0) {
+                        vm.arealist = r.list
+                    } else {
+                        alert(r.msg);
+                    }
+                }
+            });
+        },
+        changeArea:function (event) {
+            //搜索条件
+            if (event == 1) {
+                vm.q.cityId = ""
+                vm.q.citylist = []
+                if (vm.q.companyId) {
+                    vm.getAllCityList(vm.q.companyId)
+                }
+            }
+            //编辑
+            if (event == 2) {
+                vm.site.cityId = ""
+                vm.citylist = []
+                if (vm.site.companyId) {
+                    vm.getAllCityList(vm.site.companyId)
+                }
+            }
+        },
+        getAllCityList:function (event) {
+            $.ajax({
+                type: "POST",
+                url: baseURL + "sys/city/getAllCityList",
+                dataType: "json",
+                data: {areaId: event},
+                success: function (r) {
+                    if (r.code == 0) {
+                        vm.citylist = r.list
+                    } else {
+                        alert(r.msg);
+                    }
+                }
+            });
         }
     }
 });

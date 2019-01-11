@@ -3,6 +3,7 @@ package com.admin.modules.sys.controller;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
+import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.SiteEntity;
 import com.admin.modules.sys.service.SiteService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -65,6 +66,7 @@ public class SiteController {
     @RequestMapping("/save")
     @RequiresPermissions("sys:site:save")
     public R save(@RequestBody SiteEntity site){
+        ValidatorUtils.validateEntity(site,UpdateGroup.class);
         siteService.insert(site);
 
         return R.ok();
@@ -76,7 +78,7 @@ public class SiteController {
     @RequestMapping("/update")
     @RequiresPermissions("sys:site:update")
     public R update(@RequestBody SiteEntity site){
-        ValidatorUtils.validateEntity(site);
+        ValidatorUtils.validateEntity(site,UpdateGroup.class);
         siteService.updateAllColumnById(site);//全部更新
         
         return R.ok();
