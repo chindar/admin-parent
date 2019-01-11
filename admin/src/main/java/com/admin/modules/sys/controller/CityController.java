@@ -43,7 +43,7 @@ public class CityController {
      * liriming
      * 2019-01-11
      */
-    @RequestMapping(value = "getAllAreaList")
+    @RequestMapping(value = "getAllCityList")
     public R getAllCityList(@RequestParam(value = "areaId",defaultValue = "") Integer areaId){
         List<CityEntity> list = cityService.getAllCityList(areaId);
         return R.ok().put("list",list);
