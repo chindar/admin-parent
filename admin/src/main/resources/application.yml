@@ -10,7 +10,7 @@ server:
 
 spring:
   profiles:
-    active: prop
+    active: prod
   application:
     name: renren-admin
   jackson:
