@@ -20,4 +20,6 @@ public interface CityDao extends BaseMapper<CityEntity> {
     List<CityEntityVo> getCityList(RowBounds var1, CityEntity params);
 
     int deleteCityById(@Param("id") Integer id);
+
+    List<CityEntity> getAllCityList(@Param("areaId") Integer areaId);
 }

@@ -12,6 +12,9 @@
         <result property="isDelete" column="is_delete"/>
     </resultMap>
 
+    <select id="getAllCityList" resultMap="cityMap">
+        select * from tb_city where is_delete = 0 and area_id = #{areaId} order by  create_time desc
+    </select>
 
     <select id="getCityList" parameterType="com.admin.modules.sys.entity.CityEntity" resultMap="cityMap">
         SELECT a.*,b.`name` as areaName,c.name AS companyName

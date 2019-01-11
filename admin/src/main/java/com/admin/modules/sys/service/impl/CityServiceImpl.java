@@ -6,6 +6,7 @@ import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
 import com.admin.modules.sys.dao.AreaDao;
 import com.admin.modules.sys.dao.CityDao;
+import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.entity.vo.CityEntityVo;
 import com.admin.modules.sys.service.CityService;
@@ -58,6 +59,15 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
         return count;
     }
 
+    /**
+     * 获取该片区下所有有效的城市(不带分页)
+     * @param areaId
+     * @return
+     */
+    @Override
+    public List<CityEntity> getAllCityList(Integer areaId) {
+        return dao.getAllCityList(areaId);
+    }
     /**
      * 获取所有有效的城市信息(不带分页)
      *

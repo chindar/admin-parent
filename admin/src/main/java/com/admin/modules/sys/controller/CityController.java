@@ -10,6 +10,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,6 +38,16 @@ public class CityController {
         return R.ok().put("page", page);
     }
 
+    /**
+     * 获取该片区下所有有效的城市(不带分页)
+     * liriming
+     * 2019-01-11
+     */
+    @RequestMapping(value = "getAllAreaList")
+    public R getAllCityList(@RequestParam(value = "areaId",defaultValue = "") Integer areaId){
+        List<CityEntity> list = cityService.getAllCityList(areaId);
+        return R.ok().put("list",list);
+    }
     /**
      * 获取所有有效的城市信息(不带分页)
      * @return
