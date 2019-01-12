@@ -335,14 +335,37 @@ var vm = new Vue({
         initCondition: function () {
             // 查询公司信息
             this.searchCompany();
-            // 查询合同信息
-            this.searchPact();
-            // 查询城市信息
-            this.searchCity();
-            // 查询区域信息
-            this.searchArea();
-            // 查询站点信息
-            this.searchSite();
+        },
+
+        changeCompany: function (companyId, type) {
+            // 搜索
+            if (type == 1) {
+                this.searchPact(companyId);
+                this.searchArea(companyId);
+                vm.q.areaId = '';
+                vm.q.cityId = '';
+                vm.q.siteId = '';
+                vm.cityList = [];
+                vm.siteList = [];
+            }
+        },
+
+        changeArea: function (areaId, type) {
+            // 搜索
+            if (type == 1) {
+                this.searchCity(areaId);
+                vm.q.cityId = '';
+                vm.q.siteId = '';
+                vm.siteList = [];
+            }
+        },
+
+        changeCity: function (cityId, type) {
+            // 搜索
+            if (type == 1) {
+                this.searchSite(cityId);
+                vm.q.siteId = '';
+            }
         },
 
         /**********************************************************************
