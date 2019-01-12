@@ -103,10 +103,15 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
      *
      * @return
      * @param companyId
+     * @param erpId
      */
     @Override
-    public R getErpList(String companyId) {
+    public R getErpList(String companyId, String erpId) {
         List<ErpEntity> erpList = erpDao.getErpList(companyId);
+        if (StrUtil.isNotBlank(erpId)) {
+            ErpEntity erpEntity = erpDao.selectById(erpId);
+            erpList.add(erpEntity);
+        }
         return R.ok().put("list", erpList);
     }
 

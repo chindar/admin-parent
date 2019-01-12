@@ -362,14 +362,14 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 Date entryDate = vo.getEntryDate();
                 if (ObjectUtil.isNotNull(entryDate)) {
                     cell = row.createCell(7);
-                    cell.setCellValue(entryDate);
+                    cell.setCellValue(DateUtil.formatDate(entryDate));
                 }
 
                 // 离职时间
                 Date leaveDate = vo.getLeaveDate();
                 if (ObjectUtil.isNotNull(leaveDate)) {
                     cell = row.createCell(8);
-                    cell.setCellValue(leaveDate);
+                    cell.setCellValue(DateUtil.formatDate(leaveDate));
                 }
 
                 // 合同

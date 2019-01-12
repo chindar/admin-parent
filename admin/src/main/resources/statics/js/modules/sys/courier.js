@@ -105,7 +105,11 @@ $(function () {
                 index: 'id',
                 align: 'center',
                 width: 150,
-                formatter: cmgStateFormat
+                formatter: function (value, options, row) {
+                    return "<a onclick=\"vm.edit(" + value + ")\">编辑</a>" +
+                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + value + ")\">详情</a>" +
+                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
+                }
             },
         ],
         viewrecords: true,
@@ -294,7 +298,6 @@ var vm = new Vue({
             vm.disabled = false;
             vm.title = "编辑配送员信息";
             vm.getInfo(id);
-            vm.searchErpList();
         },
 
         saveOrUpdate: function (event) {
@@ -323,6 +326,7 @@ var vm = new Vue({
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
                 vm.courier = r.courier;
+                vm.searchErpList(r.courier.companyId, r.courier.erpId);
             });
         },
 
@@ -412,6 +416,8 @@ var vm = new Vue({
             this.searchArea();
             // 查询站点信息
             this.searchSite();
+            // 初始化ERP账号
+            this.searchErpList();
         },
 
         /**********************************************************************
@@ -468,8 +474,8 @@ var vm = new Vue({
          * 查询Erp账户
          * @author Wang Chinda
          **********************************************************************/
-        searchErpList: function (companyId) {
-            $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId, function (r) {
+        searchErpList: function (companyId, erpId) {
+            $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId + "&erpId=" + erpId, function (r) {
                 vm.erpList = r.list;
             });
         },

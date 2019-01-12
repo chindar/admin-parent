@@ -40,8 +40,10 @@ public class ErpController {
      * @return
      */
     @GetMapping("/listByCourier")
-    public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId) {
-        return erpService.getErpList(companyId);
+    public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId
+    ,@RequestParam(value = "erpId", required = false, defaultValue = "") String erpId) {
+
+        return erpService.getErpList(companyId, erpId);
     }
 
     /**
