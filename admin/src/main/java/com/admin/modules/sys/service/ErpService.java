@@ -23,8 +23,9 @@ public interface ErpService extends IService<ErpEntity> {
     /**
      * 查询未绑定在职员工的ERP账号
      * @return
+     * @param companyId
      */
-    R getErpList();
+    R getErpList(String companyId);
 
     /**
      * 查询ERP账号列表

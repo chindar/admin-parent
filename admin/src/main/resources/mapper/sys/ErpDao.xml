@@ -31,7 +31,11 @@
              , a.is_delete
         FROM tb_erp a
         WHERE 1 = 1
-          AND NOT exists(SELECT 0 FROM tb_courier b WHERE a.id = b.erp_id)
+          AND (NOT exists(SELECT 0 FROM tb_courier b WHERE a.id = b.erp_id)
+              OR a.id = (SELECT c.erp_id FROM tb_courier c WHERE a.id = c.erp_id))
+        <if test="companyId != null and companyId != '' and companyId != 'undefined'">
+          AND a.company_id = #{companyId}
+        </if>
     </select>
     <select id="queryPageErpList" resultMap="erpVoMap">
         SELECT a.id

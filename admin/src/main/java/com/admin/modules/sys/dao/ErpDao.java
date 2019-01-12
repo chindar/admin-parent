@@ -20,8 +20,9 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
     /**
      * 查询未绑定在职员工的ERP账号
      * @return
+     * @param companyId
      */
-    List<ErpEntity> getErpList();
+    List<ErpEntity> getErpList(@Param("companyId") String companyId);
 
     /**
      * 查询ERP账号列表

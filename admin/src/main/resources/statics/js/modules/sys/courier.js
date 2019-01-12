@@ -183,67 +183,14 @@ var vm = new Vue({
             siteId: ''
         },
         courier: {},
-        pactId: '',
         companyList: [],
         pactList: [],
         cityList: [],
         areaList: [],
         siteList: [],
-        erpList: [],
-        batchId: null
+        erpList: []
     },
 
-    computed: {
-        searchCompanyId() {
-            return this.q.companyId
-        },
-        searchAreaId() {
-            return this.q.areaId
-        },
-        searchCityId() {
-            return this.q.cityId
-        },
-        objCompanyId() {
-            return this.courier.companyId
-        },
-        objAreaId() {
-            return this.courier.areaId
-        },
-        objCityId() {
-            return this.courier.cityId
-        },
-    },
-
-    watch: {
-        searchCompanyId(newVal, oldVal) {
-            this.searchPact(newVal);
-            this.q.pactId = '';
-            this.searchArea(newVal);
-            this.q.areaId = '';
-        },
-        searchAreaId(newVal, oldVal) {
-            this.searchCity(newVal);
-            this.q.cityId = '';
-        },
-        searchCityId(newVal, oldVal) {
-            this.searchSite(newVal);
-            this.q.siteId = '';
-        },
-        objCompanyId(newVal, oldVal) {
-            this.searchPact(newVal);
-            this.courier.pactId = '';
-            this.searchArea(newVal);
-            this.courier.areaId = '';
-        },
-        objAreaId(newVal, oldVal) {
-            this.searchCity(newVal);
-            this.courier.cityId = '';
-        },
-        objCityId(newVal, oldVal) {
-            this.searchSite(newVal);
-            this.courier.siteId = '';
-        }
-    },
     methods: {
         query: function () {
             vm.reload();
@@ -265,6 +212,42 @@ var vm = new Vue({
             vm.searchErpList();
 
         },
+
+        changeCompany: function (companyId, type) {
+            this.searchPact(companyId);
+            this.searchArea(companyId);
+            if (type == 1) {
+                this.q.pactId = '';
+                this.q.areaId = '';
+                this.changeArea('', 1);
+            } else {
+                this.changeArea();
+                this.searchErpList(companyId);
+                this.courier.erpId = '';
+                this.courier.pactId = '';
+                this.courier.areaId = '';
+            }
+        },
+
+        changeArea: function (cityId, type) {
+            this.searchCity(cityId);
+            if (type == 1) {
+                this.q.cityId = '';
+                this.changeCity('', 1);
+            } else {
+                this.changeCity();
+                this.courier.cityId = '';
+            }
+        },
+        changeCity: function (siteId, type) {
+            this.searchSite(siteId);
+            if (type == 1) {
+                this.q.siteId = '';
+            } else {
+                this.courier.siteId = '';
+            }
+        },
+
         /**********************************************************************
          * 删除配送员信息
          * @author Wang Chinda
@@ -337,9 +320,9 @@ var vm = new Vue({
             });
         },
 
-
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
+                debugger;
                 vm.courier = r.courier;
             });
         },
@@ -486,8 +469,8 @@ var vm = new Vue({
          * 查询Erp账户
          * @author Wang Chinda
          **********************************************************************/
-        searchErpList: function () {
-            $.get(baseURL + "sys/erp/listByCourier", function (r) {
+        searchErpList: function (companyId) {
+            $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId, function (r) {
                 vm.erpList = r.list;
             });
         },

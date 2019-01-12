@@ -102,10 +102,11 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
      * 查询未绑定在职员工的ERP账号
      *
      * @return
+     * @param companyId
      */
     @Override
-    public R getErpList() {
-        List<ErpEntity> erpList = erpDao.getErpList();
+    public R getErpList(String companyId) {
+        List<ErpEntity> erpList = erpDao.getErpList(companyId);
         return R.ok().put("list", erpList);
     }
 
