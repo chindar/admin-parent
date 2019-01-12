@@ -23,7 +23,7 @@ public interface SiteService extends IService<SiteEntity> {
      * @return
      * @param cityId
      */
-    R listAll(Integer cityId);
+    R listAll(String cityId);
 
     int deleteSiteById(Integer id);
 }

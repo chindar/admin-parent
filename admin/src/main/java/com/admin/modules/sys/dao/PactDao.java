@@ -20,7 +20,7 @@ public interface PactDao extends BaseMapper<PactEntity> {
 
     List<PactEntityVo> getPactList(RowBounds var1, PactEntityVo params);
 
-    List<PactEntity> listAll(@Param("companyId") Integer companyId);
+    List<PactEntity> listAll(@Param("companyId") String companyId);
 
     int deletePactById(@Param("id")Integer id);
 

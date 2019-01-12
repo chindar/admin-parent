@@ -42,7 +42,7 @@ public class SiteController {
      * @return
      */
     @GetMapping("/listAll/{cityId}")
-    public R listAll(@PathVariable("cityId") Integer cityId) {
+    public R listAll(@PathVariable("cityId") String cityId) {
         return siteService.listAll(cityId);
     }
 

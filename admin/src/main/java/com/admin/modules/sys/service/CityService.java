@@ -27,6 +27,6 @@ public interface CityService extends IService<CityEntity> {
      * @return
      * @param areaId
      */
-    R listAll(Integer areaId);
+    R listAll(String areaId);
 }
 

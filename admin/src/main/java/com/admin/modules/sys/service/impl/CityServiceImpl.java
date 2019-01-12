@@ -1,6 +1,6 @@
 package com.admin.modules.sys.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
@@ -76,8 +76,9 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
      * @param areaId
      */
     @Override
-    public R listAll(Integer areaId) {
+    public R listAll(String areaId) {
+        boolean condition = StrUtil.isNotBlank(areaId) && !StrUtil.equals(areaId, "undefined");
         return R.ok().put("list", this.selectList(new EntityWrapper<CityEntity>()
-        .eq(ObjectUtil.isNotNull(areaId), "area_id", areaId)));
+        .eq(condition, "area_id", areaId)));
     }
 }

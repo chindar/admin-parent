@@ -67,7 +67,7 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
      * @param companyId
      */
     @Override
-    public R listAll(Integer companyId) {
+    public R listAll(String companyId) {
         return R.ok().put("list", dao.listAll(companyId));
     }
 

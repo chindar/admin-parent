@@ -24,7 +24,7 @@ public interface PactService extends IService<PactEntity> {
      * @return
      * @param companyId
      */
-    R listAll(Integer companyId);
+    R listAll(String companyId);
 
     int deletePactById(Integer id);
 

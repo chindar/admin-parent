@@ -51,7 +51,7 @@ public class CityController {
      * @return
      */
     @GetMapping("/listAll/{areaId}")
-    public R listAll(@PathVariable("areaId") Integer areaId) {
+    public R listAll(@PathVariable("areaId") String areaId) {
         return cityService.listAll(areaId);
     }
 

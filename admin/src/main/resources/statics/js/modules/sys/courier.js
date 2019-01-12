@@ -194,23 +194,47 @@ var vm = new Vue({
     },
 
     computed: {
-        watchCompanyId() {
+        searchCompanyId() {
             return this.q.companyId
         },
-        watchAreaId() {
+        searchAreaId() {
             return this.q.areaId
-        }
+        },
+        searchCityId() {
+            return this.q.cityId
+        },
+        objCompanyId() {
+            return this.courier.companyId
+        },
+        objAreaId() {
+            return this.courier.areaId
+        },
+        objCityId() {
+            return this.courier.cityId
+        },
     },
 
     watch: {
-        watchCompanyId(newVal, oldVal) {
-            console.log(newVal, oldVal);
+        searchCompanyId(newVal, oldVal) {
             this.searchPact(newVal);
             this.searchArea(newVal);
         },
-        watchAreaId(newVal, oldVal) {
+        searchAreaId(newVal, oldVal) {
             this.searchCity(newVal);
-        }
+        },
+        searchCityId(newVal, oldVal) {
+            this.searchSite(newVal);
+        },
+        // objCompanyId(newVal, oldVal) {
+        //     this.searchPact(newVal);
+        //     this.searchArea(newVal);
+        // },
+        // objAreaId(newVal, oldVal) {
+        //     this.searchCity(newVal);
+        // },
+        // objCityId(newVal, oldVal) {
+        //     this.searchSite(newVal);
+        // }
     },
     methods: {
         query: function () {

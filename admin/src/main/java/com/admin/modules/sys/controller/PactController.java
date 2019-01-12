@@ -46,7 +46,7 @@ public class PactController {
      * @return
      */
     @GetMapping("/listAll/{companyId}")
-    public R listAll(@PathVariable("companyId") Integer companyId) {
+    public R listAll(@PathVariable("companyId") String companyId) {
         return pactService.listAll(companyId);
     }
 

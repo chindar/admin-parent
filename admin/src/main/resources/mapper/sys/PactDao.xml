@@ -86,7 +86,7 @@
              , is_delete
         FROM tb_pact
         WHERE 1 = 1
-            <if test="companyId != null and companyId != ''">
+            <if test="companyId != null and companyId != '' and companyId != 'undefined'">
               AND company_id = #{companyId}
             </if>
              AND is_delete = 0

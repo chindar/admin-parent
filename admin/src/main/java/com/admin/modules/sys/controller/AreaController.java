@@ -42,7 +42,7 @@ public class AreaController {
      * @return
      */
     @GetMapping("/listAll/{companyId}")
-    public R listAll(@PathVariable("companyId") Integer companyId) {
+    public R listAll(@PathVariable("companyId") String companyId) {
         return areaService.listAll(companyId);
     }
 

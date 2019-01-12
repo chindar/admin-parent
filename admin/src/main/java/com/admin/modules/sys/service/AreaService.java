@@ -31,6 +31,6 @@ public interface AreaService extends IService<AreaEntity> {
      * @return
      * @param companyId
      */
-    R listAll(Integer companyId);
+    R listAll(String companyId);
 }
 

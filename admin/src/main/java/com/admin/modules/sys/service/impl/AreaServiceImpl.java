@@ -1,6 +1,6 @@
 package com.admin.modules.sys.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
@@ -85,8 +85,9 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements
      * @param companyId
      */
     @Override
-    public R listAll(Integer companyId) {
+    public R listAll(String companyId) {
+        boolean condition = StrUtil.isNotBlank(companyId) && !StrUtil.equals(companyId, "undefined");
         return R.ok().put("list", this.selectList(new EntityWrapper<AreaEntity>()
-                .eq(ObjectUtil.isNotNull(companyId), "company_id", companyId)));
+                .eq(condition, "company_id", companyId)));
     }
 }

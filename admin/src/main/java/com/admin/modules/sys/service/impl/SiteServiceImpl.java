@@ -1,6 +1,6 @@
 package com.admin.modules.sys.service.impl;
 
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
@@ -54,9 +54,10 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
      * @return
      */
     @Override
-    public R listAll(Integer cityId) {
+    public R listAll(String cityId) {
+        boolean condition = StrUtil.isNotBlank(cityId) && !StrUtil.equals(cityId, "undefined");
         return R.ok().put("list", this.selectList(new EntityWrapper<SiteEntity>()
-                .eq(ObjectUtil.isNotNull(cityId), "city_id", cityId)));
+                .eq(condition, "city_id", cityId)));
     }
 
 
