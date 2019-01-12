@@ -1,7 +1,6 @@
 package com.admin.modules.sys.dao;
 
 import com.admin.modules.sys.entity.AreaEntity;
-import com.admin.modules.sys.entity.DispatchInfoEntity;
 import com.admin.modules.sys.entity.vo.AreaEntityVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,4 +26,6 @@ public interface AreaDao extends BaseMapper<AreaEntity> {
     List<AreaEntity> getAllAreaList(@Param("companyId") Integer companyId);
 
     int getPactByCompanyId(@Param("id")Integer id,@Param("tb")String tb);
+
+    Integer getAreaId(@Param("siteId") Integer siteId, @Param("companyId") Integer companyId);
 }

@@ -7,7 +7,6 @@ import cn.hutool.core.date.DateException;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
@@ -46,7 +45,7 @@ import java.util.Map;
 public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> implements CourierService {
 
     @Autowired
-    private CityInfoDao cityInfoDao;
+    private CityDao cityDao;
     @Autowired
     private CourierDao courierDao;
     @Autowired
@@ -55,6 +54,9 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     private PactDao pactDao;
     @Autowired
     private ErpDao erpDao;
+    @Autowired
+    private AreaDao areaDao;
+
     @Autowired
     private SiteDao siteDao;
 
@@ -133,7 +135,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
      */
     @Override
     public R importCourier(MultipartFile multipartFile) {
-        final String batchId = RandomUtil.simpleUUID();
+
         try {
             InputStream is = multipartFile.getInputStream();
             String filename = multipartFile.getOriginalFilename();
@@ -147,7 +149,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 // TODO: 2018/12/15 解析数据
                 List<CourierEntity> courierList = CollUtil.newArrayList();
                 List<CourierEntity> failList = CollUtil.newArrayList();
-                contentList.forEach(lineList -> {
+                for (List<Object> lineList : contentList) {
                     CourierEntity courier = new CourierEntity();
                     // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
                     String companyName = Convert.toStr(lineList.get(0));
@@ -182,14 +184,42 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                     Date leaveDate = DateUtil.parse(Convert.toStr(lineList.get(8)));
                     courier.setLeaveDate(leaveDate);
                     String pactName = Convert.toStr(lineList.get(9));
-                    Integer pactId = pactDao.getOneByName(pactName);
+                    Integer pactId = pactDao.getOneByName(pactName, companyId);
+                    if (ObjectUtil.isNull(pactId)) {
+                        throw new RuntimeException();
+                    }
                     courier.setPactId(pactId);
                     String erpNumber = Convert.toStr(lineList.get(10));
                     Integer erpId = erpDao.getOneByNumber(erpNumber, companyId);
+                    if (ObjectUtil.isNull(erpId)) {
+                        throw new RuntimeException();
+                    }
+
+                    // 校验ERP是否已经使用
+                    if (isExist(erpId, companyId)) {
+                        throw new RuntimeException();
+                    }
                     courier.setErpId(erpId);
                     String siteName = Convert.toStr(lineList.get(11));
-                    Integer siteId = siteDao.getOneByName(siteName);
+                    Integer siteId = siteDao.getOneByName(siteName, companyId);
+                    if (ObjectUtil.isNull(siteId)) {
+                        throw new RuntimeException();
+                    }
                     courier.setSiteId(siteId);
+
+                    // 根据站点id及公司id查询片区及城市
+                    Integer areaId = areaDao.getAreaId(siteId, companyId);
+                    if (ObjectUtil.isNull(areaId)) {
+                        throw new RuntimeException();
+                    }
+                    courier.setAreaId(areaId);
+
+                    Integer cityId = cityDao.getCityId(siteId, companyId);
+                    if (ObjectUtil.isNull(cityId)) {
+                        throw new RuntimeException();
+                    }
+                    courier.setCityId(cityId);
+
                     String remark = Convert.toStr(lineList.get(12));
                     courier.setRemark(remark);
 
@@ -197,7 +227,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                         failList.add(courier);
                     }
                     courierList.add(courier);
-                });
+                }
 
                 if (CollUtil.isNotEmpty(failList)) {
                     return R.error("上传失败：数据重复！");
@@ -211,15 +241,32 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 return R.error("上传失败: 请选择正确的模板!");
             }
         } catch (IOException e) {
+            log.error(e);
             return R.error("上传失败: 解析Excel异常!");
         } catch (DateException e) {
+            log.error(e);
             return R.error("上传失败: 时间解析异常!");
         } catch (RuntimeException e) {
+            log.error(e);
             return R.error("上传失败: 数据出错!");
         } catch (Exception e) {
+            log.error(e);
             return R.error();
         }
         return R.ok();
+    }
+
+    /**
+     * 校验ERP账号是否被使用
+     * @param erpId
+     * @param companyId
+     * @return
+     */
+    private boolean isExist(Integer erpId, Integer companyId) {
+        Integer count = courierDao.selectCount(new EntityWrapper<CourierEntity>()
+                .eq("erp_id", erpId)
+                .eq("company_id", companyId));
+        return count > 0 ? true : false;
     }
 
     /**

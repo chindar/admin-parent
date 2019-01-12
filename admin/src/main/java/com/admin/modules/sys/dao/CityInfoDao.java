@@ -21,4 +21,6 @@ public interface CityInfoDao extends BaseMapper<CityInfoEntity> {
     String getCityNameById(@Param("id") Object id);
 
     Integer getIdByCityName(@Param("cityName") Object cityName);
+
+    Integer getCityId(@Param("siteId") Integer siteId, @Param("companyId") Integer companyId);
 }

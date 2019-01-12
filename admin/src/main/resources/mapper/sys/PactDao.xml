@@ -104,6 +104,6 @@
     </select>
     <!-- 根据合同名称获取合同id START -->
     <select id="getOneByName" resultType="java.lang.Integer">
-        SELECT id FROM tb_pact WHERE is_delete = 0 AND name = #{pactName}
+        SELECT id FROM tb_pact WHERE is_delete = 0 AND name = #{pactName} AND company_id = #{companyId}
     </select>
 </mapper>

@@ -24,7 +24,8 @@ public interface SiteDao extends BaseMapper<SiteEntity> {
     /**
      * 根据站点名称获取站点id
      * @param siteName
+     * @param companyId
      * @return
      */
-    Integer getOneByName(@Param("siteName") String siteName);
+    Integer getOneByName(@Param("siteName") String siteName, @Param("companyId") Integer companyId);
 }

@@ -48,4 +48,12 @@
             )
         AND end_date > NOW()
     </select>
+    <select id="getAreaId" resultType="java.lang.Integer">
+        SELECT a.id
+        FROM tb_area a
+          LEFT JOIN tb_city b ON a.id = b.area_id
+          LEFT JOIN tb_site c ON b.id = c.city_id
+        WHERE a.company_id = #{companyId}
+          AND c.id = #{siteId}
+    </select>
 </mapper>

@@ -34,6 +34,13 @@
             and a.company_id = #{companyId}
         </if>
     </select>
+    <select id="getCityId" resultType="java.lang.Integer">
+        SELECT a.id
+        FROM tb_city a
+        LEFT JOIN tb_site b ON a.id = b.city_id
+        WHERE a.company_id = #{companyId}
+          AND b.id = #{siteId}
+    </select>
 
 
     <!--删除-->
