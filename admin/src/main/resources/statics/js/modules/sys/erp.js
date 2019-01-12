@@ -82,6 +82,7 @@ $(function () {
         },
         onComplete: function (file, r) {
             if (r.code == 0) {
+                alert("导入成功！");
                 vm.initSearch();
                 vm.reload();
             } else {
