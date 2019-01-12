@@ -207,6 +207,8 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 if (CollUtil.isNotEmpty(courierList)) {
                     this.insertBatch(courierList);
                 }
+            } else {
+                return R.error("上传失败: 请选择正确的模板!");
             }
         } catch (IOException e) {
             return R.error("上传失败: 解析Excel异常!");

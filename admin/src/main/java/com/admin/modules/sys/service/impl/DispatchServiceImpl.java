@@ -367,6 +367,8 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                 if (CollUtil.isNotEmpty(dispatchList)) {
                     this.insertBatch(dispatchList);
                 }
+            } else {
+                return R.error("上传失败: 请选择正确的模板!");
             }
         } catch (IOException e) {
             return R.error("上传失败: 解析Excel异常!");

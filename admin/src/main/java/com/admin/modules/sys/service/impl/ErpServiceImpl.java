@@ -261,6 +261,8 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
                 if (CollUtil.isNotEmpty(erpList)) {
                     this.insertBatch(erpList);
                 }
+            } else {
+                return R.error("上传失败: 请选择正确的模板!");
             }
         } catch (RuntimeException e) {
             return R.error("上传失败, 数据出错!");
