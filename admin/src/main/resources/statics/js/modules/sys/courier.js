@@ -541,6 +541,31 @@ var vm = new Vue({
                 alert("离职时间不能为空");
                 return true;
             }
+            if (isBlank(vm.courier.companyId)) {
+                alert("请选择公司");
+                return true;
+            }
+            if (isBlank(vm.courier.pactId)) {
+                alert("请选择合同");
+                return true;
+            }
+            if (isBlank(vm.courier.erpId)) {
+                alert("请选择ERP账号");
+                return true;
+            }
+            if (isBlank(vm.courier.areaId)) {
+                alert("请选择片区");
+                return true;
+            }
+            if (isBlank(vm.courier.cityId)) {
+                alert("请选择城市");
+                return true;
+            }
+            if (isBlank(vm.courier.siteId)) {
+                alert("请选择站点");
+                return true;
+            }
+
         }
     },
 

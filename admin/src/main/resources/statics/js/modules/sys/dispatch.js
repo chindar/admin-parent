@@ -461,10 +461,70 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         validator: function () {
-            // if (isBlank(vm.courier.name)) {
-            //     alert("配送员姓名不能为空");
-            //     return true;
-            // }
+            if (isBlank(vm.courier.name)) {
+                alert("月份不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.cardId)) {
+                alert("总单量不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.phone)) {
+                alert("合计单量不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.bankCardId)) {
+                alert("费用合计不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.entryDate)) {
+                alert("小件不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.leaveDate)) {
+                alert("大件不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.companyId)) {
+                alert("三同不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.pactId)) {
+                alert("售后取件不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.erpId)) {
+                alert("接货首单量不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.areaId)) {
+                alert("接货续单量不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.cityId)) {
+                alert("其他单量不允许为空");
+                return true;
+            }
+            if (isBlank(vm.courier.siteId)) {
+                alert("差评不允许为空");
+                return true;
+            }
+            if (isBlank(vm.courier.erpId)) {
+                alert("投诉不允许为空");
+                return true;
+            }
+            if (isBlank(vm.courier.areaId)) {
+                alert("罚款合计不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.cityId)) {
+                alert("其他扣款不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.siteId)) {
+                alert("工资不能为空");
+                return true;
+            }
         }
     },
 
