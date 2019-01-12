@@ -556,7 +556,9 @@ var vm = new Vue({
             $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId + "&erpId=" + erpId, function (r) {
                     vm.erpList = r.list;
                     if(data){
-                        vm.courier = data
+                        setTimeout(function () {
+                            vm.courier = data
+                        },10)
                     }
             });
         },
