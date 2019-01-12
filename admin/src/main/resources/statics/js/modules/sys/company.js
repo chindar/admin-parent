@@ -101,7 +101,7 @@ $(function () {
         rownumbers: true,
         rownumWidth: 25,
         autowidth: true,
-        multiselect: true,
+        multiselect: false,
         pager: "#jqGridPager",
         jsonReader: {
             root: "page.list",
@@ -128,8 +128,8 @@ $(function () {
     });
     //格式化操作列
     function cmgStateFormat(cellValue) {
-        return "<button class='btn btn-primary' onclick=\"editCompany("+ cellValue + ")\">编辑</button>"+
-            "&nbsp;&nbsp;&nbsp;<button class='btn btn-primary' onclick=\"deleteCompany("+ cellValue + ")\">删除</button>";
+        return "<a onclick=\"editCompany("+ cellValue + ")\">编辑</a>"+
+            "&nbsp;&nbsp;&nbsp;<a onclick=\"deleteCompany("+ cellValue + ")\">删除</a>";
     };
 
     $.ajax({
