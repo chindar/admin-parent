@@ -322,7 +322,6 @@ var vm = new Vue({
 
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
-                debugger;
                 vm.courier = r.courier;
             });
         },
