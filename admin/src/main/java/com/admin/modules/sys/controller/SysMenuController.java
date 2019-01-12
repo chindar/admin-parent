@@ -23,7 +23,6 @@ import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.SysMenuEntity;
 import com.admin.modules.sys.service.SysMenuService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,7 +57,6 @@ public class SysMenuController extends AbstractController {
 	 * 所有菜单列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("sys:menu:list")
 	public List<SysMenuEntity> list(){
 		List<SysMenuEntity> menuList = sysMenuService.selectList(null);
 		for(SysMenuEntity sysMenuEntity : menuList){
@@ -75,7 +73,6 @@ public class SysMenuController extends AbstractController {
 	 * 选择菜单(添加、修改菜单)
 	 */
 	@RequestMapping("/select")
-	@RequiresPermissions("sys:menu:select")
 	public R select(){
 		//查询列表数据
 		List<SysMenuEntity> menuList = sysMenuService.queryNotButtonList();
@@ -95,7 +92,6 @@ public class SysMenuController extends AbstractController {
 	 * 菜单信息
 	 */
 	@RequestMapping("/info/{menuId}")
-	@RequiresPermissions("sys:menu:info")
 	public R info(@PathVariable("menuId") Long menuId){
 		SysMenuEntity menu = sysMenuService.selectById(menuId);
 		return R.ok().put("menu", menu);
@@ -106,7 +102,6 @@ public class SysMenuController extends AbstractController {
 	 */
 	@SysLog("保存菜单")
 	@RequestMapping("/save")
-	@RequiresPermissions("sys:menu:save")
 	public R save(@RequestBody SysMenuEntity menu){
 		//数据校验
 		verifyForm(menu);
@@ -121,7 +116,6 @@ public class SysMenuController extends AbstractController {
 	 */
 	@SysLog("修改菜单")
 	@RequestMapping("/update")
-	@RequiresPermissions("sys:menu:update")
 	public R update(@RequestBody SysMenuEntity menu){
 		//数据校验
 		verifyForm(menu);
@@ -136,7 +130,6 @@ public class SysMenuController extends AbstractController {
 	 */
 	@SysLog("删除菜单")
 	@RequestMapping("/delete")
-	@RequiresPermissions("sys:menu:delete")
 	public R delete(long menuId){
 		if(menuId <= 40){
 			return R.error("系统菜单，不能删除");

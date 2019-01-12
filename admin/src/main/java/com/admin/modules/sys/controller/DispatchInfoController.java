@@ -1,34 +1,31 @@
 package com.admin.modules.sys.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.util.*;
-
 import cn.hutool.core.convert.Convert;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
-import com.alibaba.fastjson.JSONObject;
 import com.admin.common.validator.ValidatorUtils;
+import com.admin.modules.sys.entity.DispatchInfoEntity;
+import com.admin.modules.sys.service.DispatchInfoService;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.admin.modules.sys.entity.DispatchInfoEntity;
-import com.admin.modules.sys.service.DispatchInfoService;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.util.*;
 
 
 /**
@@ -48,7 +45,6 @@ public class DispatchInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:dispatchinfo:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = dispatchInfoService.queryPage(params);
 
@@ -56,7 +52,6 @@ public class DispatchInfoController {
     }
 
     @RequestMapping("/list2")
-    @RequiresPermissions("sys:dispatchinfo:list")
     public R list2(@RequestParam Map<String, Object> params){
         PageUtils page = dispatchInfoService.getDispatchList(params);
 

@@ -1,6 +1,5 @@
 package com.admin.modules.sys.controller;
 
-import com.mongodb.gridfs.GridFSDBFile;
 import com.admin.common.utils.MongoUtils;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
@@ -8,7 +7,7 @@ import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.PactInfoEntity;
 import com.admin.modules.sys.service.PactInfoService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.mongodb.gridfs.GridFSDBFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +40,6 @@ public class PactInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:pactinfo:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = pactInfoService.queryPage(params);
 
@@ -49,7 +47,6 @@ public class PactInfoController {
     }
 
     @RequestMapping("/list2")
-    @RequiresPermissions("sys:pactinfo:list")
     public R list2(@RequestParam Map<String, Object> params, HttpServletRequest request){
         String QUERY_FILE_PATH = request.getScheme() + "://" +
                 request.getServerName() + ":" + request.getServerPort() +
@@ -73,7 +70,6 @@ public class PactInfoController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:pactinfo:info")
     public R info(@PathVariable("id") Integer id){
         PactInfoEntity pactInfo = pactInfoService.selectById(id);
 
@@ -84,7 +80,6 @@ public class PactInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:pactinfo:save")
     public R save(@RequestBody PactInfoEntity pactInfo){
         ValidatorUtils.validateEntity(pactInfo, UpdateGroup.class);
         pactInfoService.insert(pactInfo);
@@ -96,7 +91,6 @@ public class PactInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:pactinfo:update")
     public R update(@RequestBody PactInfoEntity pactInfo){
         ValidatorUtils.validateEntity(pactInfo);
         pactInfoService.updateAllColumnById(pactInfo);//全部更新
@@ -108,7 +102,6 @@ public class PactInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:pactinfo:delete")
     public R delete(@RequestBody Integer[] ids){
         pactInfoService.deleteBatchIds(Arrays.asList(ids));
 

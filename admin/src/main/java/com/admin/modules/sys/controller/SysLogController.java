@@ -16,10 +16,9 @@
 
 package com.admin.modules.sys.controller;
 
-import com.admin.modules.sys.service.SysLogService;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.admin.modules.sys.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +46,6 @@ public class SysLogController {
 	 */
 	@ResponseBody
 	@RequestMapping("/list")
-	@RequiresPermissions("sys:log:list")
 	public R list(@RequestParam Map<String, Object> params){
 		PageUtils page = sysLogService.queryPage(params);
 

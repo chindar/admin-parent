@@ -6,7 +6,6 @@ import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.service.AreaService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +50,6 @@ public class AreaController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:area:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = areaService.queryPage(params);
 
@@ -63,7 +61,6 @@ public class AreaController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:area:info")
     public R info(@PathVariable("id") Integer id){
         AreaEntity area = areaService.selectById(id);
 //        AreaEntity area = areaService.getAreaById(id);
@@ -74,7 +71,6 @@ public class AreaController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:area:save")
     public R save(@RequestBody AreaEntity area){
         ValidatorUtils.validateEntity(area,UpdateGroup.class);
         areaService.insert(area);
@@ -86,7 +82,6 @@ public class AreaController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:area:update")
     public R update(@RequestBody AreaEntity area){
         ValidatorUtils.validateEntity(area,UpdateGroup.class);
         areaService.updateAllColumnById(area);//全部更新
@@ -98,7 +93,6 @@ public class AreaController {
      * 删除
      */
     @RequestMapping(value = "/delete")
-    @RequiresPermissions("sys:area:delete")
     public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
 //        areaService.deleteBatchIds(Arrays.asList(ids));
         try {

@@ -1,5 +1,21 @@
 package com.admin.modules.sys.controller;
 
+import com.admin.common.utils.MongoUtils;
+import com.admin.common.utils.PageUtils;
+import com.admin.common.utils.R;
+import com.admin.common.validator.ValidatorUtils;
+import com.admin.common.validator.group.UpdateGroup;
+import com.admin.modules.sys.entity.CompanyInfoEntity;
+import com.admin.modules.sys.service.CompanyInfoService;
+import com.mongodb.gridfs.GridFSDBFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,25 +23,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.mongodb.gridfs.GridFSDBFile;
-import com.admin.common.utils.MongoUtils;
-import com.admin.common.validator.ValidatorUtils;
-import com.admin.common.validator.group.UpdateGroup;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import com.admin.modules.sys.entity.CompanyInfoEntity;
-import com.admin.modules.sys.service.CompanyInfoService;
-import com.admin.common.utils.PageUtils;
-import com.admin.common.utils.R;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -45,7 +42,6 @@ public class CompanyInfoController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:companyinfo:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = companyInfoService.queryPage(params);
 
@@ -53,7 +49,6 @@ public class CompanyInfoController {
     }
 
     @RequestMapping("/list2")
-    @RequiresPermissions("sys:companyinfo:list")
     public R list2(@RequestParam Map<String, Object> params,HttpServletRequest request){
 
         String QUERY_FILE_PATH = request.getScheme() + "://" +
@@ -67,7 +62,6 @@ public class CompanyInfoController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:companyinfo:info")
     public R info(@PathVariable("id") Integer id){
         CompanyInfoEntity companyInfo = companyInfoService.selectById(id);
 
@@ -78,7 +72,6 @@ public class CompanyInfoController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:companyinfo:save")
     public R save(@RequestBody CompanyInfoEntity companyInfo){
 
         ValidatorUtils.validateEntity(companyInfo, UpdateGroup.class);
@@ -91,7 +84,6 @@ public class CompanyInfoController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:companyinfo:update")
     public R update(@RequestBody CompanyInfoEntity companyInfo){
         ValidatorUtils.validateEntity(companyInfo);
         companyInfoService.updateAllColumnById(companyInfo);//全部更新
@@ -103,7 +95,6 @@ public class CompanyInfoController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:companyinfo:delete")
     public R delete(@RequestBody Integer[] ids){
         companyInfoService.deleteBatchIds(Arrays.asList(ids));
 

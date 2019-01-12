@@ -4,7 +4,6 @@ import com.admin.common.annotation.SysLog;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.CourierEntity;
 import com.admin.modules.sys.service.CourierService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +30,6 @@ public class CourierController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:courier:list")
     public R list(@RequestParam Map<String, Object> params){
         return courierService.queryCourierList(params);
     }

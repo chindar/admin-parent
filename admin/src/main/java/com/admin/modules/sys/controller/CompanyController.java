@@ -10,7 +10,6 @@ import com.admin.modules.sys.entity.CompanyEntity;
 import com.admin.modules.sys.entity.vo.CompanyEntityVo;
 import com.admin.modules.sys.service.CompanyService;
 import com.mongodb.gridfs.GridFSDBFile;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +55,6 @@ public class CompanyController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:company:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = companyService.queryPage(params);
 
@@ -64,7 +62,6 @@ public class CompanyController {
     }
 
     @RequestMapping("/list2")
-    @RequiresPermissions("sys:companyinfo:list")
     public R list2(@RequestParam Map<String, Object> params,HttpServletRequest request){
 
         String QUERY_FILE_PATH = request.getScheme() + "://" +
@@ -79,7 +76,6 @@ public class CompanyController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:company:info")
     public R info(@PathVariable("id") Integer id,HttpServletRequest request){
 //        CompanyEntity company = companyService.selectById(id);
         String path = request.getScheme() + "://" +
@@ -101,7 +97,6 @@ public class CompanyController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:company:save")
     public R save(@RequestBody CompanyEntity company){
 
         ValidatorUtils.validateEntity(company, UpdateGroup.class);
@@ -114,7 +109,6 @@ public class CompanyController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:company:update")
     public R update(@RequestBody CompanyEntity company){
         ValidatorUtils.validateEntity(company);
         companyService.updateAllColumnById(company);//全部更新
@@ -126,7 +120,6 @@ public class CompanyController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:company:delete")
     public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
         try {
             companyService.deleteComById(id);

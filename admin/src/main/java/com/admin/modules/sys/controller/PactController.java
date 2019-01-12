@@ -7,12 +7,10 @@ import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.PactEntity;
 import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.admin.modules.sys.service.PactService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Map;
 
 
@@ -34,7 +32,6 @@ public class PactController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:pact:list")
     public R list(@RequestParam Map<String, Object> params, HttpServletRequest request){
         String QUERY_FILE_PATH = request.getScheme() + "://" +
                 request.getServerName() + ":" + request.getServerPort() +
@@ -58,7 +55,6 @@ public class PactController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:pact:info")
     public R info(@PathVariable("id") Integer id){
 //        PactEntity pact = pactService.selectById(id);
         PactEntityVo pact = pactService.getPactInfoById(id);
@@ -69,7 +65,6 @@ public class PactController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:pact:save")
     public R save(@RequestBody PactEntity pact){
         ValidatorUtils.validateEntity(pact,UpdateGroup.class);
         pactService.insert(pact);
@@ -81,7 +76,6 @@ public class PactController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:pact:update")
     public R update(@RequestBody PactEntity pact){
         ValidatorUtils.validateEntity(pact);
         pactService.updateAllColumnById(pact);//全部更新
@@ -93,7 +87,6 @@ public class PactController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:pact:delete")
     public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
 //        pactService.deleteBatchIds(Arrays.asList(ids));
         try{

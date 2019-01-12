@@ -5,7 +5,6 @@ import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.entity.DispatchEntity;
 import com.admin.modules.sys.service.DispatchService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,7 +41,6 @@ public class DispatchController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:dispatch:info")
     public R info(@PathVariable("id") Integer id){
         DispatchEntity dispatch = dispatchService.selectById(id);
 
@@ -53,7 +51,6 @@ public class DispatchController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:dispatch:save")
     public R save(@RequestBody DispatchEntity dispatch){
         dispatchService.insert(dispatch);
 
@@ -64,7 +61,6 @@ public class DispatchController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:dispatch:update")
     public R update(@RequestBody DispatchEntity dispatch){
         ValidatorUtils.validateEntity(dispatch);
         dispatchService.updateAllColumnById(dispatch);//全部更新
@@ -76,7 +72,6 @@ public class DispatchController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:dispatch:delete")
     public R delete(@RequestBody Integer[] ids){
         dispatchService.deleteBatchIds(Arrays.asList(ids));
 

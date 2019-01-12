@@ -6,7 +6,6 @@ import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.SiteEntity;
 import com.admin.modules.sys.service.SiteService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,6 @@ public class SiteController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:site:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = siteService.queryPage(params);
 
@@ -53,7 +51,6 @@ public class SiteController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:site:info")
     public R info(@PathVariable("id") Integer id){
         SiteEntity site = siteService.selectById(id);
 
@@ -64,7 +61,6 @@ public class SiteController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:site:save")
     public R save(@RequestBody SiteEntity site){
         ValidatorUtils.validateEntity(site,UpdateGroup.class);
         siteService.insert(site);
@@ -76,7 +72,6 @@ public class SiteController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:site:update")
     public R update(@RequestBody SiteEntity site){
         ValidatorUtils.validateEntity(site,UpdateGroup.class);
         siteService.updateAllColumnById(site);//全部更新
@@ -88,7 +83,6 @@ public class SiteController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:site:delete")
     public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
   //      siteService.deleteBatchIds(Arrays.asList(ids));
         try {

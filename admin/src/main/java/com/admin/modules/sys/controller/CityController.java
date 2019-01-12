@@ -6,7 +6,6 @@ import com.admin.common.validator.ValidatorUtils;
 import com.admin.common.validator.group.UpdateGroup;
 import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.service.CityService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +30,6 @@ public class CityController {
      * 列表
      */
     @RequestMapping("/list")
-    @RequiresPermissions("sys:city:list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = cityService.queryPage(params);
 
@@ -62,7 +60,6 @@ public class CityController {
      * 信息
      */
     @RequestMapping("/info/{id}")
-    @RequiresPermissions("sys:city:info")
     public R info(@PathVariable("id") Integer id){
         CityEntity city = cityService.selectById(id);
 
@@ -73,7 +70,6 @@ public class CityController {
      * 保存
      */
     @RequestMapping("/save")
-    @RequiresPermissions("sys:city:save")
     public R save(@RequestBody CityEntity city){
         ValidatorUtils.validateEntity(city,UpdateGroup.class);
         cityService.insert(city);
@@ -85,7 +81,6 @@ public class CityController {
      * 修改
      */
     @RequestMapping("/update")
-    @RequiresPermissions("sys:city:update")
     public R update(@RequestBody CityEntity city){
         ValidatorUtils.validateEntity(city,UpdateGroup.class);
         cityService.updateAllColumnById(city);//全部更新
@@ -97,7 +92,6 @@ public class CityController {
      * 删除
      */
     @RequestMapping("/delete")
-    @RequiresPermissions("sys:city:delete")
     public R delete(@RequestParam(value = "id",defaultValue = "") Integer id){
 //        cityService.deleteBatchIds(Arrays.asList(ids));
         try {
