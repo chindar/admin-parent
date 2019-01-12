@@ -50,8 +50,8 @@ public class CityController {
      * 获取所有有效的城市信息(不带分页)
      * @return
      */
-    @GetMapping("/listAll/{areaId}")
-    public R listAll(@PathVariable("areaId") String areaId) {
+    @GetMapping("/listAll")
+    public R listAll(@RequestParam(value = "areaId", required = false, defaultValue = "") String areaId) {
         return cityService.listAll(areaId);
     }
 

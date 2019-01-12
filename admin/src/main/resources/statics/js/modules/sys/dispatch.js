@@ -161,6 +161,57 @@ var vm = new Vue({
         siteList: [],
         erpList: []
     },
+    computed: {
+        searchCompanyId() {
+            return this.q.companyId
+        },
+        searchAreaId() {
+            return this.q.areaId
+        },
+        searchCityId() {
+            return this.q.cityId
+        },
+        objCompanyId() {
+            return this.dispatch.companyId
+        },
+        objAreaId() {
+            return this.dispatch.areaId
+        },
+        objCityId() {
+            return this.dispatch.cityId
+        },
+    },
+
+    watch: {
+        searchCompanyId(newVal, oldVal) {
+            this.searchPact(newVal);
+            this.q.pactId = '';
+            this.searchArea(newVal);
+            this.q.areaId = '';
+        },
+        searchAreaId(newVal, oldVal) {
+            this.searchCity(newVal);
+            this.q.cityId = '';
+        },
+        searchCityId(newVal, oldVal) {
+            this.searchSite(newVal);
+            this.q.siteId = '';
+        },
+        objCompanyId(newVal, oldVal) {
+            this.searchPact(newVal);
+            this.dispatch.pactId = '';
+            this.searchArea(newVal);
+            this.dispatch.areaId = '';
+        },
+        objAreaId(newVal, oldVal) {
+            this.searchCity(newVal);
+            this.dispatch.cityId = '';
+        },
+        objCityId(newVal, oldVal) {
+            this.searchSite(newVal);
+            this.dispatch.siteId = '';
+        }
+    },
     methods: {
         query: function () {
             vm.reload();
@@ -308,8 +359,8 @@ var vm = new Vue({
          * 查询合同信息
          * @author Wang Chinda
          **********************************************************************/
-        searchPact: function () {
-            $.get(baseURL + "sys/pact/listAll", function (r) {
+        searchPact: function (companyId) {
+            $.get(baseURL + "sys/pact/listAll?companyId=" + companyId, function (r) {
                 vm.pactList = r.list;
             });
         },
@@ -318,8 +369,8 @@ var vm = new Vue({
          * 查询城市信息
          * @author Wang Chinda
          **********************************************************************/
-        searchCity: function () {
-            $.get(baseURL + "sys/city/listAll", function (r) {
+        searchCity: function (areaId) {
+            $.get(baseURL + "sys/city/listAll?areaId=" + areaId, function (r) {
                 vm.cityList = r.list;
             });
         },
@@ -328,8 +379,8 @@ var vm = new Vue({
          * 查询区域信息
          * @author Wang Chinda
          **********************************************************************/
-        searchArea: function () {
-            $.get(baseURL + "sys/area/listAll", function (r) {
+        searchArea: function (companyId) {
+            $.get(baseURL + "sys/area/listAll?companyId=" + companyId, function (r) {
                 vm.areaList = r.list;
             });
         },
@@ -338,8 +389,8 @@ var vm = new Vue({
          * 查询站点信息
          * @author Wang Chinda
          **********************************************************************/
-        searchSite: function () {
-            $.get(baseURL + "sys/site/listAll", function (r) {
+        searchSite: function (cityId) {
+            $.get(baseURL + "sys/site/listAll?cityId=" + cityId, function (r) {
                 vm.siteList = r.list;
             });
         },

@@ -217,24 +217,32 @@ var vm = new Vue({
     watch: {
         searchCompanyId(newVal, oldVal) {
             this.searchPact(newVal);
+            this.q.pactId = '';
             this.searchArea(newVal);
+            this.q.areaId = '';
         },
         searchAreaId(newVal, oldVal) {
             this.searchCity(newVal);
+            this.q.cityId = '';
         },
         searchCityId(newVal, oldVal) {
             this.searchSite(newVal);
+            this.q.siteId = '';
         },
-        // objCompanyId(newVal, oldVal) {
-        //     this.searchPact(newVal);
-        //     this.searchArea(newVal);
-        // },
-        // objAreaId(newVal, oldVal) {
-        //     this.searchCity(newVal);
-        // },
-        // objCityId(newVal, oldVal) {
-        //     this.searchSite(newVal);
-        // }
+        objCompanyId(newVal, oldVal) {
+            this.searchPact(newVal);
+            this.courier.pactId = '';
+            this.searchArea(newVal);
+            this.courier.areaId = '';
+        },
+        objAreaId(newVal, oldVal) {
+            this.searchCity(newVal);
+            this.courier.cityId = '';
+        },
+        objCityId(newVal, oldVal) {
+            this.searchSite(newVal);
+            this.courier.siteId = '';
+        }
     },
     methods: {
         query: function () {
@@ -439,7 +447,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchPact: function (companyId) {
-            $.get(baseURL + "sys/pact/listAll/" + companyId, function (r) {
+            $.get(baseURL + "sys/pact/listAll?companyId=" + companyId, function (r) {
                 vm.pactList = r.list;
             });
         },
@@ -449,7 +457,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchCity: function (areaId) {
-            $.get(baseURL + "sys/city/listAll/" + areaId, function (r) {
+            $.get(baseURL + "sys/city/listAll?areaId=" + areaId, function (r) {
                 vm.cityList = r.list;
             });
         },
@@ -459,7 +467,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchArea: function (companyId) {
-            $.get(baseURL + "sys/area/listAll/" + companyId, function (r) {
+            $.get(baseURL + "sys/area/listAll?companyId=" + companyId, function (r) {
                 vm.areaList = r.list;
             });
         },
@@ -469,7 +477,7 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchSite: function (cityId) {
-            $.get(baseURL + "sys/site/listAll/" + cityId, function (r) {
+            $.get(baseURL + "sys/site/listAll?cityId=" + cityId, function (r) {
                 vm.siteList = r.list;
             });
         },
