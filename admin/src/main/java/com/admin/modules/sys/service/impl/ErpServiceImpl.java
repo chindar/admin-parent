@@ -244,6 +244,9 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
                         throw new RuntimeException();
                     }
                     Integer companyId = companyDao.getOneByName(companyName);
+                    if (ObjectUtil.isNull(companyId)) {
+                        throw new RuntimeException();
+                    }
                     erp.setCompanyId(companyId);
                     if (existErp(erp)) {
                         failList.add(erp);
