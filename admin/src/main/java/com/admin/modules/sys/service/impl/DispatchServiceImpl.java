@@ -292,7 +292,7 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
 //                    dispatch.set(companyId);
 
                     String erpNumber = Convert.toStr(lineList.get(1));
-                    Integer erpId = erpDao.getOneByNumber(erpNumber);
+                    Integer erpId = erpDao.getOneByNumber(erpNumber, companyId);
                     dispatch.setErpId(erpId);
 
                     // 总单量

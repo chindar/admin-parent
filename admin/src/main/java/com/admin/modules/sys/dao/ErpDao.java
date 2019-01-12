@@ -41,7 +41,8 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
     /**
      * 根据ERP账号获取erpId
      * @param erpNumber
+     * @param companyId
      * @return
      */
-    Integer getOneByNumber(@Param("erpNumber") String erpNumber);
+    Integer getOneByNumber(@Param("erpNumber") String erpNumber, @Param("companyId") Integer companyId);
 }

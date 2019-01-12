@@ -185,7 +185,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                     Integer pactId = pactDao.getOneByName(pactName);
                     courier.setPactId(pactId);
                     String erpNumber = Convert.toStr(lineList.get(10));
-                    Integer erpId = erpDao.getOneByNumber(erpNumber);
+                    Integer erpId = erpDao.getOneByNumber(erpNumber, companyId);
                     courier.setErpId(erpId);
                     String siteName = Convert.toStr(lineList.get(11));
                     Integer siteId = siteDao.getOneByName(siteName);
