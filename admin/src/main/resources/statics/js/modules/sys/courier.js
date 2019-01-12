@@ -165,6 +165,18 @@ $(function () {
             }
         },
     });
+    $.ajax({
+        type: "POST",
+        url: baseURL + "sys/company/getAllCompanyList",
+        contentType: "application/json",
+        success: function (r) {
+            if (r.code == 0) {
+                vm.companyList = r.list
+            } else {
+                alert(r.msg);
+            }
+        }
+    });
 });
 
 var vm = new Vue({
@@ -192,9 +204,13 @@ var vm = new Vue({
         cityList: [],
         areaList: [],
         siteList: [],
-        erpList: []
+        erpList: [],
+        pactList2: [],
+        cityList2: [],
+        areaList2: [],
+        siteList2: [],
+        courier2:{}
     },
-
     methods: {
         query: function () {
             vm.reload();
@@ -213,42 +229,79 @@ var vm = new Vue({
                 areaId: '',
                 siteId: ''
             };
-            vm.searchErpList();
+            // vm.searchErpList();
 
         },
 
         changeCompany: function (companyId, type) {
-            this.searchPact(companyId);
-            this.searchArea(companyId);
+            console.info(companyId)
+            console.info(type)
             if (type == 1) {
                 this.q.pactId = '';
                 this.q.areaId = '';
-                this.changeArea('', 1);
+                this.q.cityId = '';
+                this.q.siteId = '';
+                vm.pactList2 = [];
+                vm.cityList2 = [];
+                vm.areaList2 = [];
+                vm.siteList2 = [];
+                if (companyId) {
+                    this.searchArea(companyId,1);
+                    this.searchPact(companyId,1);
+                }
             } else {
-                this.changeArea();
-                this.searchErpList(companyId);
                 this.courier.erpId = '';
                 this.courier.pactId = '';
                 this.courier.areaId = '';
+                this.courier.cityId = '';
+                this.courier.siteId = '';
+                vm.pactList = [];
+                vm.cityList = [];
+                vm.areaList = [];
+                vm.siteList = [];
+                vm.erpList = [];
+                if (companyId){
+                    this.searchArea(companyId,2);
+                    this.searchPact(companyId,2);
+                    this.searchErpList(companyId,'');
+                }
             }
         },
 
-        changeArea: function (cityId, type) {
-            this.searchCity(cityId);
+        changeArea: function (areaId, type) {
+            // this.searchCity(cityId);
             if (type == 1) {
                 this.q.cityId = '';
-                this.changeCity('', 1);
+                this.q.siteId = '';
+                // this.changeCity('', 1);
+                vm.cityList2 = [];
+                vm.siteList2 = [];
+                if (vm.q.areaId) {
+                    vm.searchCity(areaId,1)
+                }
             } else {
-                this.changeCity();
                 this.courier.cityId = '';
+                this.courier.siteId = '';
+                vm.cityList = [];
+                vm.siteList = [];
+                if (areaId) {
+                    vm.searchCity(areaId,2)
+                }
             }
         },
         changeCity: function (siteId, type) {
-            this.searchSite(siteId);
             if (type == 1) {
                 this.q.siteId = '';
+                vm.siteList2 = [];
+                if (siteId) {
+                    vm.searchSite(siteId,1)
+                }
             } else {
                 this.courier.siteId = '';
+                vm.siteList = [];
+                if (siteId) {
+                    vm.searchSite(siteId,2)
+                }
             }
         },
 
@@ -325,8 +378,17 @@ var vm = new Vue({
 
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
-                vm.courier = r.courier;
-                vm.searchErpList(r.courier.companyId, r.courier.erpId);
+                // vm.courier = r.courier;
+                // vm.courier2 = JSON.parse(JSON.stringify(r.courier));
+                vm.searchArea(r.courier.companyId,2);
+                vm.searchPact(r.courier.companyId,2);
+                vm.searchErpList(r.courier.companyId,r.courier.erpId,r.courier);
+                vm.searchCity(r.courier.areaId,2);
+                vm.searchSite(r.courier.cityId,2);
+                // vm.courier = r.courier;
+                // vm.$set(vm.courier,'erpId',vm.courier2.erpId);
+                // console.info(vm.courier2)
+                // console.info(vm.courier)
             });
         },
 
@@ -407,17 +469,17 @@ var vm = new Vue({
          **********************************************************************/
         initCondition: function () {
             // 查询公司信息
-            this.searchCompany();
-            // 查询合同信息
-            this.searchPact();
-            // 查询城市信息
-            this.searchCity();
-            // 查询区域信息
-            this.searchArea();
-            // 查询站点信息
-            this.searchSite();
-            // 初始化ERP账号
-            this.searchErpList();
+            // this.searchCompany();
+            // // 查询合同信息
+            // this.searchPact();
+            // // 查询城市信息
+            // this.searchCity();
+            // // 查询区域信息
+            // this.searchArea();
+            // // 查询站点信息
+            // this.searchSite();
+            // // 初始化ERP账号
+            // this.searchErpList();
         },
 
         /**********************************************************************
@@ -434,9 +496,13 @@ var vm = new Vue({
          * 查询合同信息
          * @author Wang Chinda
          **********************************************************************/
-        searchPact: function (companyId) {
+        searchPact: function (companyId,type) {
             $.get(baseURL + "sys/pact/listAll?companyId=" + companyId, function (r) {
-                vm.pactList = r.list;
+                if(type == 1){
+                    vm.pactList2 = r.list;
+                }else {
+                    vm.pactList = r.list;
+                }
             });
         },
 
@@ -444,9 +510,13 @@ var vm = new Vue({
          * 查询城市信息
          * @author Wang Chinda
          **********************************************************************/
-        searchCity: function (areaId) {
+        searchCity: function (areaId,type) {
             $.get(baseURL + "sys/city/listAll?areaId=" + areaId, function (r) {
-                vm.cityList = r.list;
+                if(type == 1){
+                    vm.cityList2 = r.list;
+                }else {
+                    vm.cityList = r.list;
+                }
             });
         },
 
@@ -454,9 +524,13 @@ var vm = new Vue({
          * 查询区域信息
          * @author Wang Chinda
          **********************************************************************/
-        searchArea: function (companyId) {
+        searchArea: function (companyId,type) {
             $.get(baseURL + "sys/area/listAll?companyId=" + companyId, function (r) {
-                vm.areaList = r.list;
+                if(type == 1){
+                    vm.areaList2 = r.list;
+                }else {
+                    vm.areaList = r.list;
+                }
             });
         },
 
@@ -464,9 +538,13 @@ var vm = new Vue({
          * 查询站点信息
          * @author Wang Chinda
          **********************************************************************/
-        searchSite: function (cityId) {
+        searchSite: function (cityId,type) {
             $.get(baseURL + "sys/site/listAll?cityId=" + cityId, function (r) {
-                vm.siteList = r.list;
+                if(type == 1){
+                    vm.siteList2 = r.list;
+                }else {
+                    vm.siteList = r.list;
+                }
             });
         },
 
@@ -474,9 +552,12 @@ var vm = new Vue({
          * 查询Erp账户
          * @author Wang Chinda
          **********************************************************************/
-        searchErpList: function (companyId, erpId) {
+        searchErpList: function (companyId,erpId,data) {
             $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId + "&erpId=" + erpId, function (r) {
-                vm.erpList = r.list;
+                    vm.erpList = r.list;
+                    if(data){
+                        vm.courier = data
+                    }
             });
         },
 
@@ -557,8 +638,8 @@ var vm = new Vue({
         }
     },
 
-    created: function () {
-        this.initSearch();
-        this.initCondition();
-    }
+    // created: function () {
+    //     // this.initSearch();
+    //     this.initCondition();
+    // }
 });

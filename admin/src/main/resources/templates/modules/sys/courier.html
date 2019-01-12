@@ -36,7 +36,7 @@
             <div class="form-group col-md-2">
                 <select class="form-control" v-model="q.pactId" placeholder="请选择合同">
                     <option value="">请选择合同</option>
-                    <option v-for="pact in pactList" v-bind:value="pact.id" v-bind:key="pact.id">
+                    <option v-for="pact in pactList2" v-bind:value="pact.id" v-bind:key="pact.id">
                         {{ pact.name }}
                     </option>
                 </select>
@@ -44,7 +44,7 @@
             <div class="form-group col-md-2">
                 <select class="form-control" v-model="q.areaId" placeholder="请选择片区" @change="changeArea(q.areaId, 1)">
                     <option value="">请选择片区</option>
-                    <option v-for="area in areaList" v-bind:value="area.id" v-bind:key="area.id">
+                    <option v-for="area in areaList2" v-bind:value="area.id" v-bind:key="area.id">
                         {{ area.name }}
                     </option>
                 </select>
@@ -52,7 +52,7 @@
             <div class="form-group col-md-2">
                 <select class="form-control" v-model="q.cityId" placeholder="请选择城市" @change="changeCity(q.cityId, 1)">
                     <option value="">请选择城市</option>
-                    <option v-for="city in cityList" v-bind:value="city.id" v-bind:key="city.id">
+                    <option v-for="city in cityList2" v-bind:value="city.id" v-bind:key="city.id">
                         {{ city.name }}
                     </option>
                 </select>
@@ -60,7 +60,7 @@
             <div class="form-group col-md-2">
                 <select class="form-control" v-model="q.siteId" placeholder="请选择站点">
                     <option value="">请选择站点</option>
-                    <option v-for="site in siteList" v-bind:value="site.id" v-bind:key="site.id">
+                    <option v-for="site in siteList2" v-bind:value="site.id" v-bind:key="site.id">
                         {{ site.name }}
                     </option>
                 </select>
@@ -134,7 +134,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">公司:</div>
                 <div class="col-sm-10">
-                    <select class="form-control" v-model="courier.companyId" :disabled="disabled" @change="changeCompany(courier.companyId)">
+                    <select class="form-control" v-model="courier.companyId" :disabled="disabled" @change="changeCompany(courier.companyId,2)">
                         <option value="">请选择公司</option>
                         <option v-for="company in companyList" v-bind:value="company.id" v-bind:key="company.id">
                             {{ company.name }}
@@ -177,7 +177,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">片区:</div>
                 <div class="col-sm-10">
-                    <select class="form-control" v-model="courier.areaId" :disabled="disabled" @change="changeArea(courier.areaId)">
+                    <select class="form-control" v-model="courier.areaId" :disabled="disabled" @change="changeArea(courier.areaId,2)">
                         <option value="">请选择片区</option>
                         <option v-for="area in areaList" v-bind:value="area.id" v-bind:key="area.id">
                             {{ area.name }}
@@ -188,7 +188,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">城市:</div>
                 <div class="col-sm-10">
-                    <select class="form-control" v-model="courier.cityId" :disabled="disabled" @change="changeCity(courier.cityId)">
+                    <select class="form-control" v-model="courier.cityId" :disabled="disabled" @change="changeCity(courier.cityId,2)">
                         <option value="">请选择城市</option>
                         <option v-for="city in cityList" v-bind:value="city.id" v-bind:key="city.id">
                             {{ city.name }}
