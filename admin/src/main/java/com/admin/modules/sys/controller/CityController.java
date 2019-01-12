@@ -50,9 +50,9 @@ public class CityController {
      * 获取所有有效的城市信息(不带分页)
      * @return
      */
-    @GetMapping("/listAll")
-    public R listAll() {
-        return cityService.listAll();
+    @GetMapping("/listAll/{areaId}")
+    public R listAll(@PathVariable("areaId") Integer areaId) {
+        return cityService.listAll(areaId);
     }
 
 

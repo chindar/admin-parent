@@ -4,6 +4,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.entity.SiteEntity;
 import com.baomidou.mybatisplus.service.IService;
+
 import java.util.Map;
 
 /**
@@ -20,8 +21,9 @@ public interface SiteService extends IService<SiteEntity> {
     /**
      * 获取所有有效的站点(不带分页)
      * @return
+     * @param cityId
      */
-    R listAll();
+    R listAll(Integer cityId);
 
     int deleteSiteById(Integer id);
 }

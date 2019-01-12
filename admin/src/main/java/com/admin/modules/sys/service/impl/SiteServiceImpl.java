@@ -1,5 +1,6 @@
 package com.admin.modules.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 @Service("siteService")
 public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements SiteService {
 
@@ -26,6 +28,7 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
 
     @Autowired
     private AreaDao areaDao;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
 
@@ -39,7 +42,7 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
             entity.setAreaId(Integer.parseInt(params.get("areaId").toString()));
         if (params.get("cityId") != null && Tools.notEmpty(params.get("cityId").toString()))
             entity.setCityId(Integer.parseInt(params.get("cityId").toString()));
-        List<SiteEntityVo> list = dao.getSiteList(page,entity);
+        List<SiteEntityVo> list = dao.getSiteList(page, entity);
         page.setRecords(list);
         return new PageUtils(page);
     }
@@ -47,24 +50,27 @@ public class SiteServiceImpl extends ServiceImpl<SiteDao, SiteEntity> implements
     /**
      * 获取所有有效的站点(不带分页)
      *
+     * @param cityId
      * @return
      */
     @Override
-    public R listAll() {
-        return R.ok().put("list", this.selectList(new EntityWrapper<SiteEntity>()));
+    public R listAll(Integer cityId) {
+        return R.ok().put("list", this.selectList(new EntityWrapper<SiteEntity>()
+                .eq(ObjectUtil.isNotNull(cityId), "city_id", cityId)));
     }
 
 
     /**
      * 删除
+     *
      * @param id
      * @return
      */
     @Override
     public int deleteSiteById(Integer id) {
         //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
-        int pactcount = areaDao.getPactByCompanyId(id,"tb_site");
-        if (pactcount>0){
+        int pactcount = areaDao.getPactByCompanyId(id, "tb_site");
+        if (pactcount > 0) {
             throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
         int count = dao.deleteSiteById(id);

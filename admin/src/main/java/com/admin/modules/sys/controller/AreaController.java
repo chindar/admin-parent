@@ -41,9 +41,9 @@ public class AreaController {
      * 获取所有有效的片区(不带分页)
      * @return
      */
-    @GetMapping("/listAll")
-    public R listAll() {
-        return areaService.listAll();
+    @GetMapping("/listAll/{companyId}")
+    public R listAll(@PathVariable("companyId") Integer companyId) {
+        return areaService.listAll(companyId);
     }
 
     /**

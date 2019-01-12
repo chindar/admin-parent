@@ -175,12 +175,12 @@ var vm = new Vue({
             name: null,
             erpNumber: null,
             cardId: null,
-            companyId: null,
+            companyId: '',
             status: '',
-            pactId: null,
-            cityId: null,
-            areaId: null,
-            siteId: null
+            pactId: '',
+            cityId: '',
+            areaId: '',
+            siteId: ''
         },
         courier: {},
         pactId: '',
@@ -192,8 +192,25 @@ var vm = new Vue({
         erpList: [],
         batchId: null
     },
-    watch: {
 
+    computed: {
+        watchCompanyId() {
+            return this.q.companyId
+        },
+        watchAreaId() {
+            return this.q.areaId
+        }
+    },
+
+    watch: {
+        watchCompanyId(newVal, oldVal) {
+            console.log(newVal, oldVal);
+            this.searchPact(newVal);
+            this.searchArea(newVal);
+        },
+        watchAreaId(newVal, oldVal) {
+            this.searchCity(newVal);
+        }
     },
     methods: {
         query: function () {
@@ -397,8 +414,8 @@ var vm = new Vue({
          * 查询合同信息
          * @author Wang Chinda
          **********************************************************************/
-        searchPact: function () {
-            $.get(baseURL + "sys/pact/listAll", function (r) {
+        searchPact: function (companyId) {
+            $.get(baseURL + "sys/pact/listAll/" + companyId, function (r) {
                 vm.pactList = r.list;
             });
         },
@@ -407,8 +424,8 @@ var vm = new Vue({
          * 查询城市信息
          * @author Wang Chinda
          **********************************************************************/
-        searchCity: function () {
-            $.get(baseURL + "sys/city/listAll", function (r) {
+        searchCity: function (areaId) {
+            $.get(baseURL + "sys/city/listAll/" + areaId, function (r) {
                 vm.cityList = r.list;
             });
         },
@@ -417,8 +434,8 @@ var vm = new Vue({
          * 查询区域信息
          * @author Wang Chinda
          **********************************************************************/
-        searchArea: function () {
-            $.get(baseURL + "sys/area/listAll", function (r) {
+        searchArea: function (companyId) {
+            $.get(baseURL + "sys/area/listAll/" + companyId, function (r) {
                 vm.areaList = r.list;
             });
         },
@@ -427,8 +444,8 @@ var vm = new Vue({
          * 查询站点信息
          * @author Wang Chinda
          **********************************************************************/
-        searchSite: function () {
-            $.get(baseURL + "sys/site/listAll", function (r) {
+        searchSite: function (cityId) {
+            $.get(baseURL + "sys/site/listAll/" + cityId, function (r) {
                 vm.siteList = r.list;
             });
         },

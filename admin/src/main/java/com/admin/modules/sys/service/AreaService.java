@@ -29,7 +29,8 @@ public interface AreaService extends IService<AreaEntity> {
     /**
      * 获取所有有效的片区(不带分页)
      * @return
+     * @param companyId
      */
-    R listAll();
+    R listAll(Integer companyId);
 }
 

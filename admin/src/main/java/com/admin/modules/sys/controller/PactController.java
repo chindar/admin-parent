@@ -45,9 +45,9 @@ public class PactController {
      * 获取所有有效的合同信息(不带分页)
      * @return
      */
-    @GetMapping("/listAll")
-    public R listAll() {
-        return pactService.listAll();
+    @GetMapping("/listAll/{companyId}")
+    public R listAll(@PathVariable("companyId") Integer companyId) {
+        return pactService.listAll(companyId);
     }
 
 

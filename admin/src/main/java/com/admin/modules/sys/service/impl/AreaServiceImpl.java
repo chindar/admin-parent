@@ -1,5 +1,6 @@
 package com.admin.modules.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 @Service("areaService")
 public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements AreaService {
 
@@ -80,9 +82,11 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements
      * 获取所有有效的片区(不带分页)
      *
      * @return
+     * @param companyId
      */
     @Override
-    public R listAll() {
-        return R.ok().put("list", this.selectList(new EntityWrapper<>()));
+    public R listAll(Integer companyId) {
+        return R.ok().put("list", this.selectList(new EntityWrapper<AreaEntity>()
+                .eq(ObjectUtil.isNotNull(companyId), "company_id", companyId)));
     }
 }

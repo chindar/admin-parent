@@ -1,10 +1,10 @@
 package com.admin.modules.sys.service;
 
+import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.R;
+import com.admin.modules.sys.entity.PactEntity;
 import com.admin.modules.sys.entity.vo.PactEntityVo;
 import com.baomidou.mybatisplus.service.IService;
-import com.admin.common.utils.PageUtils;
-import com.admin.modules.sys.entity.PactEntity;
 
 import java.util.Map;
 
@@ -22,8 +22,9 @@ public interface PactService extends IService<PactEntity> {
     /**
      * 获取所有有效的合同信息
      * @return
+     * @param companyId
      */
-    R listAll();
+    R listAll(Integer companyId);
 
     int deletePactById(Integer id);
 

@@ -41,9 +41,9 @@ public class SiteController {
      * 获取所有有效的站点(不带分页)
      * @return
      */
-    @GetMapping("/listAll")
-    public R listAll() {
-        return siteService.listAll();
+    @GetMapping("/listAll/{cityId}")
+    public R listAll(@PathVariable("cityId") Integer cityId) {
+        return siteService.listAll(cityId);
     }
 
 

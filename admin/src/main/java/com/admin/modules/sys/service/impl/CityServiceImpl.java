@@ -1,12 +1,12 @@
 package com.admin.modules.sys.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.common.utils.Tools;
 import com.admin.modules.sys.dao.AreaDao;
 import com.admin.modules.sys.dao.CityDao;
-import com.admin.modules.sys.entity.AreaEntity;
 import com.admin.modules.sys.entity.CityEntity;
 import com.admin.modules.sys.entity.vo.CityEntityVo;
 import com.admin.modules.sys.service.CityService;
@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@SuppressWarnings("ALL")
 @Service("cityService")
 public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements CityService {
 
@@ -72,9 +73,11 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
      * 获取所有有效的城市信息(不带分页)
      *
      * @return
+     * @param areaId
      */
     @Override
-    public R listAll() {
-        return R.ok().put("list", this.selectList(new EntityWrapper<CityEntity>()));
+    public R listAll(Integer areaId) {
+        return R.ok().put("list", this.selectList(new EntityWrapper<CityEntity>()
+        .eq(ObjectUtil.isNotNull(areaId), "area_id", areaId)));
     }
 }

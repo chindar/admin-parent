@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 
+@SuppressWarnings("ALL")
 @Service("pactService")
 public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements PactService {
 
@@ -63,10 +64,11 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
      * 获取所有有效的合同信息
      *
      * @return
+     * @param companyId
      */
     @Override
-    public R listAll() {
-        return R.ok().put("list", dao.listAll());
+    public R listAll(Integer companyId) {
+        return R.ok().put("list", dao.listAll(companyId));
     }
 
     /**

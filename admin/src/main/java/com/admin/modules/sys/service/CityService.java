@@ -25,7 +25,8 @@ public interface CityService extends IService<CityEntity> {
     /**
      * 获取所有有效的城市信息(不带分页)
      * @return
+     * @param areaId
      */
-    R listAll();
+    R listAll(Integer areaId);
 }
 
