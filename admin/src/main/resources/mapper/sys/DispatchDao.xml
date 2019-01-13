@@ -78,8 +78,7 @@
           AND a.is_delete = 0
     </select>
     <select id="selectAll" resultMap="dispatchMap">
-        SELECT a.id
-        , a.month
+        SELECT a.*
         , g.name        AS area_name
         , f.name        AS city_name
         , e.name        AS site_name
@@ -93,6 +92,7 @@
         , a.deduct_money
         , a.salary
         , a.remark
+        , d.name        AS company_name
         FROM tb_dispatch a
         LEFT JOIN tb_erp c ON a.erp_id = c.id
         LEFT JOIN tb_courier b ON c.id = b.erp_id AND a.erp_id = b.erp_id
@@ -102,6 +102,33 @@
         LEFT JOIN tb_area g ON g.id = f.area_id
         WHERE 1 = 1
         AND a.is_delete = 0
+    </select>
+    <select id="getById" resultType="com.admin.modules.sys.entity.vo.DispatchVo">
+        SELECT a.*
+        , g.name        AS area_name
+        , f.name        AS city_name
+        , e.name        AS site_name
+        , c.erp_number
+        , b.name        AS courier_name
+        , b.card_id
+        , a.all_order_count
+        , a.total_order_count
+        , a.total_money
+        , a.fine_money
+        , a.deduct_money
+        , a.salary
+        , a.remark
+        , d.name        AS company_name
+        FROM tb_dispatch a
+        LEFT JOIN tb_erp c ON a.erp_id = c.id
+        LEFT JOIN tb_courier b ON c.id = b.erp_id AND a.erp_id = b.erp_id
+        LEFT JOIN tb_company d ON c.company_id = d.id
+        LEFT JOIN tb_site e ON e.id = b.site_id
+        LEFT JOIN tb_city f ON f.id = e.city_id
+        LEFT JOIN tb_area g ON g.id = f.area_id
+        WHERE 1 = 1
+            AND a.id = #{id}
+            AND a.is_delete = 0
     </select>
 
 </mapper>

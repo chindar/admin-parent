@@ -162,55 +162,9 @@ var vm = new Vue({
         erpList: []
     },
     computed: {
-        searchCompanyId() {
-            return this.q.companyId
-        },
-        searchAreaId() {
-            return this.q.areaId
-        },
-        searchCityId() {
-            return this.q.cityId
-        },
-        objCompanyId() {
-            return this.dispatch.companyId
-        },
-        objAreaId() {
-            return this.dispatch.areaId
-        },
-        objCityId() {
-            return this.dispatch.cityId
-        },
     },
 
     watch: {
-        searchCompanyId(newVal, oldVal) {
-            this.searchPact(newVal);
-            this.q.pactId = '';
-            this.searchArea(newVal);
-            this.q.areaId = '';
-        },
-        searchAreaId(newVal, oldVal) {
-            this.searchCity(newVal);
-            this.q.cityId = '';
-        },
-        searchCityId(newVal, oldVal) {
-            this.searchSite(newVal);
-            this.q.siteId = '';
-        },
-        objCompanyId(newVal, oldVal) {
-            this.searchPact(newVal);
-            this.dispatch.pactId = '';
-            this.searchArea(newVal);
-            this.dispatch.areaId = '';
-        },
-        objAreaId(newVal, oldVal) {
-            this.searchCity(newVal);
-            this.dispatch.cityId = '';
-        },
-        objCityId(newVal, oldVal) {
-            this.searchSite(newVal);
-            this.dispatch.siteId = '';
-        }
     },
     methods: {
         query: function () {
@@ -433,33 +387,16 @@ var vm = new Vue({
          **********************************************************************/
         getCourier: function (erpNumber) {
             $.get(baseURL + "sys/courier/getCourier/" + erpNumber, function (r) {
-                let dispatchVo = {};
-                dispatchVo = r.courier;
-                dispatchVo.courierName = r.courier.name;
-                dispatchVo.leaveDate = r.courier.leaveDate;
-                dispatchVo.afterSaleCount = vm.dispatch.afterSaleCount;
-                dispatchVo.againCount = vm.dispatch.againCount;
-                dispatchVo.allOrderCount = vm.dispatch.allOrderCount;
-                dispatchVo.badCount = vm.dispatch.badCount;
-                dispatchVo.complaintCount = vm.dispatch.complaintCount;
-                dispatchVo.createTime = vm.dispatch.createTime;
-                dispatchVo.deductMoney = vm.dispatch.deductMoney;
-                dispatchVo.erpId = vm.dispatch.erpId;
-                dispatchVo.erpNumber = vm.dispatch.erpNumber;
-                dispatchVo.fineMoney = vm.dispatch.fineMoney;
-                dispatchVo.firstCount = vm.dispatch.firstCount;
-                dispatchVo.id = vm.dispatch.id;
-                dispatchVo.isDelete = vm.dispatch.isDelete;
-                dispatchVo.large = vm.dispatch.large;
-                dispatchVo.month = vm.dispatch.month;
-                dispatchVo.otherCount = vm.dispatch.otherCount;
-                dispatchVo.remark = vm.dispatch.remark;
-                dispatchVo.salary = vm.dispatch.salary;
-                dispatchVo.small = vm.dispatch.small;
-                dispatchVo.thrIdentical = vm.dispatch.thrIdentical;
-                dispatchVo.totalMoney = vm.dispatch.totalMoney;
-                dispatchVo.totalOrderCount = vm.dispatch.totalOrderCount;
-                vm.dispatch = dispatchVo;
+                if (r.courier == null)  {
+                    alert("ERP账号不存在!");
+                    return;
+                }
+                vm.dispatch.companyName=r.courier.companyName;
+                vm.dispatch.areaName=r.courier.areaName;
+                vm.dispatch.cityName=r.courier.cityName;
+                vm.dispatch.siteName=r.courier.siteName;
+                vm.dispatch.courierName=r.courier.name;
+                vm.dispatch.cardId=r.courier.cardId;
             });
         },
 
@@ -484,67 +421,68 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         validator: function () {
-            if (isBlank(vm.courier.name)) {
+            console.log(vm.dispatch.month);
+            if (!(vm.dispatch.month != null && vm.dispatch.month.length != 0)) {
                 alert("月份不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.cardId)) {
+            if (!(vm.dispatch.allOrderCount != null && vm.dispatch.allOrderCount.length != 0)) {
                 alert("总单量不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.phone)) {
+            if (!(vm.dispatch.totalOrderCount != null && vm.dispatch.totalOrderCount.length != 0)) {
                 alert("合计单量不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.bankCardId)) {
+            if (!(vm.dispatch.totalMoney != null && vm.dispatch.totalMoney.length != 0)) {
                 alert("费用合计不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.entryDate)) {
+            if (!(vm.dispatch.small != null && vm.dispatch.small.length != 0)) {
                 alert("小件不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.leaveDate)) {
+            if (!(vm.dispatch.large != null && vm.dispatch.large.length != 0)) {
                 alert("大件不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.companyId)) {
+            if (!(vm.dispatch.thrIdentical != null && vm.dispatch.thrIdentical.length != 0)) {
                 alert("三同不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.pactId)) {
+            if (!(vm.dispatch.afterSaleCount != null && vm.dispatch.afterSaleCount.length != 0)) {
                 alert("售后取件不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.erpId)) {
+            if (!(vm.dispatch.firstCount != null && vm.dispatch.firstCount.length != 0)) {
                 alert("接货首单量不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.areaId)) {
+            if (!(vm.dispatch.againCount != null && vm.dispatch.againCount.length != 0)) {
                 alert("接货续单量不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.cityId)) {
+            if (!(vm.dispatch.otherCount != null && vm.dispatch.otherCount.length != 0)) {
                 alert("其他单量不允许为空");
                 return true;
             }
-            if (isBlank(vm.courier.siteId)) {
+            if (!(vm.dispatch.badCount != null && vm.dispatch.badCount.length != 0)) {
                 alert("差评不允许为空");
                 return true;
             }
-            if (isBlank(vm.courier.erpId)) {
+            if (!(vm.dispatch.complaintCount != null && vm.dispatch.complaintCount.length != 0)) {
                 alert("投诉不允许为空");
                 return true;
             }
-            if (isBlank(vm.courier.areaId)) {
+            if (!(vm.dispatch.fineMoney != null && vm.dispatch.fineMoney.length != 0)) {
                 alert("罚款合计不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.cityId)) {
+            if (!(vm.dispatch.deductMoney != null && vm.dispatch.deductMoney.length != 0)) {
                 alert("其他扣款不能为空");
                 return true;
             }
-            if (isBlank(vm.courier.siteId)) {
+            if (!(vm.dispatch.salary != null && vm.dispatch.salary.length != 0)) {
                 alert("工资不能为空");
                 return true;
             }

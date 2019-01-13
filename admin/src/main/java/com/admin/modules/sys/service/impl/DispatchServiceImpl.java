@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateException;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -116,6 +117,8 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                 cell.setCellValue(Convert.toStr(templetList.get(i)));
             }
 
+            cell = row.createCell(18);
+            cell.setCellValue("月份");
 
             // 遍历配送员信息list
             for (int i = 0; i < dispatchList.size(); i++) {
@@ -243,6 +246,13 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                     cell = row.createCell(17);
                     cell.setCellValue(remark);
                 }
+
+                // 月份
+                String month = vo.getMonth();
+                if (StrUtil.isNotBlank(month)) {
+                    cell = row.createCell(18);
+                    cell.setCellValue(month);
+                }
             }
 
             String filename = "运营数据模板.xlsx";
@@ -358,7 +368,7 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                     // 备注
                     String remark = Convert.toStr(lineList.get(17));
                     dispatch.setRemark(remark);
-
+                    dispatch.setMonth(Convert.toStr(DateUtil.month(DateUtil.date()) + 1));
 
                     dispatchList.add(dispatch);
                 });
@@ -380,6 +390,15 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
             return R.error();
         }
         return R.ok();
+    }
+
+    @Override
+    public R getById(Integer id) {
+
+        DispatchVo dispatch = dispatchDao.getById(id);
+
+
+        return R.ok().put("dispatch", dispatch);
     }
 
     /**

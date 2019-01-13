@@ -44,7 +44,7 @@ public class DispatchController {
     public R info(@PathVariable("id") Integer id){
         DispatchEntity dispatch = dispatchService.selectById(id);
 
-        return R.ok().put("dispatch", dispatch);
+        return dispatchService.getById(id);
     }
 
     /**

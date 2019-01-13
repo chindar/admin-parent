@@ -234,8 +234,7 @@ var vm = new Vue({
         },
 
         changeCompany: function (companyId, type) {
-            console.info(companyId)
-            console.info(type)
+
             if (type == 1) {
                 this.q.pactId = '';
                 this.q.areaId = '';

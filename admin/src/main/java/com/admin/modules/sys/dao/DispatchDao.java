@@ -4,6 +4,7 @@ import com.admin.modules.sys.entity.DispatchEntity;
 import com.admin.modules.sys.entity.vo.DispatchVo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface DispatchDao extends BaseMapper<DispatchEntity> {
      * @return
      */
     List<DispatchVo> selectAll();
+
+    DispatchVo getById(@Param("id") Integer id);
 }

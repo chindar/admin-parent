@@ -27,5 +27,7 @@ public interface DispatchService extends IService<DispatchEntity> {
      * @return
      */
     R importDispatch(MultipartFile file);
+
+    R getById(Integer id);
 }
 

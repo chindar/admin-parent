@@ -183,6 +183,7 @@
     <!-- 获取运营数据中配送员相关信息 START -->
     <select id="getListByErpNumber" resultType="com.admin.modules.sys.entity.vo.CourierVo">
         SELECT a.company_id AS companyId
+             , f.name       AS companyName
              , c.name       AS areaName
              , c.id         AS areaId
              , d.name       AS cityName
@@ -199,6 +200,7 @@
                LEFT JOIN tb_area c ON c.id = a.area_id
                LEFT JOIN tb_city d ON d.id = a.city_id
                LEFT JOIN tb_site e ON e.id = a.site_id
+               LEFT JOIN tb_company f ON a.company_id = f.id
         WHERE 1 = 1
           AND b.erp_number = #{erpNumber}
           AND a.is_delete = 0
