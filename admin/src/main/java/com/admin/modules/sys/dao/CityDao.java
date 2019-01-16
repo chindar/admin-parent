@@ -24,4 +24,6 @@ public interface CityDao extends BaseMapper<CityEntity> {
     List<CityEntity> getAllCityList(@Param("areaId") Integer areaId);
 
     Integer getCityId(@Param("siteId") Integer siteId, @Param("companyId") Integer companyId);
+
+    int getSiteByAreaId(@Param("id") Integer id);
 }

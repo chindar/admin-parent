@@ -64,6 +64,10 @@ public class AreaServiceImpl extends ServiceImpl<AreaDao, AreaEntity> implements
         if (pactcount>0){
             throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
+        int citycount = dao.getCityByAreaId(id);
+        if (citycount>0){
+            throw new RuntimeException("删除失败，该片区下存在城市不可删除。");
+        }
         int count = dao.deleteAreaById(id);
         return count;
     }

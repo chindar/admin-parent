@@ -28,4 +28,6 @@ public interface AreaDao extends BaseMapper<AreaEntity> {
     int getPactByCompanyId(@Param("id")Integer id,@Param("tb")String tb);
 
     Integer getAreaId(@Param("siteId") Integer siteId, @Param("companyId") Integer companyId);
+
+    int getCityByAreaId(@Param("id") Integer id);
 }

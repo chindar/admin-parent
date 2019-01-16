@@ -56,6 +56,10 @@ public class CityServiceImpl extends ServiceImpl<CityDao, CityEntity> implements
         if (pactcount>0){
             throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
+        int sitecount = dao.getSiteByAreaId(id);
+        if (sitecount>0){
+            throw new RuntimeException("删除失败，该城市下存在站点不可删除。");
+        }
         int count = dao.deleteCityById(id);
         return count;
     }

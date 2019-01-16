@@ -47,4 +47,9 @@
     <update id="deleteCityById">
         update tb_city set is_delete = 1 where id = #{id}
     </update>
+
+    <select id="getSiteByAreaId" resultType="java.lang.Integer">
+        select  count(1) from tb_site
+        where is_delete = 0 and city_id = #{id}
+    </select>
 </mapper>

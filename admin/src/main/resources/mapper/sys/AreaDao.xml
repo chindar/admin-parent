@@ -48,6 +48,12 @@
             )
         AND end_date > NOW()
     </select>
+
+    <select id="getCityByAreaId" resultType="java.lang.Integer">
+        select  count(1) from tb_city
+        where is_delete = 0 and area_id = #{id}
+    </select>
+
     <select id="getAreaId" resultType="java.lang.Integer">
         SELECT a.id
         FROM tb_area a

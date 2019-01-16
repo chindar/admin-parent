@@ -47,8 +47,8 @@
                 <div class="col-sm-2 control-label">公司</div>
                 <div class="col-sm-10">
                     <!--<input type="text" class="form-control" v-model="area.companyId" placeholder=""/>-->
-                    <select class="form-control" v-model="area.companyId"  placeholder="请选择合同">
-                        <option value="" >请选择城市</option>
+                    <select class="form-control" v-model="area.companyId"  placeholder="请选择公司">
+                        <option value="" >请选择公司</option>
                         <option  v-for="company in companylist"  :value="company.id" >{{company.name}}</option>
                     </select>
                 </div>
