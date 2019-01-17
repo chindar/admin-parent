@@ -69,7 +69,7 @@ public class PactController {
         ValidatorUtils.validateEntity(pact,UpdateGroup.class);
         int count = pactService.getCount(pact);
         if(count > 0){
-            return R.error("该公司下已经有同名的合同");
+            return R.error("该公司下已经有同名的生效/待生效的合同");
         }
         pactService.insert(pact);
 
