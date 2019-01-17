@@ -33,4 +33,6 @@ public interface PactDao extends BaseMapper<PactEntity> {
      * @return
      */
     Integer getOneByName(@Param("pactName") String pactName, @Param("companyId") Integer companyId);
+
+    int getCount(PactEntity entity);
 }

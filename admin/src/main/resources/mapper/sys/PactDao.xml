@@ -106,4 +106,14 @@
     <select id="getOneByName" resultType="java.lang.Integer">
         SELECT id FROM tb_pact WHERE is_delete = 0 AND name = #{pactName} AND company_id = #{companyId}
     </select>
+
+    <select id="getCount" parameterType="com.admin.modules.sys.entity.PactEntity" resultType="java.lang.Integer">
+        select count(1) from tb_pact where is_delete = 0
+        and name = #{name}
+        AND company_id = #{companyId}
+        and end_date > now()
+        <if test="id != null and id != ''">
+            and id != #{id}
+        </if>
+    </select>
 </mapper>

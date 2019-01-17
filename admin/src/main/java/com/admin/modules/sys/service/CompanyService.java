@@ -26,5 +26,7 @@ public interface CompanyService extends IService<CompanyEntity> {
     int deleteComById(Integer id);
 
     CompanyEntityVo getCompanyById(Integer id);
+
+    int getCount(CompanyEntity entity);
 }
 

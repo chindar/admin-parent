@@ -28,6 +28,8 @@ public interface CompanyDao extends BaseMapper<CompanyEntity> {
 
     int deleteComById(@Param("id") Integer id);
 
+    int getPactById(@Param("id") Integer id);
+
     /**
      * 根据公司名称获取公司id
      * @param companyName
@@ -36,4 +38,6 @@ public interface CompanyDao extends BaseMapper<CompanyEntity> {
     Integer getOneByName(@Param("name") String companyName);
 
     CompanyEntityVo getCompanyById(@Param("id") Integer id);
+
+    int getCount(CompanyEntity entity);
 }

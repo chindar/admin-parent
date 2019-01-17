@@ -29,7 +29,7 @@ public interface PactService extends IService<PactEntity> {
     int deletePactById(Integer id);
 
     PactEntityVo getPactInfoById(Integer id);
+
+    int getCount(PactEntity entity);
 }
-
-
 

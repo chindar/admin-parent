@@ -248,6 +248,7 @@ function editCompany(id) {
 //删除
 function deleteCompany(id) {
     confirm('确定要删除选中的记录？', function () {
+        console.info(id)
         var data = {id: id};
         $.ajax({
             type: "POST",

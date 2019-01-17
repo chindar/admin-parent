@@ -67,6 +67,10 @@ public class PactController {
     @RequestMapping("/save")
     public R save(@RequestBody PactEntity pact){
         ValidatorUtils.validateEntity(pact,UpdateGroup.class);
+        int count = pactService.getCount(pact);
+        if(count > 0){
+            return R.error("该公司下已经有同名的合同");
+        }
         pactService.insert(pact);
 
         return R.ok();
@@ -78,6 +82,10 @@ public class PactController {
     @RequestMapping("/update")
     public R update(@RequestBody PactEntity pact){
         ValidatorUtils.validateEntity(pact);
+        int count = pactService.getCount(pact);
+        if(count > 0){
+            return R.error("该公司下已经有同名的生效/待生效的合同");
+        }
         pactService.updateAllColumnById(pact);//全部更新
         
         return R.ok();

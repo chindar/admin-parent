@@ -85,4 +85,9 @@ public class PactServiceImpl extends ServiceImpl<PactDao, PactEntity> implements
     public PactEntityVo getPactInfoById(Integer id) {
         return dao.getPactInfoById(id);
     }
+
+    @Override
+    public int getCount(PactEntity entity) {
+        return dao.getCount(entity);
+    }
 }

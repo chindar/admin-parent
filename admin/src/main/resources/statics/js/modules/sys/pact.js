@@ -163,8 +163,8 @@ $(function () {
             //     alert("云存储配置未配置");
             //     return false;
             // }
-            if (!(extension && /^(pdf)$/.test(extension.toLowerCase()))){
-                alert('只支持pdf格式的合同文件！');
+            if (!(extension && /^(pdf|jpg|png)$/.test(extension.toLowerCase()))){
+                alert('只支持pdf、jpg、png格式的合同文件！');
                 return false;
             }
         },
@@ -220,7 +220,7 @@ var vm = new Vue({
             businessName:null,
             pactStatus:"",
             companyId:"",
-            timeType:0,
+            timeType:1,
             startDate:null,
             endDate:null
         }

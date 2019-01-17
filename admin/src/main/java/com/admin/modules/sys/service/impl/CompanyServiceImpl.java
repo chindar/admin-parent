@@ -55,6 +55,8 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyDao, CompanyEntity> i
     public PageUtils getCompanyList(Map<String, Object> params,String path) {
         CompanyEntity entity = new CompanyEntity();
         Page page = new Query<CompanyEntityVo>(params).getPage();
+        if (params.get("name") != null && Tools.notEmpty(params.get("name").toString()))
+            entity.setName(params.get("name").toString());
         List<CompanyEntityVo> list = dao.getComList(page,entity);
         if (list.size() > 0){
             for (CompanyEntityVo info: list) {
@@ -73,7 +75,7 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyDao, CompanyEntity> i
     @Override
     public int deleteComById(Integer id) {
         //删除则校验该公司下面有无绑定的待生效、生效中的合同，如果有则提示：删除失败，该公司有待生效/生效中的合同。
-        int pactcount = areaDao.getPactByCompanyId(id,"tb_company");
+        int pactcount = dao.getPactById(id);
         if (pactcount>0){
             throw new RuntimeException("删除失败，该公司有待生效/生效中的合同");
         }
@@ -84,5 +86,10 @@ public class CompanyServiceImpl extends ServiceImpl<CompanyDao, CompanyEntity> i
     @Override
     public CompanyEntityVo getCompanyById(Integer id) {
         return dao.getCompanyById(id);
+    }
+
+    @Override
+    public int getCount(CompanyEntity entity) {
+        return dao.getCount(entity);
     }
 }

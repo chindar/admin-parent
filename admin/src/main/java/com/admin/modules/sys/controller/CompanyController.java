@@ -100,6 +100,10 @@ public class CompanyController {
     public R save(@RequestBody CompanyEntity company){
 
         ValidatorUtils.validateEntity(company, UpdateGroup.class);
+        int count = companyService.getCount(company);
+        if (count > 0){
+            return R.error("公司名称不可以重复");
+        }
         companyService.insert(company);
 
         return R.ok();
@@ -111,6 +115,10 @@ public class CompanyController {
     @RequestMapping("/update")
     public R update(@RequestBody CompanyEntity company){
         ValidatorUtils.validateEntity(company);
+        int count = companyService.getCount(company);
+        if (count > 0){
+            return R.error("公司名称不可以重复");
+        }
         companyService.updateAllColumnById(company);//全部更新
         
         return R.ok();

@@ -47,4 +47,20 @@
         update tb_company set is_delete = 1 where id = #{id}
     </update>
 
+    <!--删除则校验该公司下面有无绑定的待生效、生效中的合同-->
+    <select id="getPactById" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM tb_pact
+        WHERE is_delete = 0
+        AND company_id = #{id}
+        AND end_date > NOW()
+    </select>
+
+    <select id="getCount" parameterType="com.admin.modules.sys.entity.CompanyEntity" resultType="java.lang.Integer">
+        select count(1) from tb_company
+        where is_delete = 0
+        and name = #{name}
+        <if test="id != null and id != ''">
+            and id != #{id}
+        </if>
+    </select>
 </mapper>

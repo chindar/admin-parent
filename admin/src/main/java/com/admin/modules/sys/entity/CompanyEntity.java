@@ -63,11 +63,12 @@ public class CompanyEntity implements Serializable {
 	/**
 	 * 营业执照
 	 */
+	@NotBlank(message="请上传营业执照", groups = {AddGroup.class, UpdateGroup.class})
 	private String businessFileid;
 	/**
 	 * 法人身份证
 	 */
-
+	@NotBlank(message="请上传法人身份证", groups = {AddGroup.class, UpdateGroup.class})
 	private String cardFileid;
 	/**
 	 * 省份
