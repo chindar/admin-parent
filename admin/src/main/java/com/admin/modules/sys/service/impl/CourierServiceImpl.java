@@ -108,12 +108,16 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
             Date leaveDate = c.getLeaveDate();
             if (ObjectUtil.isNotNull(leaveDate)) {
                 long jobOverTime = DateUtil.between(DateUtil.date(), leaveDate, DateUnit.DAY, false);
+
                 // 当离职倒计时小于等于0并且状态不为离职时, 更新离职状态。
                 if (jobOverTime <= 0 && c.getStatus() != 1) {
                     CourierEntity entity = new CourierEntity();
-                    entity.setId(c.getId());
+                    Integer id = c.getId();
+                    entity.setId(id);
                     entity.setStatus(1);
-                    courierDao.updateById(entity);
+
+                    // 离职员工解绑ERP账号
+                    courierDao.clearErpById(id);
                     c.setStatus(1);
                     if (jobOverTime < 0) {
                         jobOverTime = 0;

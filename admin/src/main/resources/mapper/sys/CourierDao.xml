@@ -37,6 +37,13 @@
         AND batch_id = #{batchId}
      </update>
 
+    <!-- 离职员工解绑ERP -->
+    <update id="clearErpById">
+        UPDATE tb_courier
+        SET erp_id = null
+        WHERE id = #{id}
+    </update>
+
     <select id="selectMyPage" parameterType="com.admin.modules.sys.entity.vo.CourierVo" resultMap="courierVoMap">
       SELECT
         a.id
