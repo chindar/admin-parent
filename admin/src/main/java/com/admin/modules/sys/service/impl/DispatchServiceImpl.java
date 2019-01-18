@@ -119,7 +119,16 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
 
             cell = row.createCell(18);
             cell.setCellValue("月份");
-
+            cell = row.createCell(19);
+            cell.setCellValue("片区");
+            cell = row.createCell(20);
+            cell.setCellValue("城市");
+            cell = row.createCell(21);
+            cell.setCellValue("站点");
+            cell = row.createCell(22);
+            cell.setCellValue("姓名");
+            cell = row.createCell(23);
+            cell.setCellValue("身份证");
             // 遍历配送员信息list
             for (int i = 0; i < dispatchList.size(); i++) {
                 DispatchVo vo = dispatchList.get(i);
@@ -252,6 +261,36 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                 if (StrUtil.isNotBlank(month)) {
                     cell = row.createCell(18);
                     cell.setCellValue(month);
+                }
+                // 片区
+                String areaname = vo.getAreaName();
+                if (StrUtil.isNotBlank(areaname)) {
+                    cell = row.createCell(19);
+                    cell.setCellValue(areaname);
+                }
+                // 城市
+                String cityname = vo.getCityName();
+                if (StrUtil.isNotBlank(cityname)) {
+                    cell = row.createCell(20);
+                    cell.setCellValue(cityname);
+                }
+                // 站点
+                String sitename = vo.getSiteName();
+                if (StrUtil.isNotBlank(sitename)) {
+                    cell = row.createCell(21);
+                    cell.setCellValue(sitename);
+                }
+                // 姓名
+                String couriername = vo.getCourierName();
+                if (StrUtil.isNotBlank(couriername)) {
+                    cell = row.createCell(22);
+                    cell.setCellValue(couriername);
+                }
+                // 身份证
+                String cardid = vo.getCardId();
+                if (StrUtil.isNotBlank(cardid)) {
+                    cell = row.createCell(23);
+                    cell.setCellValue(cardid);
                 }
             }
 

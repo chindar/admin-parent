@@ -145,31 +145,32 @@ $(function () {
             "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + cellValue + ")\">删除</a>";
     }
 
-    new AjaxUpload('#upload', {
-        action: baseURL + "sys/courier/upload",
-        name: 'file',
-        autoSubmit: true,
-        responseType: "json",
-        onSubmit: function (file, extension) {
-            if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
-                alert('只支持xls, xlsx格式的文件！');
-                return false;
-            }
-        },
-        onComplete: function (file, r) {
-            if (r.code == 0) {
-                vm.initSearch();
-                vm.reload();
-            } else {
-                alert(r.msg);
-            }
-        },
-    });
+    // new AjaxUpload('#upload', {
+    //     action: baseURL + "sys/courier/upload",
+    //     name: 'file',
+    //     autoSubmit: true,
+    //     responseType: "json",
+    //     onSubmit: function (file, extension) {
+    //         if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
+    //             alert('只支持xls, xlsx格式的文件！');
+    //             return false;
+    //         }
+    //     },
+    //     onComplete: function (file, r) {
+    //         if (r.code == 0) {
+    //             vm.initSearch();
+    //             vm.reload();
+    //         } else {
+    //             alert(r.msg);
+    //         }
+    //     },
+    // });
     $.ajax({
         type: "POST",
         url: baseURL + "sys/company/getAllCompanyList",
         contentType: "application/json",
         success: function (r) {
+            console.info(r)
             if (r.code == 0) {
                 vm.companyList = r.list
             } else {

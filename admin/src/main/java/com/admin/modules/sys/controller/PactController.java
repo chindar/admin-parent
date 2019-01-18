@@ -87,7 +87,7 @@ public class PactController {
             return R.error("该公司下已经有同名的生效/待生效的合同");
         }
         pactService.updateAllColumnById(pact);//全部更新
-        
+
         return R.ok();
     }
 
