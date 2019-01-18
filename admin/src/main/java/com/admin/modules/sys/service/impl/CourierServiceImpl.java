@@ -496,6 +496,22 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     @Override
     public R update(CourierEntity courier) {
 
+        Integer id = courier.getId();
+        Integer companyId = courier.getCompanyId();
+        String cardId = courier.getCardId();
+        CourierEntity courierEntity = courierDao.selectById(id);
+        Integer checkCompanyId = courierEntity.getCompanyId();
+        String checkCardId = courierEntity.getCardId();
+
+        // 若修改身份证或公司信息校验重复性
+        if (StrUtil.equals(cardId, checkCardId) || companyId.intValue() == checkCompanyId.intValue()) {
+            if (isExist(courier)) {
+                return R.error("该员工已在公司中入职!");
+            }
+        }
+
+
+
         ValidatorUtils.validateEntity(courier);
         this.updateAllColumnById(courier);//全部更新
         return R.ok();
