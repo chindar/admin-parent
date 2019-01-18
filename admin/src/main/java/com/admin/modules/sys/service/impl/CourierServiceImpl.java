@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateException;
+import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -61,6 +62,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     private SiteDao siteDao;
 
     private static List<Object> templetList = CollUtil.newArrayList();
+
     static {
         // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
         templetList.add("公司");
@@ -105,7 +107,18 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         for (CourierVo c : courierVoList) {
             Date leaveDate = c.getLeaveDate();
             if (ObjectUtil.isNotNull(leaveDate)) {
-                long jobOverTime = DateUtil.betweenDay(DateUtil.date(), leaveDate, false);
+                long jobOverTime = DateUtil.between(DateUtil.date(), leaveDate, DateUnit.DAY, false);
+                // 当离职倒计时小于等于0并且状态不为离职时, 更新离职状态。
+                if (jobOverTime <= 0 && c.getStatus() != 1) {
+                    CourierEntity entity = new CourierEntity();
+                    entity.setId(c.getId());
+                    entity.setStatus(1);
+                    courierDao.updateById(entity);
+                    c.setStatus(1);
+                    if (jobOverTime < 0) {
+                        jobOverTime = 0;
+                    }
+                }
                 c.setJobOverTime(jobOverTime);
             } else {
                 nameList.add(c.getName());
@@ -258,6 +271,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
 
     /**
      * 校验ERP账号是否被使用
+     *
      * @param erpId
      * @param companyId
      * @return

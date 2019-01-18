@@ -179,6 +179,7 @@
                AND a.site_id = #{siteId}
         </if>
                AND a.is_delete = 0
+               ORDER BY a.leave_date asc, a.create_time desc
     </select>
     <!-- 获取运营数据中配送员相关信息 START -->
     <select id="getListByErpNumber" resultType="com.admin.modules.sys.entity.vo.CourierVo">
