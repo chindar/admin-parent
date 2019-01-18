@@ -119,9 +119,9 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                     // 离职员工解绑ERP账号
                     courierDao.clearErpById(id);
                     c.setStatus(1);
-                    if (jobOverTime < 0) {
-                        jobOverTime = 0;
-                    }
+                }
+                if (jobOverTime < 0) {
+                    jobOverTime = 0;
                 }
                 c.setJobOverTime(jobOverTime);
             } else {
@@ -509,7 +509,6 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                 return R.error("该员工已在公司中入职!");
             }
         }
-
 
 
         ValidatorUtils.validateEntity(courier);
