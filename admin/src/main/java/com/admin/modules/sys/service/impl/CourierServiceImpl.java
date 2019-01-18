@@ -325,7 +325,15 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
             }
             cell = row.createCell(13);
             cell.setCellValue("状态");
+            cell = row.createCell(14);
+            cell.setCellValue("片区");
+            cell = row.createCell(15);
+            cell.setCellValue("城市");
+            cell = row.createCell(16);
+            cell.setCellValue("创建时间");
 
+
+            // 公司、姓名、身份证、手机号、银行卡、开户行、银联号、入职时间、离职时间、合同、ERP账号、站点、备注
             // 遍历配送员信息list
             for (int i = 0; i < courierList.size(); i++) {
                 CourierVo vo = courierList.get(i);
@@ -425,6 +433,26 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                     cell = row.createCell(13);
                     cell.setCellValue(status == 1 ? "离职" : status == 0 ? "在职" : "");
                 }
+
+                // 片区
+                String areaName = vo.getAreaName();
+                if (StrUtil.isNotBlank(areaName)) {
+                    cell = row.createCell(14);
+                    cell.setCellValue(areaName);
+                }
+                // 城市
+                String cityName = vo.getCityName();
+                if (StrUtil.isNotBlank(cityName)) {
+                    cell = row.createCell(15);
+                    cell.setCellValue(cityName);
+                }
+                // 创建时间
+                Date createTime = vo.getCreateTime();
+                if (ObjectUtil.isNotNull(createTime)) {
+                    cell = row.createCell(16);
+                    cell.setCellValue(DateUtil.formatDateTime(createTime));
+                }
+
             }
 
             String filename = "配送员信息.xlsx";
@@ -486,8 +514,8 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     }
 
     @Override
-    public R getCourier2(Integer companyId,Integer erpId) {
-        CourierVo courier = courierDao.getListById(companyId,erpId);
+    public R getCourier2(Integer companyId, Integer erpId) {
+        CourierVo courier = courierDao.getListById(companyId, erpId);
         return R.ok().put("courier", courier);
     }
 
