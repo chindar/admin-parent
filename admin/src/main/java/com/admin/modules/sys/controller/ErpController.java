@@ -47,6 +47,16 @@ public class ErpController {
     }
 
     /**
+     * 查询已经绑定员工的ERP账号
+     * @return
+     */
+    @GetMapping("/listByCourier2")
+    public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId
+            ) {
+
+        return erpService.getErpList2(companyId);
+    }
+    /**
      * 信息
      */
     @RequestMapping("/info/{id}")

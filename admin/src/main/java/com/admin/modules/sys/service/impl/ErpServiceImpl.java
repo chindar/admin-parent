@@ -115,6 +115,11 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
         return R.ok().put("list", erpList);
     }
 
+    @Override
+    public R getErpList2(String companyId) {
+        List<ErpEntity> erpList = erpDao.getErpList2(companyId);
+        return R.ok().put("list", erpList);
+    }
     /**
      * 查询ERP账号列表
      *

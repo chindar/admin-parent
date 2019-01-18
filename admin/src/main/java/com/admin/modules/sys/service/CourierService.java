@@ -70,5 +70,7 @@ public interface CourierService extends IService<CourierEntity> {
      * @return
      */
     R getCourier(String erpNumber);
+
+    R getCourier2(Integer companyId,Integer erpId);
 }
 

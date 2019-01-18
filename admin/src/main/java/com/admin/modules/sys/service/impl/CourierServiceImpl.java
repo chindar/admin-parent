@@ -481,6 +481,12 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         return R.ok().put("courier", courier);
     }
 
+    @Override
+    public R getCourier2(Integer companyId,Integer erpId) {
+        CourierVo courier = courierDao.getListById(companyId,erpId);
+        return R.ok().put("courier", courier);
+    }
+
     /**
      * 判断配送员信息在公司中是否存在
      *

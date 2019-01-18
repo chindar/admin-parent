@@ -36,6 +36,22 @@
           AND a.company_id = #{companyId}
         </if>
     </select>
+
+    <select id="getErpList2" resultType="com.admin.modules.sys.entity.ErpEntity">
+        SELECT id
+        , a.erp_number
+        , a.company_id
+        , a.status
+        , a.create_time
+        , a.is_delete
+        FROM tb_erp a
+        WHERE 1 = 1 AND a.is_delete = 0 AND a.`status` = 0
+        AND exists(SELECT 0 FROM tb_courier b WHERE a.id = b.erp_id AND b.is_delete = 0 AND b.status=0)
+        <if test="companyId != null and companyId != '' and companyId != 'undefined'">
+            AND a.company_id = #{companyId}
+        </if>
+    </select>
+
     <select id="queryPageErpList" resultMap="erpVoMap">
         SELECT a.id
              , a.erp_number

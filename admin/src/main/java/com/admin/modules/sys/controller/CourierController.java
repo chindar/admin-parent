@@ -102,4 +102,13 @@ public class CourierController {
         return courierService.getCourier(erpNumber);
     }
 
+    /**
+     * 获取运营数据相关信息
+     * @return
+     */
+    @RequestMapping("/getCourier2")
+    public R getCourier(@RequestParam("companyId") Integer companyId,
+                        @RequestParam("erpId")Integer erpId){
+        return courierService.getCourier2(companyId,erpId);
+    }
 }

@@ -12,7 +12,7 @@
                 <input type="text" class="form-control" v-model="q.name" placeholder="请输入姓名">
             </div>
             <div class="form-group col-md-2">
-                <input type="text" class="form-control" v-model="q.month" placeholder="请输入月份">
+                <input type="month" class="form-control" v-model="q.month" placeholder="请输入月份">
             </div>
             <div class="form-group col-md-2">
                 <input type="text" class="form-control" v-model="q.cardId" placeholder="请输入身份证">
@@ -57,10 +57,10 @@
                 </select>
             </div>
             <a class="btn btn-default" @click="query"></i>&nbsp;查询</a>
-            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
             <a class="btn btn-primary" @click="download"><i class="fa fa-download"></i>&nbsp;下载模板</a>
             <a class="btn btn-primary" id="upload"><i class="fa fa-list"></i>&nbsp;批量录入</a>
             <a class="btn btn-primary" @click="exportFile"><i class="fa fa-sign-out"></i>&nbsp;导出数据</a>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
         <table id="jqGrid"></table>
         <div id="jqGridPager"></div>
@@ -71,29 +71,47 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-2 control-label">月份</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.month" placeholder="月份"
-                           :disabled="disabled"/>
+                <div class="col-sm-10" v-if="!disabled">
+                    <input type="month" class="form-control" v-model="dispatch.month" placeholder="月份"/>
+                </div>
+                <div class="col-sm-10" v-else>
+                    <input type="text" class="form-control" v-model="dispatch.month" disabled/>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-2 control-label">公司</div>
-                <div class="col-sm-10">
+                <div class="col-sm-10" v-if="disabled">
                     <input type="text" class="form-control" v-model="dispatch.companyName" disabled/>
+                </div>
+                <div class="col-sm-10" v-else>
+                    <select class="form-control" v-model="dispatch.companyId" @change="changeCompany(dispatch.companyId, 2)">
+                        <option value="">请选择公司</option>
+                        <option v-for="company in companyList" :value="company.id" :key="company.id">
+                            {{ company.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-2 control-label">ERP账号</div>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" v-model="dispatch.erpNumber" placeholder="请输入ERP账号">
+                <div class="col-sm-10" v-if="disabled">
+                    <input type="text" class="form-control" v-model="dispatch.erpNumber" disabled>
+                </div>
+                <div class="col-sm-10" v-else>
+                    <select class="form-control" v-model="dispatch.erpId" @change="changeErp(dispatch.erpId)">
+                        <option value="">请选择erp</option>
+                        <option v-for="erp in erpList" :value="erp.id" :key="erp.id">
+                            {{ erp.erpNumber }}
+                        </option>
+                    </select>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-sm-10 control-label"></div>
-                <div class="col-sm-2 control-label"><a class="btn btn-default" @click="search(dispatch.erpNumber)"></i>&nbsp;查询</a>
-                </div>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-10 control-label"></div>-->
+                <!--<div class="col-sm-2 control-label"><a class="btn btn-default" @click="search(dispatch.erpNumber)"></i>&nbsp;查询</a>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <div class="col-sm-2 control-label">片区</div>
                 <div class="col-sm-10">

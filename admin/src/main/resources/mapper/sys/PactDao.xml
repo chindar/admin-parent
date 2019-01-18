@@ -69,6 +69,7 @@
         <if test="(pactStatus != null and pactStatus != '') or pactStatus == 0">
             having pactStatus = #{pactStatus}
         </if>
+        order by a.end_date asc,a.create_time desc
     </select>
     <select id="listAll" resultMap="pactMap">
         SELECT id

@@ -21,6 +21,8 @@
         <result property="salary" column="salary"/>
         <result property="remark" column="remark"/>
         <result property="companyName" column="company_name"/>
+        <result property="erpId" column="erp_id"/>
+        <result property="companyId" column="company_id"/>
     </resultMap>
 
     <select id="queryPage" resultMap="dispatchMap">
@@ -119,6 +121,7 @@
         , a.salary
         , a.remark
         , d.name        AS company_name
+        , c.company_id
         FROM tb_dispatch a
         LEFT JOIN tb_erp c ON a.erp_id = c.id
         LEFT JOIN tb_courier b ON c.id = b.erp_id AND a.erp_id = b.erp_id

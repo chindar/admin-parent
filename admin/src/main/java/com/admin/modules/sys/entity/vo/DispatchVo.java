@@ -51,7 +51,8 @@ public class DispatchVo extends DispatchEntity implements Serializable {
     private Integer status;
     /** 合同id */
     private Integer pactId;
-    
+
+    private Integer erpId;
 
 
 

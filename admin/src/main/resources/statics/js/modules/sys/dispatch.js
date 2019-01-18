@@ -183,7 +183,7 @@ var vm = new Vue({
             vm.disabled = false;
             vm.title = "编辑运营数据";
             vm.getInfo(id);
-            vm.searchErpList();
+            // vm.searchErpList();
         },
 
         /**********************************************************************
@@ -245,7 +245,8 @@ var vm = new Vue({
         },
         getInfo: function (id) {
             $.get(baseURL + "sys/dispatch/info/" + id, function (r) {
-                vm.dispatch = r.dispatch;
+                vm.searchErpList2(r.dispatch.companyId,r.dispatch)
+                // vm.dispatch = r.dispatch;
             });
         },
         reload: function (event) {
@@ -301,6 +302,12 @@ var vm = new Vue({
                 vm.q.siteId = '';
                 vm.cityList = [];
                 vm.siteList = [];
+            }else{
+                vm.dispatch.erpId = "";
+                vm.erpList = [];
+                if (companyId) {
+                    this.searchErpList2(companyId);
+                }
             }
         },
 
@@ -381,6 +388,26 @@ var vm = new Vue({
                 vm.erpList = r.list;
             });
         },
+        /**
+         * 根据公司id查询erp
+         */
+        searchErpList2: function (id,data) {
+            $.get(baseURL + "sys/erp/listByCourier2?companyId="+id, function (r) {
+                vm.erpList = r.list;
+                if(data){
+                    vm.dispatch = data;
+                }
+            });
+        },
+        changeErp:function(id){
+            $.get(baseURL + "sys/courier/getCourier2?companyId="+vm.dispatch.companyId+"&erpId="+id, function (r) {
+                vm.dispatch.areaName=r.courier.areaName;
+                vm.dispatch.cityName=r.courier.cityName;
+                vm.dispatch.siteName=r.courier.siteName;
+                vm.dispatch.courierName=r.courier.name;
+                vm.dispatch.cardId=r.courier.cardId;
+            });
+        },
         /**********************************************************************
          * 根据erpnumber获取配送员信息
          * @author Wang Chinda
@@ -422,6 +449,10 @@ var vm = new Vue({
          **********************************************************************/
         validator: function () {
             console.log(vm.dispatch.month);
+            if (!vm.dispatch.erpId){
+                alert("erp账号不能为空");
+                return true;
+            }
             if (!(vm.dispatch.month != null && vm.dispatch.month.length != 0)) {
                 alert("月份不能为空");
                 return true;

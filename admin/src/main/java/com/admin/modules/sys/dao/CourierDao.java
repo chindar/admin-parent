@@ -51,4 +51,6 @@ public interface CourierDao extends BaseMapper<CourierEntity> {
      * @return
      */
     CourierVo getListByErpNumber(@Param("erpNumber") String erpNumber);
+
+    CourierVo getListById(@Param("companyId")Integer companyId,@Param("erpId")Integer erpId);
 }

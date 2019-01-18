@@ -206,4 +206,26 @@
           AND b.erp_number = #{erpNumber}
           AND a.is_delete = 0
     </select>
+
+    <select id="getListById" resultType="com.admin.modules.sys.entity.vo.CourierVo">
+        SELECT
+              b.name  AS areaName
+              ,c.name AS cityName
+              ,d.name AS siteName
+              ,a.name AS name
+              ,a.card_id  as cardId
+        FROM
+        tb_courier a
+        INNER JOIN tb_area b
+        ON a.area_id = b.id
+        INNER JOIN tb_city c
+        ON a.city_id = c.id
+        INNER JOIN tb_site d
+        ON a.site_id = d.id
+        WHERE
+        a.erp_id = #{erpId}
+        AND a.company_id = #{companyId}
+        AND a.is_delete = 0
+        AND a.status = 0
+    </select>
 </mapper>

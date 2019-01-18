@@ -28,6 +28,8 @@ public interface ErpService extends IService<ErpEntity> {
      */
     R getErpList(String companyId, String erpId);
 
+    R getErpList2(String companyId);
+
     /**
      * 查询ERP账号列表
      * @param params
