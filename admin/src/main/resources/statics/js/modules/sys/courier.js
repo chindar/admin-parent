@@ -170,7 +170,6 @@ $(function () {
         url: baseURL + "sys/company/getAllCompanyList",
         contentType: "application/json",
         success: function (r) {
-            console.info(r)
             if (r.code == 0) {
                 vm.companyList = r.list
             } else {
@@ -263,7 +262,7 @@ var vm = new Vue({
                 if (companyId){
                     this.searchArea(companyId,2);
                     this.searchPact(companyId,2);
-                    this.searchErpList(companyId,'');
+                    this.searchErpList(companyId);
                 }
             }
         },
@@ -378,17 +377,12 @@ var vm = new Vue({
 
         getInfo: function (id) {
             $.get(baseURL + "sys/courier/info/" + id, function (r) {
-                // vm.courier = r.courier;
-                // vm.courier2 = JSON.parse(JSON.stringify(r.courier));
                 vm.searchArea(r.courier.companyId,2);
                 vm.searchPact(r.courier.companyId,2);
-                vm.searchErpList(r.courier.companyId,r.courier.erpId,r.courier);
                 vm.searchCity(r.courier.areaId,2);
                 vm.searchSite(r.courier.cityId,2);
-                // vm.courier = r.courier;
-                // vm.$set(vm.courier,'erpId',vm.courier2.erpId);
-                // console.info(vm.courier2)
-                // console.info(vm.courier)
+                vm.searchErpList(r.courier.companyId, r.courier);
+
             });
         },
 
@@ -552,13 +546,13 @@ var vm = new Vue({
          * 查询Erp账户
          * @author Wang Chinda
          **********************************************************************/
-        searchErpList: function (companyId,erpId,data) {
-            $.get(baseURL + "sys/erp/listByCourier?companyId=" + companyId + "&erpId=" + erpId, function (r) {
+        searchErpList: function (id,data) {
+            $.get(baseURL + "sys/erp/listByCourier2?companyId="+id, function (r) {
                     vm.erpList = r.list;
                     if(data){
                         setTimeout(function () {
                             vm.courier = data
-                        },10)
+                        },15)
                     }
             });
         },
@@ -602,6 +596,10 @@ var vm = new Vue({
             }
             if (isBlank(vm.courier.bankCardId)) {
                 alert("银行卡号不能为空");
+                return true;
+            }
+            if (isBlank(vm.courier.depositBank)) {
+                alert("开户行不能为空");
                 return true;
             }
             if (isBlank(vm.courier.entryDate)) {
