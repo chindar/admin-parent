@@ -107,18 +107,20 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         for (CourierVo c : courierVoList) {
             Date leaveDate = c.getLeaveDate();
             if (ObjectUtil.isNotNull(leaveDate)) {
-                long jobOverTime = DateUtil.between(DateUtil.date(), leaveDate, DateUnit.DAY, false);
+                long jobOverTime = DateUtil.between(DateUtil.beginOfDay(DateUtil.date()), DateUtil.beginOfDay(leaveDate)
+                        , DateUnit.DAY, false);
 
                 // 当离职倒计时小于等于0并且状态不为离职时, 更新离职状态。
-                if (jobOverTime <= 0 && c.getStatus() != 1) {
+                if (jobOverTime <= 0) {
                     CourierEntity entity = new CourierEntity();
                     Integer id = c.getId();
                     entity.setId(id);
                     entity.setStatus(1);
-
+                    courierDao.updateById(entity);
                     // 离职员工解绑ERP账号
                     courierDao.clearErpById(id);
                     c.setStatus(1);
+                    c.setErpNumber("");
                 }
                 if (jobOverTime < 0) {
                     jobOverTime = 0;
@@ -479,7 +481,7 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
     @Override
     public R save(CourierEntity courier) {
         if (isExist(courier)) {
-            return R.error("该员工已在公司中入职!");
+            return R.error("身份证号在公司中重复!");
         }
         //校验类型
         ValidatorUtils.validateEntity(courier);
@@ -504,9 +506,9 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         String checkCardId = courierEntity.getCardId();
 
         // 若修改身份证或公司信息校验重复性
-        if (StrUtil.equals(cardId, checkCardId) || companyId.intValue() == checkCompanyId.intValue()) {
+        if (!StrUtil.equals(cardId, checkCardId) || companyId.intValue() != checkCompanyId.intValue()) {
             if (isExist(courier)) {
-                return R.error("该员工已在公司中入职!");
+                return R.error("身份证号在公司中重复!");
             }
         }
 
