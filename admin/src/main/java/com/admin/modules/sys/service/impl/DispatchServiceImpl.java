@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateException;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -407,7 +406,9 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                     // 备注
                     String remark = Convert.toStr(lineList.get(17));
                     dispatch.setRemark(remark);
-                    dispatch.setMonth(Convert.toStr(DateUtil.month(DateUtil.date()) + 1));
+
+                    String month = Convert.toStr(lineList.get(18));
+                    dispatch.setMonth(month);
 
                     dispatchList.add(dispatch);
                 });
