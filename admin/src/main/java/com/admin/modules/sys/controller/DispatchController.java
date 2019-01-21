@@ -42,7 +42,7 @@ public class DispatchController {
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Integer id){
-        DispatchEntity dispatch = dispatchService.selectById(id);
+//        DispatchEntity dispatch = dispatchService.selectById(id);
 
         return dispatchService.getById(id);
     }

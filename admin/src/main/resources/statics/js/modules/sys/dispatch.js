@@ -159,7 +159,8 @@ var vm = new Vue({
         areaList: [],
         cityList: [],
         siteList: [],
-        erpList: []
+        erpList: [],
+        courierList: []
     },
     computed: {
     },
@@ -245,8 +246,10 @@ var vm = new Vue({
         },
         getInfo: function (id) {
             $.get(baseURL + "sys/dispatch/info/" + id, function (r) {
+                vm.searchCourierList(r.dispatch.companyId,r.dispatch.erpId);
                 vm.searchErpList2(r.dispatch.companyId,r.dispatch)
                 // vm.dispatch = r.dispatch;
+
             });
         },
         reload: function (event) {
@@ -305,6 +308,8 @@ var vm = new Vue({
             }else{
                 vm.dispatch.erpId = "";
                 vm.erpList = [];
+                vm.dispatch.courierId="";
+                vm.courierList = [];
                 if (companyId) {
                     this.searchErpList2(companyId);
                 }
@@ -392,21 +397,34 @@ var vm = new Vue({
          * 根据公司id查询erp
          */
         searchErpList2: function (id,data) {
-            $.get(baseURL + "sys/erp/listByCourier2?companyId="+id, function (r) {
+            $.get(baseURL + "sys/erp/listByCourier3?companyId="+id, function (r) {
                 vm.erpList = r.list;
                 if(data){
                     vm.dispatch = data;
                 }
             });
         },
-        changeErp:function(id){
-            $.get(baseURL + "sys/courier/getCourier2?companyId="+vm.dispatch.companyId+"&erpId="+id, function (r) {
-                vm.dispatch.areaName=r.courier.areaName;
-                vm.dispatch.cityName=r.courier.cityName;
-                vm.dispatch.siteName=r.courier.siteName;
-                vm.dispatch.courierName=r.courier.name;
-                vm.dispatch.cardId=r.courier.cardId;
+        /**
+         * 查询能导入的配送员
+         * @param companyId
+         * @param erpId
+         */
+        searchCourierList: function(companyId,erpId){
+            $.get(baseURL + "sys/courier/getCourierList?companyId="+companyId+"&erpId="+erpId, function (r) {
+                vm.courierList = r.list;
             });
+        },
+        changeErp:function(id){
+            // $.get(baseURL + "sys/courier/getCourier2?companyId="+vm.dispatch.companyId+"&erpId="+id, function (r) {
+            //     vm.dispatch.areaName=r.courier.areaName;
+            //     vm.dispatch.cityName=r.courier.cityName;
+            //     vm.dispatch.siteName=r.courier.siteName;
+            //     vm.dispatch.courierName=r.courier.name;
+            //     vm.dispatch.cardId=r.courier.cardId;
+            // });
+            vm.dispatch.courierId = '';
+            vm.dispatch.courierList = [];
+            vm.searchCourierList(vm.dispatch.companyId,vm.dispatch.erpId);
         },
         /**********************************************************************
          * 根据erpnumber获取配送员信息
@@ -451,6 +469,10 @@ var vm = new Vue({
             console.log(vm.dispatch.month);
             if (!vm.dispatch.erpId){
                 alert("erp账号不能为空");
+                return true;
+            }
+            if (!vm.dispatch.courierId){
+                alert("配送员不能为空");
                 return true;
             }
             if (!(vm.dispatch.month != null && vm.dispatch.month.length != 0)) {

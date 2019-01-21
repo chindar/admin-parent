@@ -235,4 +235,30 @@
         AND a.is_delete = 0
         AND a.status = 0
     </select>
+
+    <select id="getCourierId" resultType="java.lang.Integer">
+        SELECT id FROM tb_courier
+        WHERE company_id = #{companyId}
+        AND erp_id = #{erpId}
+        AND status = #{status}
+        AND card_id =  #{cardId}
+        and is_delete = 0
+        ORDER BY create_time DESC LIMIT 1
+    </select>
+
+
+    <select id="getCourierList" resultType="com.admin.modules.sys.entity.vo.CourierVo">
+        SELECT id
+             ,name
+        FROM(
+        SELECT * FROM tb_courier WHERE company_id = #{companyId} AND erp_id = #{erpId}
+        AND is_delete = 0
+        ORDER BY `status` ASC,leave_date DESC)a
+        GROUP BY card_id
+    </select>
+
+
+    <select id="getErpId" resultType="java.lang.Integer">
+        select erp_id from tb_courier where  id=#{id}
+    </select>
 </mapper>

@@ -24,7 +24,10 @@ public interface ErpDao extends BaseMapper<ErpEntity> {
      */
     List<ErpEntity> getErpList(@Param("companyId") String companyId);
 
-    List<ErpEntity> getErpList2(@Param("companyId") String companyId);
+    List<ErpEntity> getErpList2(@Param("companyId") String companyId,@Param("erpId")String erpId);
+
+
+    List<ErpEntity> getErpList3(@Param("companyId") String companyId);
 
     /**
      * 查询ERP账号列表

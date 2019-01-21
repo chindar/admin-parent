@@ -14,6 +14,7 @@ import com.admin.common.utils.PageUtils;
 import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.modules.sys.dao.CompanyDao;
+import com.admin.modules.sys.dao.CourierDao;
 import com.admin.modules.sys.dao.DispatchDao;
 import com.admin.modules.sys.dao.ErpDao;
 import com.admin.modules.sys.entity.DispatchEntity;
@@ -50,6 +51,8 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
     private CompanyDao companyDao;
     @Autowired
     private ErpDao erpDao;
+    @Autowired
+    private CourierDao courierDao;
 
     private static List<Object> templetList = CollUtil.newArrayList();
 
@@ -57,6 +60,9 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
         // 公司 ERP账号 总单量 合计单量 费用合计 小件 大件 三同 售后取件 接货首单量 接货续单量 其他单量 差评 投诉 罚款合计 其他扣款 工资 备注
         templetList.add("公司");
         templetList.add("ERP账号");
+        templetList.add("状态");
+        templetList.add("身份证");
+        templetList.add("月份");
         templetList.add("总单量");
         templetList.add("合计单量");
         templetList.add("费用合计");
@@ -116,18 +122,14 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                 cell.setCellValue(Convert.toStr(templetList.get(i)));
             }
 
-            cell = row.createCell(18);
-            cell.setCellValue("月份");
-            cell = row.createCell(19);
-            cell.setCellValue("片区");
-            cell = row.createCell(20);
-            cell.setCellValue("城市");
             cell = row.createCell(21);
-            cell.setCellValue("站点");
+            cell.setCellValue("片区");
             cell = row.createCell(22);
-            cell.setCellValue("姓名");
+            cell.setCellValue("城市");
             cell = row.createCell(23);
-            cell.setCellValue("身份证");
+            cell.setCellValue("站点");
+            cell = row.createCell(24);
+            cell.setCellValue("姓名");
             // 遍历配送员信息list
             for (int i = 0; i < dispatchList.size(); i++) {
                 DispatchVo vo = dispatchList.get(i);
@@ -148,148 +150,160 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                     cell = row.createCell(1);
                     cell.setCellValue(name);
                 }
+
+                //状态
+                Integer status = vo.getStatus();
+                if (ObjectUtil.isNotNull(status)) {
+                    cell = row.createCell(2);
+                    if (status == 0)
+                        cell.setCellValue("在职");
+                    else
+                        cell.setCellValue("离职");
+                }
+
+                // 身份证
+                String cardid = vo.getCardId();
+                if (StrUtil.isNotBlank(cardid)) {
+                    cell = row.createCell(3);
+                    cell.setCellValue(cardid);
+                }
+                // 月份
+                String month = vo.getMonth();
+                if (StrUtil.isNotBlank(month)) {
+                    cell = row.createCell(4);
+                    cell.setCellValue(month);
+                }
                 // 总单量
                 Integer allOrderCount = vo.getAllOrderCount();
                 if (ObjectUtil.isNotNull(allOrderCount)) {
-                    cell = row.createCell(2);
+                    cell = row.createCell(5);
                     cell.setCellValue(allOrderCount);
                 }
                 // 合计单量
                 Integer totalOrderCount = vo.getTotalOrderCount();
                 if (ObjectUtil.isNotNull(totalOrderCount)) {
-                    cell = row.createCell(3);
+                    cell = row.createCell(6);
                     cell.setCellValue(totalOrderCount);
                 }
                 // 费用合计
                 BigDecimal totalMoney = vo.getTotalMoney();
                 if (ObjectUtil.isNotNull(totalMoney)) {
-                    cell = row.createCell(4);
+                    cell = row.createCell(7);
                     cell.setCellValue(Convert.toStr(totalMoney));
                 }
                 // 小件
                 Integer small = vo.getSmall();
                 if (ObjectUtil.isNotNull(small)) {
-                    cell = row.createCell(5);
+                    cell = row.createCell(8);
                     cell.setCellValue(small);
                 }
                 // 大件
                 Integer large = vo.getLarge();
                 if (ObjectUtil.isNotNull(large)) {
-                    cell = row.createCell(6);
+                    cell = row.createCell(9);
                     cell.setCellValue(large);
                 }
                 // 三同
                 Integer thrIdentical = vo.getThrIdentical();
                 if (ObjectUtil.isNotNull(thrIdentical)) {
-                    cell = row.createCell(7);
+                    cell = row.createCell(10);
                     cell.setCellValue(thrIdentical);
                 }
 
                 // 售后取件
                 Integer afterSaleCount = vo.getAfterSaleCount();
                 if (ObjectUtil.isNotNull(afterSaleCount)) {
-                    cell = row.createCell(8);
+                    cell = row.createCell(11);
                     cell.setCellValue(afterSaleCount);
                 }
 
                 // 接货首单量
                 Integer firstCount = vo.getFirstCount();
                 if (ObjectUtil.isNotNull(firstCount)) {
-                    cell = row.createCell(9);
+                    cell = row.createCell(12);
                     cell.setCellValue(firstCount);
                 }
 
                 // 接货续单量
                 Integer againCount = vo.getAgainCount();
                 if (ObjectUtil.isNotNull(againCount)) {
-                    cell = row.createCell(10);
+                    cell = row.createCell(13);
                     cell.setCellValue(againCount);
                 }
 
                 // 其他单量
                 Integer otherCount = vo.getOtherCount();
                 if (ObjectUtil.isNotNull(otherCount)) {
-                    cell = row.createCell(11);
+                    cell = row.createCell(14);
                     cell.setCellValue(otherCount);
                 }
 
                 // 差评
                 Integer badCount = vo.getBadCount();
                 if (ObjectUtil.isNotNull(badCount)) {
-                    cell = row.createCell(12);
+                    cell = row.createCell(15);
                     cell.setCellValue(badCount);
                 }
 
                 // 投诉
                 Integer complaintCount = vo.getComplaintCount();
                 if (ObjectUtil.isNotNull(complaintCount)) {
-                    cell = row.createCell(13);
+                    cell = row.createCell(16);
                     cell.setCellValue(complaintCount);
                 }
 
                 // 罚款合计
                 BigDecimal fineMoney = vo.getFineMoney();
                 if (ObjectUtil.isNotNull(fineMoney)) {
-                    cell = row.createCell(14);
+                    cell = row.createCell(17);
                     cell.setCellValue(Convert.toStr(fineMoney));
                 }
 
                 // 其他扣款
                 BigDecimal deductMoney = vo.getDeductMoney();
                 if (ObjectUtil.isNotNull(deductMoney)) {
-                    cell = row.createCell(15);
+                    cell = row.createCell(18);
                     cell.setCellValue(Convert.toStr(deductMoney));
                 }
 
                 // 工资
                 BigDecimal salary = vo.getSalary();
                 if (ObjectUtil.isNotNull(salary)) {
-                    cell = row.createCell(16);
+                    cell = row.createCell(19);
                     cell.setCellValue(Convert.toStr(salary));
                 }
 
                 // 备注
                 String remark = vo.getRemark();
                 if (StrUtil.isNotBlank(remark)) {
-                    cell = row.createCell(17);
+                    cell = row.createCell(20);
                     cell.setCellValue(remark);
                 }
 
-                // 月份
-                String month = vo.getMonth();
-                if (StrUtil.isNotBlank(month)) {
-                    cell = row.createCell(18);
-                    cell.setCellValue(month);
-                }
+
                 // 片区
                 String areaname = vo.getAreaName();
                 if (StrUtil.isNotBlank(areaname)) {
-                    cell = row.createCell(19);
+                    cell = row.createCell(21);
                     cell.setCellValue(areaname);
                 }
                 // 城市
                 String cityname = vo.getCityName();
                 if (StrUtil.isNotBlank(cityname)) {
-                    cell = row.createCell(20);
+                    cell = row.createCell(22);
                     cell.setCellValue(cityname);
                 }
                 // 站点
                 String sitename = vo.getSiteName();
                 if (StrUtil.isNotBlank(sitename)) {
-                    cell = row.createCell(21);
+                    cell = row.createCell(23);
                     cell.setCellValue(sitename);
                 }
                 // 姓名
                 String couriername = vo.getCourierName();
                 if (StrUtil.isNotBlank(couriername)) {
-                    cell = row.createCell(22);
+                    cell = row.createCell(24);
                     cell.setCellValue(couriername);
-                }
-                // 身份证
-                String cardid = vo.getCardId();
-                if (StrUtil.isNotBlank(cardid)) {
-                    cell = row.createCell(23);
-                    cell.setCellValue(cardid);
                 }
             }
 
@@ -343,72 +357,88 @@ public class DispatchServiceImpl extends ServiceImpl<DispatchDao, DispatchEntity
                     Integer erpId = erpDao.getOneByNumber(erpNumber, companyId);
                     dispatch.setErpId(erpId);
 
+                    Integer status;
+                    if(Convert.toStr(lineList.get(2)).equals("在职")){
+                        status = 0;
+                    }else{
+                        status = 1;
+                    }
+
+                    String cardId = Convert.toStr(lineList.get(3));
+                    Integer courierId =courierDao.getCourierId(companyId,erpId,status,cardId);
+                    if(courierId == null){
+                        throw new RuntimeException();
+                    }
+                    dispatch.setCourierId(courierId);
+
+                    //月份
+                    String month = Convert.toStr(lineList.get(4));
+                    dispatch.setMonth(month);
+
                     // 总单量
-                    Integer allOrderCount = Convert.toInt(lineList.get(2));
+                    Integer allOrderCount = Convert.toInt(lineList.get(5));
                     dispatch.setAllOrderCount(allOrderCount);
 
                     // 合计单量
-                    Integer totalOrderCount = Convert.toInt(lineList.get(3));
+                    Integer totalOrderCount = Convert.toInt(lineList.get(6));
                     dispatch.setTotalOrderCount(totalOrderCount);
 
                     // 费用合计
-                    BigDecimal totalMoney = Convert.toBigDecimal(lineList.get(4));
+                    BigDecimal totalMoney = Convert.toBigDecimal(lineList.get(7));
                     dispatch.setTotalMoney(totalMoney);
 
                     // 小件
-                    Integer small = Convert.toInt(lineList.get(5));
+                    Integer small = Convert.toInt(lineList.get(8));
                     dispatch.setSmall(small);
 
                     // 大件
-                    Integer large = Convert.toInt(lineList.get(6));
+                    Integer large = Convert.toInt(lineList.get(9));
                     dispatch.setLarge(large);
 
                     // 三同
-                    Integer thrIdentical = Convert.toInt(lineList.get(7));
+                    Integer thrIdentical = Convert.toInt(lineList.get(10));
                     dispatch.setThrIdentical(thrIdentical);
 
                     // 售后取件
-                    Integer afterSaleCount = Convert.toInt(lineList.get(8));
+                    Integer afterSaleCount = Convert.toInt(lineList.get(11));
                     dispatch.setAfterSaleCount(afterSaleCount);
 
                     // 接货首单量
-                    Integer firstCount = Convert.toInt(lineList.get(9));
+                    Integer firstCount = Convert.toInt(lineList.get(12));
                     dispatch.setFirstCount(firstCount);
 
                     // 接货续单量
-                    Integer againCount = Convert.toInt(lineList.get(10));
+                    Integer againCount = Convert.toInt(lineList.get(13));
                     dispatch.setAgainCount(againCount);
 
                     // 其他单量
-                    Integer otherCount = Convert.toInt(lineList.get(11));
+                    Integer otherCount = Convert.toInt(lineList.get(14));
                     dispatch.setOtherCount(otherCount);
 
                     // 差评
-                    Integer badCount = Convert.toInt(lineList.get(12));
+                    Integer badCount = Convert.toInt(lineList.get(15));
                     dispatch.setBadCount(badCount);
 
                     // 投诉
-                    Integer complaintCount = Convert.toInt(lineList.get(13));
+                    Integer complaintCount = Convert.toInt(lineList.get(16));
                     dispatch.setComplaintCount(complaintCount);
 
                     // 罚款合计
-                    BigDecimal fineMoney = Convert.toBigDecimal(lineList.get(14));
+                    BigDecimal fineMoney = Convert.toBigDecimal(lineList.get(17));
                     dispatch.setFineMoney(fineMoney);
 
                     // 其他扣款
-                    BigDecimal deductMoney = Convert.toBigDecimal(lineList.get(15));
+                    BigDecimal deductMoney = Convert.toBigDecimal(lineList.get(18));
                     dispatch.setDeductMoney(deductMoney);
 
                     // 工资
-                    BigDecimal salary = Convert.toBigDecimal(lineList.get(16));
+                    BigDecimal salary = Convert.toBigDecimal(lineList.get(19));
                     dispatch.setSalary(salary);
 
                     // 备注
-                    String remark = Convert.toStr(lineList.get(17));
+                    String remark = Convert.toStr(lineList.get(20));
                     dispatch.setRemark(remark);
 
-                    String month = Convert.toStr(lineList.get(18));
-                    dispatch.setMonth(month);
 
                     dispatchList.add(dispatch);
                 });

@@ -41,9 +41,9 @@ public class ErpController {
      */
     @GetMapping("/listByCourier")
     public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId
-    ,@RequestParam(value = "erpId", required = false, defaultValue = "") String erpId) {
+    ) {
 
-        return erpService.getErpList(companyId, erpId);
+        return erpService.getErpList(companyId);
     }
 
     /**
@@ -51,10 +51,23 @@ public class ErpController {
      * @return
      */
     @GetMapping("/listByCourier2")
-    public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId
+    public R list(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId,
+                  @RequestParam(value = "courierid", required = false, defaultValue = "") String courierd
             ) {
 
-        return erpService.getErpList2(companyId);
+        return erpService.getErpList2(companyId,courierd);
+    }
+
+
+    /**
+     * 查询未绑定员工的ERP账号
+     * @return
+     */
+    @GetMapping("/listByCourier3")
+    public R list3(@RequestParam(value = "companyId", required = false, defaultValue = "") String companyId
+    ) {
+
+        return erpService.getErpList3(companyId);
     }
     /**
      * 信息

@@ -14,6 +14,7 @@ import com.admin.common.utils.Query;
 import com.admin.common.utils.R;
 import com.admin.common.validator.ValidatorUtils;
 import com.admin.modules.sys.dao.CompanyDao;
+import com.admin.modules.sys.dao.CourierDao;
 import com.admin.modules.sys.dao.ErpDao;
 import com.admin.modules.sys.entity.ErpEntity;
 import com.admin.modules.sys.entity.vo.ErpVo;
@@ -47,6 +48,8 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
     private ErpDao erpDao;
     @Autowired
     private CompanyDao companyDao;
+    @Autowired
+    private CourierDao courierDao;
 
     private static List<Object> templetList = CollUtil.newArrayList();
     static {
@@ -106,18 +109,25 @@ public class ErpServiceImpl extends ServiceImpl<ErpDao, ErpEntity> implements Er
      * @param erpId
      */
     @Override
-    public R getErpList(String companyId, String erpId) {
+    public R getErpList(String companyId) {
         List<ErpEntity> erpList = erpDao.getErpList(companyId);
-        if (StrUtil.isNotBlank(erpId)) {
-            ErpEntity erpEntity = erpDao.selectById(erpId);
-            erpList.add(erpEntity);
-        }
+//        if (StrUtil.isNotBlank(erpId)) {
+//            ErpEntity erpEntity = erpDao.selectById(erpId);
+//            erpList.add(erpEntity);
+//        }
         return R.ok().put("list", erpList);
     }
 
     @Override
-    public R getErpList2(String companyId) {
-        List<ErpEntity> erpList = erpDao.getErpList2(companyId);
+    public R getErpList2(String companyId, String courierd) {
+        Integer erpId = courierDao.getErpId(courierd);
+        List<ErpEntity> erpList = erpDao.getErpList2(companyId,erpId.toString());
+        return R.ok().put("list", erpList);
+    }
+
+    @Override
+    public R getErpList3(String companyId) {
+        List<ErpEntity> erpList = erpDao.getErpList3(companyId);
         return R.ok().put("list", erpList);
     }
     /**

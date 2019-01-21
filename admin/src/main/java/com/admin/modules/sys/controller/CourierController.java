@@ -111,4 +111,10 @@ public class CourierController {
                         @RequestParam("erpId")Integer erpId){
         return courierService.getCourier2(companyId,erpId);
     }
+
+    @RequestMapping("/getCourierList")
+    public R getCourierList(@RequestParam("companyId") Integer companyId,
+                        @RequestParam("erpId")Integer erpId){
+        return courierService.getCourierList(companyId,erpId);
+    }
 }

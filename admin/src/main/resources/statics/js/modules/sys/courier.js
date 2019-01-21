@@ -80,7 +80,7 @@ $(function () {
                 align: 'center',
                 width: 80,
                 formatter: function (value, options, row) {
-                    return value == null ? '<span></span>' :
+                    return row.status == 1 ? '<span style="color: red;">已离职</span>' :
                         value < 30 ? '<span style="color: red;">' + value + '天</span>' :
                             '<span>' + value + '天</span>';
                 }
@@ -106,9 +106,14 @@ $(function () {
                 align: 'center',
                 width: 150,
                 formatter: function (value, options, row) {
-                    return "<a onclick=\"vm.edit(" + value + ")\">编辑</a>" +
-                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + value + ")\">详情</a>" +
-                        "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
+                    if(row.status == 0) {
+                        return "<a onclick=\"vm.edit(" + value + ")\">编辑</a>" +
+                            "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + value + ")\">详情</a>" +
+                            "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
+                    }else{
+                        return "<a onclick=\"vm.info(" + value + ")\">详情</a>" +
+                            "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + value + ")\">删除</a>";
+                    }
                 }
             },
         ],
@@ -139,7 +144,7 @@ $(function () {
     });
 
     // 格式化操作列
-    function cmgStateFormat(cellValue) {
+    function cmgStateFormat(cellValue,a) {
         return "<a onclick=\"vm.edit(" + cellValue + ")\">编辑</a>" +
             "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.info(" + cellValue + ")\">详情</a>" +
             "&nbsp;&nbsp;&nbsp;<a onclick=\"vm.del(" + cellValue + ")\">删除</a>";
@@ -547,14 +552,24 @@ var vm = new Vue({
          * @author Wang Chinda
          **********************************************************************/
         searchErpList: function (id,data) {
-            $.get(baseURL + "sys/erp/listByCourier2?companyId="+id, function (r) {
+            if(data) {
+                $.get(baseURL + "sys/erp/listByCourier2?companyId=" + id+"&courierid="+data.id, function (r) {
                     vm.erpList = r.list;
-                    if(data){
+                    if (data) {
                         setTimeout(function () {
                             vm.courier = data
-                        },15)
+                        }, 50)
                     }
-            });
+                });
+            }else if(vm.courier.id) {
+                $.get(baseURL + "sys/erp/listByCourier2?companyId=" + id+"&courierid="+vm.courier.id, function (r) {
+                    vm.erpList = r.list
+                });
+            }else{
+                $.get(baseURL + "sys/erp/listByCourier?companyId=" + id, function (r) {
+                    vm.erpList = r.list;
+                });
+            }
         },
 
         reload: function (event) {

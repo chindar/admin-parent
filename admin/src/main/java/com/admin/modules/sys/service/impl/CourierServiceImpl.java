@@ -118,9 +118,9 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
                     entity.setStatus(1);
                     courierDao.updateById(entity);
                     // 离职员工解绑ERP账号
-                    courierDao.clearErpById(id);
+//                    courierDao.clearErpById(id);
                     c.setStatus(1);
-                    c.setErpNumber("");
+//                    c.setErpNumber("");
                 }
                 if (jobOverTime < 0) {
                     jobOverTime = 0;
@@ -472,21 +472,56 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         }
     }
 
+//    /**
+//     * 保存配送员信息
+//     *
+//     * @param courier
+//     * @return
+//     */
+//    @Override
+//    public R save(CourierEntity courier) {
+//        if (isExist(courier)) {
+//            return R.error("身份证号在公司中重复!");
+//        }
+//        //校验类型
+//        ValidatorUtils.validateEntity(courier);
+//        this.insert(courier);
+//        return R.ok();
+//    }
+
     /**
-     * 保存配送员信息
-     *
+     * leng  修改
      * @param courier
      * @return
      */
     @Override
     public R save(CourierEntity courier) {
-        if (isExist(courier)) {
-            return R.error("身份证号在公司中重复!");
+        if (isExistCard(courier)) {
+            return R.error("该身份证号已经是在职状态，离职后才能添加!");
+        }
+        if (isExistErp(courier)){
+            return R.error("该erp账号已经是在职状态，离职后才能添加!");
         }
         //校验类型
         ValidatorUtils.validateEntity(courier);
         this.insert(courier);
         return R.ok();
+    }
+
+    private boolean isExistCard(CourierEntity courier) {
+        String cardId = courier.getCardId();
+        return this.selectCount(new EntityWrapper<CourierEntity>()
+                .eq("card_id", cardId)
+                .eq("is_delete", 0)
+                .eq("status",0))> 0 ? true : false;
+    }
+
+    private boolean isExistErp(CourierEntity courier) {
+        Integer erpId = courier.getErpId();
+        return this.selectCount(new EntityWrapper<CourierEntity>()
+                .eq("erp_id", erpId)
+                .eq("is_delete", 0)
+                .eq("status",0))> 0 ? true : false;
     }
 
     /**
@@ -535,6 +570,13 @@ public class CourierServiceImpl extends ServiceImpl<CourierDao, CourierEntity> i
         CourierVo courier = courierDao.getListById(companyId, erpId);
         return R.ok().put("courier", courier);
     }
+
+    @Override
+    public R getCourierList(Integer companyId, Integer erpId) {
+        List<CourierVo> list = courierDao.getCourierList(companyId, erpId);
+        return R.ok().put("list", list);
+    }
+
 
     /**
      * 判断配送员信息在公司中是否存在

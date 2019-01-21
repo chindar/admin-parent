@@ -111,5 +111,7 @@ public class DispatchEntity implements Serializable {
 	@TableLogic
 	private Integer isDelete;
 
+	private Integer courierId;
+
 
 }
