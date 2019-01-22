@@ -170,7 +170,7 @@
         <if test="companyId != null and companyId != ''">
                AND a.company_id = #{companyId}
         </if>
-        <if test="status != null and status != ''">
+        <if test="(status != null and status != '') or status ==0">
                AND a.status = #{status}
         </if>
         <if test="pactId != null and pactId != ''">
@@ -230,10 +230,7 @@
         INNER JOIN tb_site d
         ON a.site_id = d.id
         WHERE
-        a.erp_id = #{erpId}
-        AND a.company_id = #{companyId}
-        AND a.is_delete = 0
-        AND a.status = 0
+        a.id = #{id}
     </select>
 
     <select id="getCourierId" resultType="java.lang.Integer">

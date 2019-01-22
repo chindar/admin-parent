@@ -52,7 +52,7 @@ public interface CourierDao extends BaseMapper<CourierEntity> {
      */
     CourierVo getListByErpNumber(@Param("erpNumber") String erpNumber);
 
-    CourierVo getListById(@Param("companyId")Integer companyId,@Param("erpId")Integer erpId);
+    CourierVo getListById(@Param("id")Integer id);
 
     List<CourierVo> getCourierList(@Param("companyId")Integer companyId,@Param("erpId")Integer erpId);
 

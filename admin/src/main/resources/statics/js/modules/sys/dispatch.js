@@ -426,6 +426,15 @@ var vm = new Vue({
             vm.dispatch.courierList = [];
             vm.searchCourierList(vm.dispatch.companyId,vm.dispatch.erpId);
         },
+        changeCourier:function(id){
+            $.get(baseURL + "sys/courier/getCourier2?id="+id, function (r) {
+                vm.dispatch.areaName=r.courier.areaName;
+                vm.dispatch.cityName=r.courier.cityName;
+                vm.dispatch.siteName=r.courier.siteName;
+                vm.dispatch.courierName=r.courier.name;
+                vm.dispatch.cardId=r.courier.cardId;
+            });
+        },
         /**********************************************************************
          * 根据erpnumber获取配送员信息
          * @author Wang Chinda
